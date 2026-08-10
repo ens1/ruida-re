@@ -1,0 +1,403 @@
+{
+  "cases": [
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m001-power-000.rd",
+      "files": {
+        "m001-power-000.lbrn2": {
+          "sha256": "4135448ee1b61ca40080cf7195d1945e9ca2f4e2730f8cc1012021f34049ad74",
+          "size": 2798,
+          "stage": "post-lightburn-normalized"
+        },
+        "m001-power-000.rd": {
+          "sha256": "19509ffc32d7a08beb3d740c787ca5e51ab18cb317c32c9c0c961581bea7e289",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m001-power-000",
+      "layer": 0,
+      "max_power_percent": 0,
+      "min_power_percent": 0,
+      "output": true,
+      "project": "m001-power-000.lbrn2",
+      "purpose": "power scaling at 0%",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m002-power-001.rd",
+      "files": {
+        "m002-power-001.lbrn2": {
+          "sha256": "ac63a6633613c0288409c07e5ad2d0b31b8a882dbe66421663012194e9ab2dbd",
+          "size": 2798,
+          "stage": "post-lightburn-normalized"
+        },
+        "m002-power-001.rd": {
+          "sha256": "931fec287a4518dec1c86221a3d8b8cc83409b67ed8509af152bfe0dc60c06cc",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m002-power-001",
+      "layer": 0,
+      "max_power_percent": 1,
+      "min_power_percent": 1,
+      "output": true,
+      "project": "m002-power-001.lbrn2",
+      "purpose": "power scaling at 1%",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m003-power-050.rd",
+      "files": {
+        "m003-power-050.lbrn2": {
+          "sha256": "3d6f714c91395af7bb0085d5d54db8e50fc2ecd9399170e30d63fbfa46a9ee48",
+          "size": 2802,
+          "stage": "post-lightburn-normalized"
+        },
+        "m003-power-050.rd": {
+          "sha256": "8252279673ec3997537ef113e8ff8569c76414298be99623170be29f5bdab723",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m003-power-050",
+      "layer": 0,
+      "max_power_percent": 50,
+      "min_power_percent": 50,
+      "output": true,
+      "project": "m003-power-050.lbrn2",
+      "purpose": "power scaling at 50%",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m004-power-099.rd",
+      "files": {
+        "m004-power-099.lbrn2": {
+          "sha256": "92bd01223c4111a3e20d2d6a47dc7e65856f509490623410e0994402c589d95d",
+          "size": 2802,
+          "stage": "post-lightburn-normalized"
+        },
+        "m004-power-099.rd": {
+          "sha256": "2aab64bf5b62ca9e86e84c9aebd528b52971ffe9b661d773db30fbe8380c08d2",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m004-power-099",
+      "layer": 0,
+      "max_power_percent": 99,
+      "min_power_percent": 99,
+      "output": true,
+      "project": "m004-power-099.lbrn2",
+      "purpose": "power scaling at 99%",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m005-power-100.rd",
+      "files": {
+        "m005-power-100.lbrn2": {
+          "sha256": "3b95f33ba78135b7245a475aa0177171142192741339c0f9cdaa2a4c64a4877a",
+          "size": 2806,
+          "stage": "post-lightburn-normalized"
+        },
+        "m005-power-100.rd": {
+          "sha256": "f732ccca0fc15079aa279845bb012d2d80247d508a90b001a21999c9d074fbfc",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m005-power-100",
+      "layer": 0,
+      "max_power_percent": 100,
+      "min_power_percent": 100,
+      "output": true,
+      "project": "m005-power-100.lbrn2",
+      "purpose": "power scaling at 100%",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m006-speed-decimal.rd",
+      "files": {
+        "m006-speed-decimal.lbrn2": {
+          "sha256": "ed6009c4832f389ade2a027896d775952e82fa9f40e0816a986057037843422f",
+          "size": 2806,
+          "stage": "post-lightburn-normalized"
+        },
+        "m006-speed-decimal.rd": {
+          "sha256": "5fc12b1446b4cbbe9c082f5c1f9d79dc1da5859caf915b8c4da6fa2037e62ce4",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m006-speed-decimal",
+      "layer": 0,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m006-speed-decimal.lbrn2",
+      "purpose": "speed precision",
+      "speed_mm_s": 12.345,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m007-speed-low.rd",
+      "files": {
+        "m007-speed-low.lbrn2": {
+          "sha256": "145af9a9623c50315782ee60bfcf261036e2c69182ce75a9d72df102a47ab825",
+          "size": 2803,
+          "stage": "post-lightburn-normalized"
+        },
+        "m007-speed-low.rd": {
+          "sha256": "efd64933f6d3d0b1a3f34d39e35d40bb07029f187688307c30cd426629dca8bc",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m007-speed-low",
+      "layer": 0,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m007-speed-low.lbrn2",
+      "purpose": "low speed encoding",
+      "speed_mm_s": 0.1,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": true,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m008-air-on.rd",
+      "files": {
+        "m008-air-on.lbrn2": {
+          "sha256": "f640bc315e8798331c9e87086cc41783f281e8d8fba9f736650b58b84049d4ab",
+          "size": 2803,
+          "stage": "post-lightburn-normalized"
+        },
+        "m008-air-on.rd": {
+          "sha256": "0ee3d51191d3e70014a2e25e7a886fe322f686c3e2f8517ab81ff695f13132d0",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m008-air-on",
+      "layer": 0,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m008-air-on.lbrn2",
+      "purpose": "air-assist layer flag",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        20
+      ],
+      "expected_rd": "m009-layer-1.rd",
+      "files": {
+        "m009-layer-1.lbrn2": {
+          "sha256": "b5e16d5d4f99828fb193f454ed5446e43e95e0b96494d38e2b45cd1b3e69f164",
+          "size": 2802,
+          "stage": "post-lightburn-normalized"
+        },
+        "m009-layer-1.rd": {
+          "sha256": "f2cb4ec75f28da493274112be79830df06681c0b255d1e415f9ad3d7876bbfd9",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m009-layer-1",
+      "layer": 1,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m009-layer-1.lbrn2",
+      "purpose": "a lone C01 UI layer is compacted to RD layer 0 with blue color",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        20,
+        30
+      ],
+      "expected_rd": "m010-vertical.rd",
+      "files": {
+        "m010-vertical.lbrn2": {
+          "sha256": "746390f39e650658ec81b74bf0197c23d356bf1fe1439e95cd77c92cfa1b58fd",
+          "size": 2818,
+          "stage": "post-lightburn-normalized"
+        },
+        "m010-vertical.rd": {
+          "sha256": "398f96d2a2d737f2881be5272b69885e90761be1b01de51d105eb5a56bc7fb83",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m010-vertical",
+      "layer": 0,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m010-vertical.lbrn2",
+      "purpose": "vertical absolute geometry",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        31,
+        20
+      ],
+      "expected_rd": "m011-offset-x.rd",
+      "files": {
+        "m011-offset-x.lbrn2": {
+          "sha256": "dcccf5086f7185b5d8ec850927a9aa544bc2738247dfc3ed0877f6494bcd3b93",
+          "size": 2802,
+          "stage": "post-lightburn-normalized"
+        },
+        "m011-offset-x.rd": {
+          "sha256": "da354bfb540a94b0b9605f1094ca9fbe2bb0a99deefc4456bc8c67d12de90590",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m011-offset-x",
+      "layer": 0,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m011-offset-x.lbrn2",
+      "purpose": "job and layer X-bound changes",
+      "speed_mm_s": 10,
+      "start_mm": [
+        21,
+        20
+      ]
+    },
+    {
+      "air_assist": false,
+      "end_mm": [
+        30,
+        21
+      ],
+      "expected_rd": "m012-offset-y.rd",
+      "files": {
+        "m012-offset-y.lbrn2": {
+          "sha256": "5d8d657c05e2253f59c27b955ef3b7611f01ed7f06c686b7a2a2eae5869d3e4f",
+          "size": 2802,
+          "stage": "post-lightburn-normalized"
+        },
+        "m012-offset-y.rd": {
+          "sha256": "189f32b8096328e972bbbe1c8336930c38c198785f171146c6af46704a2e54ea",
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "m012-offset-y",
+      "layer": 0,
+      "max_power_percent": 20,
+      "min_power_percent": 10,
+      "output": true,
+      "project": "m012-offset-y.lbrn2",
+      "purpose": "job and layer Y-bound changes",
+      "speed_mm_s": 10,
+      "start_mm": [
+        20,
+        21
+      ]
+    }
+  ],
+  "device_profile": {
+    "bed_height_mm": 599.947998046875,
+    "bed_width_mm": 991.1080322265625,
+    "connection": "Serial",
+    "controller": "Ruida",
+    "display_name": "Ruida 644XS",
+    "mirror_x": true,
+    "mirror_y": true
+  },
+  "reference_software": {
+    "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+    "name": "LightBurn",
+    "platform": "macOS",
+    "version": "2.1.03"
+  }
+}

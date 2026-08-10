@@ -1,0 +1,50 @@
+{
+  "device_profile": {
+    "bed_height_mm": 599.947998046875,
+    "bed_width_mm": 991.1080322265625,
+    "connection": "Serial",
+    "controller": "Ruida",
+    "display_name": "Ruida 644XS",
+    "mirror_x": true,
+    "mirror_y": true
+  },
+  "files": {
+    "v001-single-line.lbrn2": {
+      "sha256": "d5dd4806e5abbcb7fd9cb977753ef6944c6909220f0c53d89832273bc033fd3c",
+      "size": 859,
+      "stage": "generated-input"
+    },
+    "v001-single-line.rd": {
+      "sha256": "32117307511f5017b70e3039099d665b8758c7d24850284de5f0039e826b3819",
+      "size": 492,
+      "stage": "lightburn-machine-export"
+    }
+  },
+  "fixture": "v001-single-line",
+  "geometry": {
+    "end_mm": [
+      30,
+      20
+    ],
+    "kind": "line",
+    "start_mm": [
+      20,
+      20
+    ]
+  },
+  "layer": {
+    "air_assist": false,
+    "index": 0,
+    "max_power_percent": 20,
+    "min_power_percent": 10,
+    "mode": "Line",
+    "output": true,
+    "speed_mm_s": 10
+  },
+  "reference_software": {
+    "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+    "name": "LightBurn",
+    "platform": "macOS",
+    "version": "2.1.03"
+  }
+}

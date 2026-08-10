@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ruida-re"
+version = "0.1.0"
+description = "Fixture-driven Ruida protocol reverse engineering"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["laser", "reverse-engineering", "ruida"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries",
+]
+
+[project.scripts]
+ruida-advanced = "ruida_re.advanced:main"
+ruida-decode = "ruida_re.decode_cli:main"
+ruida-diff = "ruida_re.diff:main"
+ruida-encode = "ruida_re.encode_cli:main"
+ruida-fixture = "ruida_re.fixture:main"
+ruida-spec = "ruida_re.spec_cli:main"
+ruida-verify = "ruida_re.verify:main"
+ruida-lightburn-export = "ruida_re.lightburn_export:main"
+ruida-matrix = "ruida_re.matrix:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
