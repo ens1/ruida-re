@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import argparse
-from copy import deepcopy
 import json
-from pathlib import Path
 import sys
+from copy import deepcopy
+from pathlib import Path
 from typing import Any
 
 from .cli_io import atomic_write_text
@@ -35,12 +35,12 @@ from .registry import (
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIBLASERCUT,
     SRC_LIGHTBURN,
+    SRC_LIGHTBURN_CAPABILITIES,
     SRC_MEERK40T,
     SRC_RUIDA_LASER,
     SRC_RUIDA_PA,
 )
 from .specs import CommandSpec
-
 
 CATALOG_SCHEMA = "ruida-re.catalog.v1"
 CATALOG_CONTEXTS = ("job", "request", "reply")
@@ -65,6 +65,17 @@ _SOURCE_PROVENANCE = (
         "revision": "2.1.03",
         "license": None,
         "local_path": "fixtures/lightburn-2.1.03",
+    },
+    {
+        "id": SRC_LIGHTBURN_CAPABILITIES,
+        "kind": "local-fixture",
+        "url": None,
+        "revision": "2.1.03-capabilities-v1",
+        "license": None,
+        "local_path": (
+            "fixtures/lightburn-2.1.03/capabilities/"
+            "capabilities.json"
+        ),
     },
     {
         "id": SRC_LIBLASERCUT,

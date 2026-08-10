@@ -1,0 +1,1482 @@
+{
+  "capability": "diagonal-raster",
+  "captures": [
+    {
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "id": "c001-raster-angle-000-uni",
+      "path": "c001-raster-angle-000-uni.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "de14a39be3c127381df0b2fd5e55d06119606168a5aff37f6c599c259c2563db",
+          "rd_sha256": "cfb3c71078be1430206cbfc4eac23f429023942f2b3c4a2100e2c11ae65ff0ea"
+        },
+        "comparison": null,
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c001-raster-angle-000-uni.lbrn2": {
+            "sha256": "de14a39be3c127381df0b2fd5e55d06119606168a5aff37f6c599c259c2563db",
+            "size": 1572,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c001-raster-angle-000-uni",
+        "profile_requirements": [],
+        "project": "c001-raster-angle-000-uni.lbrn2",
+        "purpose": "establish the horizontal unidirectional threshold baseline",
+        "rd_file_metadata": {
+          "size": 526,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "sha256": "cfb3c71078be1430206cbfc4eac23f429023942f2b3c4a2100e2c11ae65ff0ea"
+    },
+    {
+      "controls": {
+        "angle_degrees": 45,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "id": "c002-raster-angle-045-uni",
+      "path": "c002-raster-angle-045-uni.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "9435aeff156a70ef782006cae74dac585c417bfcc95431c528e59082e28fb096",
+          "rd_sha256": "8fdca8c9a07a12c1ee7189d3b96025b609906963b38e9fa87d75f7646821175c"
+        },
+        "comparison": {
+          "baseline": "c001-raster-angle-000-uni",
+          "baseline_value": 0,
+          "case_value": 45,
+          "controlled_differences": [
+            "angle_degrees"
+          ],
+          "independent_variable": "angle_degrees"
+        },
+        "controls": {
+          "angle_degrees": 45,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c002-raster-angle-045-uni.lbrn2": {
+            "sha256": "9435aeff156a70ef782006cae74dac585c417bfcc95431c528e59082e28fb096",
+            "size": 1573,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c002-raster-angle-045-uni",
+        "profile_requirements": [],
+        "project": "c002-raster-angle-045-uni.lbrn2",
+        "purpose": "isolate a 45 degree unidirectional scan angle",
+        "rd_file_metadata": {
+          "size": 508,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "sha256": "8fdca8c9a07a12c1ee7189d3b96025b609906963b38e9fa87d75f7646821175c"
+    },
+    {
+      "controls": {
+        "angle_degrees": 45,
+        "bidirectional": true,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "id": "c003-raster-angle-045-bi",
+      "path": "c003-raster-angle-045-bi.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "aa8579c5f4a471696039d68cca4c24c0d87a28c86010c9514fc6d04c4a0cac46",
+          "rd_sha256": "2aaeb0510f5b7fb617acb0b815db7886be4f10a1d5af1d4b212776ae71d52a0d"
+        },
+        "comparison": {
+          "baseline": "c002-raster-angle-045-uni",
+          "baseline_value": false,
+          "case_value": true,
+          "controlled_differences": [
+            "bidirectional"
+          ],
+          "independent_variable": "bidirectional"
+        },
+        "controls": {
+          "angle_degrees": 45,
+          "bidirectional": true,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c003-raster-angle-045-bi.lbrn2": {
+            "sha256": "aa8579c5f4a471696039d68cca4c24c0d87a28c86010c9514fc6d04c4a0cac46",
+            "size": 1572,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c003-raster-angle-045-bi",
+        "profile_requirements": [],
+        "project": "c003-raster-angle-045-bi.lbrn2",
+        "purpose": "isolate bidirectional scanning at 45 degrees",
+        "rd_file_metadata": {
+          "size": 510,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "sha256": "2aaeb0510f5b7fb617acb0b815db7886be4f10a1d5af1d4b212776ae71d52a0d"
+    },
+    {
+      "controls": {
+        "angle_degrees": 135,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "id": "c004-raster-angle-135-uni",
+      "path": "c004-raster-angle-135-uni.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "a1b1bd9140ddf50d47b0c4bd68a2cb7b0915235daa925bec94717b7906c6b32f",
+          "rd_sha256": "946bba365738e890bd23003610cb7c3b9f80a921bce514c01988318d830a1649"
+        },
+        "comparison": {
+          "baseline": "c002-raster-angle-045-uni",
+          "baseline_value": 45,
+          "case_value": 135,
+          "controlled_differences": [
+            "angle_degrees"
+          ],
+          "independent_variable": "angle_degrees"
+        },
+        "controls": {
+          "angle_degrees": 135,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c004-raster-angle-135-uni.lbrn2": {
+            "sha256": "a1b1bd9140ddf50d47b0c4bd68a2cb7b0915235daa925bec94717b7906c6b32f",
+            "size": 1574,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c004-raster-angle-135-uni",
+        "profile_requirements": [],
+        "project": "c004-raster-angle-135-uni.lbrn2",
+        "purpose": "isolate the direction change from 45 to 135 degrees",
+        "rd_file_metadata": {
+          "size": 540,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "sha256": "946bba365738e890bd23003610cb7c3b9f80a921bce514c01988318d830a1649"
+    },
+    {
+      "controls": {
+        "angle_degrees": 45,
+        "bidirectional": false,
+        "cross_hatch": true,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "id": "c005-raster-angle-045-cross-hatch",
+      "path": "c005-raster-angle-045-cross-hatch.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "5cc58813085d8e1a4d09f3752338eb943b93ad494fdc8cd48ff3efccf91b41f5",
+          "rd_sha256": "131e69e02995faac0c8409da1111b02edce75c0513b149804003db841f0a4a36"
+        },
+        "comparison": {
+          "baseline": "c002-raster-angle-045-uni",
+          "baseline_value": false,
+          "case_value": true,
+          "controlled_differences": [
+            "cross_hatch"
+          ],
+          "independent_variable": "cross_hatch"
+        },
+        "controls": {
+          "angle_degrees": 45,
+          "bidirectional": false,
+          "cross_hatch": true,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c005-raster-angle-045-cross-hatch.lbrn2": {
+            "sha256": "5cc58813085d8e1a4d09f3752338eb943b93ad494fdc8cd48ff3efccf91b41f5",
+            "size": 1581,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c005-raster-angle-045-cross-hatch",
+        "profile_requirements": [],
+        "project": "c005-raster-angle-045-cross-hatch.lbrn2",
+        "purpose": "isolate LightBurn's cross-hatch layer control at 45 degrees",
+        "rd_file_metadata": {
+          "size": 644,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "sha256": "131e69e02995faac0c8409da1111b02edce75c0513b149804003db841f0a4a36"
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "c001-raster-angle-000-uni",
+      "expected_relation": "observe",
+      "id": "c001-raster-angle-000-uni-vs-c002-raster-angle-045-uni",
+      "variable": "angle_degrees",
+      "variant": "c002-raster-angle-045-uni"
+    },
+    {
+      "baseline": "c002-raster-angle-045-uni",
+      "expected_relation": "observe",
+      "id": "c002-raster-angle-045-uni-vs-c003-raster-angle-045-bi",
+      "variable": "bidirectional",
+      "variant": "c003-raster-angle-045-bi"
+    },
+    {
+      "baseline": "c002-raster-angle-045-uni",
+      "expected_relation": "observe",
+      "id": "c002-raster-angle-045-uni-vs-c004-raster-angle-135-uni",
+      "variable": "angle_degrees",
+      "variant": "c004-raster-angle-135-uni"
+    },
+    {
+      "baseline": "c002-raster-angle-045-uni",
+      "expected_relation": "observe",
+      "id": "c002-raster-angle-045-uni-vs-c005-raster-angle-045-cross-hatch",
+      "variable": "cross_hatch",
+      "variant": "c005-raster-angle-045-cross-hatch"
+    }
+  ],
+  "protocol": {
+    "container": "rd",
+    "context": "job",
+    "magic": 136
+  },
+  "provenance": {
+    "lightburn_profile": {
+      "bed_height_mm": 599.947998046875,
+      "bed_width_mm": 991.1080322265625,
+      "connection": "Serial",
+      "controller": "Ruida",
+      "display_name": "Ruida 644XS",
+      "mirror_x": true,
+      "mirror_y": true
+    },
+    "machine": {
+      "display_name": "Boss LS2040",
+      "manufacturer": "Boss Laser",
+      "model": "LS2040",
+      "rotary_hardware_available": false
+    },
+    "publication": {
+      "blocked_rotary_case_ids": [
+        "c045-rotary-enabled-off",
+        "c046-rotary-enabled-on",
+        "c047-rotary-object-diameter-50",
+        "c048-rotary-object-diameter-75",
+        "c049-rotary-mirror-output-off",
+        "c050-rotary-mirror-output-on",
+        "c051-rotary-roller",
+        "c052-rotary-chuck"
+      ],
+      "capture_chain": "original capture hashes retained in capture_origin",
+      "excluded_artifacts": [
+        "LightBurn backup files",
+        "unattested or quarantined exports",
+        "rotary template attempts",
+        "blocked rotary case files"
+      ],
+      "included_case_count": 44,
+      "included_case_ids": [
+        "c001-raster-angle-000-uni",
+        "c002-raster-angle-045-uni",
+        "c003-raster-angle-045-bi",
+        "c004-raster-angle-135-uni",
+        "c005-raster-angle-045-cross-hatch",
+        "c006-laser1-only-static",
+        "c007-lasers-1-and-2-static",
+        "c008-laser2-only-static",
+        "c009-lasers-both-laser1-power-25",
+        "c010-lasers-both-laser2-power-45",
+        "c011-z-per-pass-zero-baseline",
+        "c012-z-per-pass-positive-05",
+        "c013-z-per-pass-negative-05",
+        "c014-material-height-positive-1",
+        "c015-power-scale-omitted",
+        "c016-power-scale-all-000",
+        "c017-power-scale-all-050",
+        "c018-power-scale-all-100",
+        "c019-power-scale-sequence-000-050-100",
+        "c020-power-scale-sequence-100-050-000",
+        "c021-power-scale-sequence-repeated-050",
+        "c022-delay-zero-baseline",
+        "c023-start-delay-100",
+        "c024-start-delay-200",
+        "c025-end-delay-100",
+        "c026-end-delay-200",
+        "c027-cut-through-disabled",
+        "c028-cut-through-start-enabled",
+        "c029-cut-through-end-enabled",
+        "c030-cut-through-start-and-end",
+        "c031-cut-through-laser1-power-35",
+        "c032-cut-through-laser2-power-55",
+        "c033-dot-mode-disabled",
+        "c034-dot-mode-enabled",
+        "c035-dot-time-200",
+        "c036-dot-spacing-2",
+        "c037-frequency-override-disabled-20000",
+        "c038-frequency-override-enabled-20000",
+        "c039-frequency-override-enabled-10000",
+        "c040-fiber-pulse-width-zero",
+        "c041-fiber-pulse-width-100",
+        "c042-fiber-pulse-width-200",
+        "c043-z-offset-positive-1",
+        "c044-z-offset-negative-1"
+      ],
+      "included_families": [
+        "cut-through",
+        "diagonal-raster",
+        "dot-mode",
+        "dwell",
+        "dynamic-vector-power",
+        "frequency",
+        "laser-channel",
+        "pulse-width-candidate",
+        "z-axis-candidate"
+      ],
+      "profile_matrix": {
+        "capture_filename": "lightburn-profile-matrix.json",
+        "original_document_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_size": 3763,
+        "path": "profiles/lightburn-profile-matrix.json",
+        "published_document_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_size": 3763,
+        "redactions": [],
+        "rewrites": [
+          {
+            "json_pointer": "/source/source_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/source/source_document_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/variants/0/variant_sha256",
+            "operation": "replace",
+            "original_value": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+            "published_value": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243"
+          },
+          {
+            "json_pointer": "/variants/0/size",
+            "operation": "replace",
+            "original_value": 2326,
+            "published_value": 2217
+          },
+          {
+            "json_pointer": "/variants/1/variant_sha256",
+            "operation": "replace",
+            "original_value": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+            "published_value": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa"
+          },
+          {
+            "json_pointer": "/variants/1/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/2/variant_sha256",
+            "operation": "replace",
+            "original_value": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+            "published_value": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4"
+          },
+          {
+            "json_pointer": "/variants/2/size",
+            "operation": "replace",
+            "original_value": 2340,
+            "published_value": 2231
+          },
+          {
+            "json_pointer": "/variants/3/variant_sha256",
+            "operation": "replace",
+            "original_value": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+            "published_value": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a"
+          },
+          {
+            "json_pointer": "/variants/3/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/4/variant_sha256",
+            "operation": "replace",
+            "original_value": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+            "published_value": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06"
+          },
+          {
+            "json_pointer": "/variants/4/size",
+            "operation": "replace",
+            "original_value": 2344,
+            "published_value": 2235
+          }
+        ]
+      },
+      "profiles": [
+        {
+          "capture_filename": "research-enable-z.lbdev",
+          "original_document_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_size": 2326,
+          "path": "profiles/research-enable-z.lbdev",
+          "published_document_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_size": 2217,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-fiber.lbdev",
+          "original_document_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_size": 2338,
+          "path": "profiles/research-laser-1-fiber.lbdev",
+          "published_document_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-rf-tube.lbdev",
+          "original_document_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_size": 2340,
+          "path": "profiles/research-laser-1-rf-tube.lbdev",
+          "published_document_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_size": 2231,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-2-enabled.lbdev",
+          "original_document_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_size": 2338,
+          "path": "profiles/research-laser-2-enabled.lbdev",
+          "published_document_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-save-rotary-config.lbdev",
+          "original_document_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_size": 2344,
+          "path": "profiles/research-save-rotary-config.lbdev",
+          "published_document_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_size": 2235,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "ruida-644xs-active.lbdev",
+          "original_document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_size": 2270,
+          "path": "profiles/ruida-644xs-active.lbdev",
+          "published_document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_size": 2161,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        }
+      ],
+      "schema": "ruida-re.capability-publication.v1",
+      "source_manifest_sha256": "32a2059b3a610787f8bb21cfbc0c9481e234deb7a68476866e267f19d2dcf062"
+    },
+    "reference_software": {
+      "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+      "name": "LightBurn",
+      "platform": "macOS",
+      "version": "2.1.03"
+    },
+    "rotary_template": {
+      "blocked_reason": "Supply a LightBurn-exported .lbrn2 project containing exactly one GantryRotaryConfig; its Axis value and unknown content will be preserved rather than inferred.",
+      "status": "required"
+    },
+    "schema": "ruida-re-lightburn-capabilities-v1",
+    "scope": {
+      "default_export_status": "pending",
+      "export_capture": {
+        "attestation_scope": "per-case",
+        "available_case_count": 44,
+        "captured_case_count": 44,
+        "status": "complete"
+      },
+      "project_generation": {
+        "hardware_contacted": false,
+        "lightburn_launched": false,
+        "mode": "offline"
+      }
+    }
+  },
+  "schema": "ruida-re.experiment.v1",
+  "strict": true
+}

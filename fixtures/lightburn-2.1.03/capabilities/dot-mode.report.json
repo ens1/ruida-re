@@ -1,0 +1,2472 @@
+{
+  "capability": "dot-mode",
+  "captures": [
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 68,
+          "matches_source_basis": true,
+          "offset": 484,
+          "value": 21341
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "dot_mode": false,
+        "dot_spacing_mm": 1,
+        "dot_time_ms": 100,
+        "enable_cut_through_end": false,
+        "enable_cut_through_start": false,
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "end_delay_ms": 0,
+        "end_mm": [
+          30,
+          20
+        ],
+        "fiber_pulse_width_ns": 0,
+        "frequency_hz": 20000,
+        "laser1_min_power_percent": null,
+        "laser1_power_percent": 20,
+        "laser2_power_percent": 40,
+        "override_frequency": false,
+        "power_scale_sequence": [
+          null
+        ],
+        "project_kind": "vector",
+        "speed_mm_s": 10,
+        "start_delay_ms": 0,
+        "start_mm": [
+          20,
+          20
+        ],
+        "through_power2_percent": 0,
+        "through_power_percent": 0
+      },
+      "expected_sha256": "20a9fcfb4d127385f094c5ebc1aac61e05e854047f7d72a9413753048b35fd7c",
+      "id": "c033-dot-mode-disabled",
+      "issues": [],
+      "known_records": 70,
+      "opaque_records": 0,
+      "path": "c033-dot-mode-disabled.rd",
+      "provenance": {
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "a6092d407eb60a3168550a0f592a04186d1f6a0c16da4c4a535c3824434e6729",
+          "rd_sha256": "20a9fcfb4d127385f094c5ebc1aac61e05e854047f7d72a9413753048b35fd7c"
+        },
+        "comparison": null,
+        "controls": {
+          "dot_mode": false,
+          "dot_spacing_mm": 1,
+          "dot_time_ms": 100,
+          "enable_cut_through_end": false,
+          "enable_cut_through_start": false,
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "end_delay_ms": 0,
+          "end_mm": [
+            30,
+            20
+          ],
+          "fiber_pulse_width_ns": 0,
+          "frequency_hz": 20000,
+          "laser1_min_power_percent": null,
+          "laser1_power_percent": 20,
+          "laser2_power_percent": 40,
+          "override_frequency": false,
+          "power_scale_sequence": [
+            null
+          ],
+          "project_kind": "vector",
+          "speed_mm_s": 10,
+          "start_delay_ms": 0,
+          "start_mm": [
+            20,
+            20
+          ],
+          "through_power2_percent": 0,
+          "through_power_percent": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "dot-mode",
+        "files": {
+          "c033-dot-mode-disabled.lbrn2": {
+            "sha256": "a6092d407eb60a3168550a0f592a04186d1f6a0c16da4c4a535c3824434e6729",
+            "size": 1289,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c033-dot-mode-disabled",
+        "profile_requirements": [],
+        "project": "c033-dot-mode-disabled.lbrn2",
+        "purpose": "establish configured dot timing and spacing with dot mode off",
+        "rd_file_metadata": {
+          "size": 492,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 70,
+      "round_trip_exact": true,
+      "sha256": "20a9fcfb4d127385f094c5ebc1aac61e05e854047f7d72a9413753048b35fd7c",
+      "sha256_matches": true,
+      "size": 492,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 86,
+          "matches_source_basis": true,
+          "offset": 570,
+          "value": 25828
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "dot_mode": true,
+        "dot_spacing_mm": 1,
+        "dot_time_ms": 100,
+        "enable_cut_through_end": false,
+        "enable_cut_through_start": false,
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "end_delay_ms": 0,
+        "end_mm": [
+          30,
+          20
+        ],
+        "fiber_pulse_width_ns": 0,
+        "frequency_hz": 20000,
+        "laser1_min_power_percent": null,
+        "laser1_power_percent": 20,
+        "laser2_power_percent": 40,
+        "override_frequency": false,
+        "power_scale_sequence": [
+          null
+        ],
+        "project_kind": "vector",
+        "speed_mm_s": 10,
+        "start_delay_ms": 0,
+        "start_mm": [
+          20,
+          20
+        ],
+        "through_power2_percent": 0,
+        "through_power_percent": 0
+      },
+      "expected_sha256": "916f6ef733601851a10e49e47ce2481bc503878c409760ac429db0e526d61e4f",
+      "id": "c034-dot-mode-enabled",
+      "issues": [],
+      "known_records": 88,
+      "opaque_records": 0,
+      "path": "c034-dot-mode-enabled.rd",
+      "provenance": {
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "6770c6e8b9eb7f138a929b52d42743da3e2775f5bc07e3bacb3d1c8c0552c6c1",
+          "rd_sha256": "916f6ef733601851a10e49e47ce2481bc503878c409760ac429db0e526d61e4f"
+        },
+        "comparison": {
+          "baseline": "c033-dot-mode-disabled",
+          "baseline_value": false,
+          "case_value": true,
+          "controlled_differences": [
+            "dot_mode"
+          ],
+          "independent_variable": "dot_mode"
+        },
+        "controls": {
+          "dot_mode": true,
+          "dot_spacing_mm": 1,
+          "dot_time_ms": 100,
+          "enable_cut_through_end": false,
+          "enable_cut_through_start": false,
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "end_delay_ms": 0,
+          "end_mm": [
+            30,
+            20
+          ],
+          "fiber_pulse_width_ns": 0,
+          "frequency_hz": 20000,
+          "laser1_min_power_percent": null,
+          "laser1_power_percent": 20,
+          "laser2_power_percent": 40,
+          "override_frequency": false,
+          "power_scale_sequence": [
+            null
+          ],
+          "project_kind": "vector",
+          "speed_mm_s": 10,
+          "start_delay_ms": 0,
+          "start_mm": [
+            20,
+            20
+          ],
+          "through_power2_percent": 0,
+          "through_power_percent": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "dot-mode",
+        "files": {
+          "c034-dot-mode-enabled.lbrn2": {
+            "sha256": "6770c6e8b9eb7f138a929b52d42743da3e2775f5bc07e3bacb3d1c8c0552c6c1",
+            "size": 1289,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c034-dot-mode-enabled",
+        "profile_requirements": [],
+        "project": "c034-dot-mode-enabled.lbrn2",
+        "purpose": "isolate enabling LightBurn dot mode",
+        "rd_file_metadata": {
+          "size": 578,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 88,
+      "round_trip_exact": true,
+      "sha256": "916f6ef733601851a10e49e47ce2481bc503878c409760ac429db0e526d61e4f",
+      "sha256_matches": true,
+      "size": 578,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 86,
+          "matches_source_basis": true,
+          "offset": 570,
+          "value": 26338
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "dot_mode": true,
+        "dot_spacing_mm": 1,
+        "dot_time_ms": 200,
+        "enable_cut_through_end": false,
+        "enable_cut_through_start": false,
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "end_delay_ms": 0,
+        "end_mm": [
+          30,
+          20
+        ],
+        "fiber_pulse_width_ns": 0,
+        "frequency_hz": 20000,
+        "laser1_min_power_percent": null,
+        "laser1_power_percent": 20,
+        "laser2_power_percent": 40,
+        "override_frequency": false,
+        "power_scale_sequence": [
+          null
+        ],
+        "project_kind": "vector",
+        "speed_mm_s": 10,
+        "start_delay_ms": 0,
+        "start_mm": [
+          20,
+          20
+        ],
+        "through_power2_percent": 0,
+        "through_power_percent": 0
+      },
+      "expected_sha256": "c5c84802cd1eb7b702b3ea8905d3bc8b7fa8d54af50ae9a131e7f202857e2cf2",
+      "id": "c035-dot-time-200",
+      "issues": [],
+      "known_records": 88,
+      "opaque_records": 0,
+      "path": "c035-dot-time-200.rd",
+      "provenance": {
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "5f403d2b0db0d872bdfd318bcb0ca2ed5d6fcd0dd4f465ac259a15bcd2d739cd",
+          "rd_sha256": "c5c84802cd1eb7b702b3ea8905d3bc8b7fa8d54af50ae9a131e7f202857e2cf2"
+        },
+        "comparison": {
+          "baseline": "c034-dot-mode-enabled",
+          "baseline_value": 100,
+          "case_value": 200,
+          "controlled_differences": [
+            "dot_time_ms"
+          ],
+          "independent_variable": "dot_time_ms"
+        },
+        "controls": {
+          "dot_mode": true,
+          "dot_spacing_mm": 1,
+          "dot_time_ms": 200,
+          "enable_cut_through_end": false,
+          "enable_cut_through_start": false,
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "end_delay_ms": 0,
+          "end_mm": [
+            30,
+            20
+          ],
+          "fiber_pulse_width_ns": 0,
+          "frequency_hz": 20000,
+          "laser1_min_power_percent": null,
+          "laser1_power_percent": 20,
+          "laser2_power_percent": 40,
+          "override_frequency": false,
+          "power_scale_sequence": [
+            null
+          ],
+          "project_kind": "vector",
+          "speed_mm_s": 10,
+          "start_delay_ms": 0,
+          "start_mm": [
+            20,
+            20
+          ],
+          "through_power2_percent": 0,
+          "through_power_percent": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "dot-mode",
+        "files": {
+          "c035-dot-time-200.lbrn2": {
+            "sha256": "5f403d2b0db0d872bdfd318bcb0ca2ed5d6fcd0dd4f465ac259a15bcd2d739cd",
+            "size": 1289,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c035-dot-time-200",
+        "profile_requirements": [],
+        "project": "c035-dot-time-200.lbrn2",
+        "purpose": "isolate a 200 ms dot time while dot mode is enabled",
+        "rd_file_metadata": {
+          "size": 578,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 88,
+      "round_trip_exact": true,
+      "sha256": "c5c84802cd1eb7b702b3ea8905d3bc8b7fa8d54af50ae9a131e7f202857e2cf2",
+      "sha256_matches": true,
+      "size": 578,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 76,
+          "matches_source_basis": true,
+          "offset": 520,
+          "value": 23194
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "dot_mode": true,
+        "dot_spacing_mm": 2,
+        "dot_time_ms": 100,
+        "enable_cut_through_end": false,
+        "enable_cut_through_start": false,
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "end_delay_ms": 0,
+        "end_mm": [
+          30,
+          20
+        ],
+        "fiber_pulse_width_ns": 0,
+        "frequency_hz": 20000,
+        "laser1_min_power_percent": null,
+        "laser1_power_percent": 20,
+        "laser2_power_percent": 40,
+        "override_frequency": false,
+        "power_scale_sequence": [
+          null
+        ],
+        "project_kind": "vector",
+        "speed_mm_s": 10,
+        "start_delay_ms": 0,
+        "start_mm": [
+          20,
+          20
+        ],
+        "through_power2_percent": 0,
+        "through_power_percent": 0
+      },
+      "expected_sha256": "c9a2bbeede1378b13dc0f936f81e3c90bfdab0dd32e1866b984226e4ae9716fe",
+      "id": "c036-dot-spacing-2",
+      "issues": [],
+      "known_records": 78,
+      "opaque_records": 0,
+      "path": "c036-dot-spacing-2.rd",
+      "provenance": {
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "3bfcc7998c0e3e2842900235c2e00a01f0eae0e4ffe462c92821d97417ad3597",
+          "rd_sha256": "c9a2bbeede1378b13dc0f936f81e3c90bfdab0dd32e1866b984226e4ae9716fe"
+        },
+        "comparison": {
+          "baseline": "c034-dot-mode-enabled",
+          "baseline_value": 1,
+          "case_value": 2,
+          "controlled_differences": [
+            "dot_spacing_mm"
+          ],
+          "independent_variable": "dot_spacing_mm"
+        },
+        "controls": {
+          "dot_mode": true,
+          "dot_spacing_mm": 2,
+          "dot_time_ms": 100,
+          "enable_cut_through_end": false,
+          "enable_cut_through_start": false,
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "end_delay_ms": 0,
+          "end_mm": [
+            30,
+            20
+          ],
+          "fiber_pulse_width_ns": 0,
+          "frequency_hz": 20000,
+          "laser1_min_power_percent": null,
+          "laser1_power_percent": 20,
+          "laser2_power_percent": 40,
+          "override_frequency": false,
+          "power_scale_sequence": [
+            null
+          ],
+          "project_kind": "vector",
+          "speed_mm_s": 10,
+          "start_delay_ms": 0,
+          "start_mm": [
+            20,
+            20
+          ],
+          "through_power2_percent": 0,
+          "through_power_percent": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "dot-mode",
+        "files": {
+          "c036-dot-spacing-2.lbrn2": {
+            "sha256": "3bfcc7998c0e3e2842900235c2e00a01f0eae0e4ffe462c92821d97417ad3597",
+            "size": 1289,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c036-dot-spacing-2",
+        "profile_requirements": [],
+        "project": "c036-dot-spacing-2.lbrn2",
+        "purpose": "isolate 2 mm dot spacing while dot mode is enabled",
+        "rd_file_metadata": {
+          "size": 528,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 78,
+      "round_trip_exact": true,
+      "sha256": "c9a2bbeede1378b13dc0f936f81e3c90bfdab0dd32e1866b984226e4ae9716fe",
+      "sha256_matches": true,
+      "size": 528,
+      "structured": true,
+      "valid": true
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "c033-dot-mode-disabled",
+      "baseline_value": false,
+      "expected_relation": "observe",
+      "id": "c033-dot-mode-disabled-vs-c034-dot-mode-enabled",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e5050000014964",
+                "index": 86,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 570,
+                "opcode": "e505",
+                "raw": "e5050000014964",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 25828
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e505000001265d",
+                "index": 68,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 484,
+                "opcode": "e505",
+                "raw": "e505000001265d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 21341
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 83,
+            "after_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 64,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 456,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 65,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 463,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 66,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 466,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 67,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 473,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 68,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 476,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 69,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 483,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 70,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 486,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 71,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 493,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 72,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 496,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 73,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 503,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 74,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 506,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 75,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 513,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 76,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 516,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 77,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 523,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 78,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 526,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 79,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 533,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 80,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 536,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 81,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 543,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 82,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 546,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "after_start": 64,
+            "before_end": 65,
+            "before_records": [
+              {
+                "encoded": "a80000016a300000011c20",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_absolute",
+                "offset": 456,
+                "opcode": "a8",
+                "raw": "a80000016a300000011c20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 30.0,
+                  "y_mm": 20.0
+                }
+              }
+            ],
+            "before_start": 64,
+            "operation": "replace"
+          },
+          {
+            "after_end": 86,
+            "after_records": [
+              {
+                "encoded": "da01062000000000000000000000",
+                "index": 85,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 556,
+                "opcode": "da01",
+                "raw": "da01062000000000000000000000",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 0,
+                  "second_value": 0
+                }
+              }
+            ],
+            "after_start": 85,
+            "before_end": 68,
+            "before_records": [
+              {
+                "encoded": "da010620000000000a000000000a",
+                "index": 67,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 470,
+                "opcode": "da01",
+                "raw": "da010620000000000a000000000a",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 10,
+                  "second_value": 10
+                }
+              }
+            ],
+            "before_start": 67,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "4964",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "265d",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "c610",
+            "after_end": 458,
+            "after_start": 456,
+            "before": "a8",
+            "before_end": 457,
+            "before_start": 456,
+            "operation": "replace"
+          },
+          {
+            "after": "060d208a0768c610",
+            "after_end": 468,
+            "after_start": 460,
+            "before": "016a30",
+            "before_end": 462,
+            "before_start": 459,
+            "operation": "replace"
+          },
+          {
+            "after": "060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d",
+            "after_end": 552,
+            "after_start": 470,
+            "before": "011c",
+            "before_end": 466,
+            "before_start": 464,
+            "operation": "replace"
+          },
+          {
+            "after": "",
+            "after_end": 564,
+            "after_start": 564,
+            "before": "0a",
+            "before_end": 479,
+            "before_start": 478,
+            "operation": "delete"
+          },
+          {
+            "after": "0000",
+            "after_end": 570,
+            "after_start": 568,
+            "before": "0a",
+            "before_end": 484,
+            "before_start": 483,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "dot_mode",
+      "variant": "c034-dot-mode-enabled",
+      "variant_value": true
+    },
+    {
+      "baseline": "c034-dot-mode-enabled",
+      "baseline_value": 100,
+      "expected_relation": "observe",
+      "id": "c034-dot-mode-enabled-vs-c035-dot-time-200",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e5050000014d62",
+                "index": 86,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 570,
+                "opcode": "e505",
+                "raw": "e5050000014d62",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 26338
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e5050000014964",
+                "index": 86,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 570,
+                "opcode": "e505",
+                "raw": "e5050000014964",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 25828
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 65,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 64,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 456,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 64,
+            "before_end": 65,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 64,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 456,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 64,
+            "operation": "replace"
+          },
+          {
+            "after_end": 67,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 66,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 466,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 66,
+            "before_end": 67,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 66,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 466,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 66,
+            "operation": "replace"
+          },
+          {
+            "after_end": 69,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 68,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 476,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 68,
+            "before_end": 69,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 68,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 476,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 68,
+            "operation": "replace"
+          },
+          {
+            "after_end": 71,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 70,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 486,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 70,
+            "before_end": 71,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 70,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 486,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 70,
+            "operation": "replace"
+          },
+          {
+            "after_end": 73,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 72,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 496,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 72,
+            "before_end": 73,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 72,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 496,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 72,
+            "operation": "replace"
+          },
+          {
+            "after_end": 75,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 74,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 506,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 74,
+            "before_end": 75,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 74,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 506,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 74,
+            "operation": "replace"
+          },
+          {
+            "after_end": 77,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 76,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 516,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 76,
+            "before_end": 77,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 76,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 516,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 76,
+            "operation": "replace"
+          },
+          {
+            "after_end": 79,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 78,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 526,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 78,
+            "before_end": 79,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 78,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 526,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 78,
+            "operation": "replace"
+          },
+          {
+            "after_end": 81,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 80,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 536,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 80,
+            "before_end": 81,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 80,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 536,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 80,
+            "operation": "replace"
+          },
+          {
+            "after_end": 83,
+            "after_records": [
+              {
+                "encoded": "c61000000c1a40",
+                "index": 82,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 546,
+                "opcode": "c610",
+                "raw": "c61000000c1a40",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 200.0
+                }
+              }
+            ],
+            "after_start": 82,
+            "before_end": 83,
+            "before_records": [
+              {
+                "encoded": "c6100000060d20",
+                "index": 82,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 546,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              }
+            ],
+            "before_start": 82,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "4d62",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "4964",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "0c1a40",
+            "after_end": 463,
+            "after_start": 460,
+            "before": "060d20",
+            "before_end": 463,
+            "before_start": 460,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 473,
+            "after_start": 470,
+            "before": "060d20",
+            "before_end": 473,
+            "before_start": 470,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 483,
+            "after_start": 480,
+            "before": "060d20",
+            "before_end": 483,
+            "before_start": 480,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 493,
+            "after_start": 490,
+            "before": "060d20",
+            "before_end": 493,
+            "before_start": 490,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 503,
+            "after_start": 500,
+            "before": "060d20",
+            "before_end": 503,
+            "before_start": 500,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 513,
+            "after_start": 510,
+            "before": "060d20",
+            "before_end": 513,
+            "before_start": 510,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 523,
+            "after_start": 520,
+            "before": "060d20",
+            "before_end": 523,
+            "before_start": 520,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 533,
+            "after_start": 530,
+            "before": "060d20",
+            "before_end": 533,
+            "before_start": 530,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 543,
+            "after_start": 540,
+            "before": "060d20",
+            "before_end": 543,
+            "before_start": 540,
+            "operation": "replace"
+          },
+          {
+            "after": "0c1a40",
+            "after_end": 553,
+            "after_start": 550,
+            "before": "060d20",
+            "before_end": 553,
+            "before_start": 550,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "dot_time_ms",
+      "variant": "c035-dot-time-200",
+      "variant_value": 200
+    },
+    {
+      "baseline": "c034-dot-mode-enabled",
+      "baseline_value": 1,
+      "expected_relation": "observe",
+      "id": "c034-dot-mode-enabled-vs-c036-dot-spacing-2",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e505000001351a",
+                "index": 76,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 520,
+                "opcode": "e505",
+                "raw": "e505000001351a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 23194
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e5050000014964",
+                "index": 86,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 570,
+                "opcode": "e505",
+                "raw": "e5050000014964",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 25828
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 66,
+            "after_records": [
+              {
+                "encoded": "8a0f50",
+                "index": 65,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 463,
+                "opcode": "8a",
+                "raw": "8a0f50",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.0
+                }
+              }
+            ],
+            "after_start": 65,
+            "before_end": 66,
+            "before_records": [
+              {
+                "encoded": "8a0768",
+                "index": 65,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 463,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              }
+            ],
+            "before_start": 65,
+            "operation": "replace"
+          },
+          {
+            "after_end": 68,
+            "after_records": [
+              {
+                "encoded": "8a0f50",
+                "index": 67,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 473,
+                "opcode": "8a",
+                "raw": "8a0f50",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.0
+                }
+              }
+            ],
+            "after_start": 67,
+            "before_end": 68,
+            "before_records": [
+              {
+                "encoded": "8a0768",
+                "index": 67,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 473,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              }
+            ],
+            "before_start": 67,
+            "operation": "replace"
+          },
+          {
+            "after_end": 70,
+            "after_records": [
+              {
+                "encoded": "8a0f50",
+                "index": 69,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 483,
+                "opcode": "8a",
+                "raw": "8a0f50",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.0
+                }
+              }
+            ],
+            "after_start": 69,
+            "before_end": 70,
+            "before_records": [
+              {
+                "encoded": "8a0768",
+                "index": 69,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 483,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              }
+            ],
+            "before_start": 69,
+            "operation": "replace"
+          },
+          {
+            "after_end": 72,
+            "after_records": [
+              {
+                "encoded": "8a0f50",
+                "index": 71,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 493,
+                "opcode": "8a",
+                "raw": "8a0f50",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.0
+                }
+              }
+            ],
+            "after_start": 71,
+            "before_end": 82,
+            "before_records": [
+              {
+                "encoded": "8a0768",
+                "index": 71,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 493,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 72,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 496,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 73,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 503,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 74,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 506,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 75,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 513,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 76,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 516,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 77,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 523,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 78,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 526,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 79,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 533,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              },
+              {
+                "encoded": "c6100000060d20",
+                "index": 80,
+                "kind": "command",
+                "name": "laser_interval",
+                "offset": 536,
+                "opcode": "c610",
+                "raw": "c6100000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 100.0
+                }
+              },
+              {
+                "encoded": "8a0768",
+                "index": 81,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 543,
+                "opcode": "8a",
+                "raw": "8a0768",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.0
+                }
+              }
+            ],
+            "before_start": 71,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "351a",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "4964",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "0f50",
+            "after_end": 466,
+            "after_start": 464,
+            "before": "0768",
+            "before_end": 466,
+            "before_start": 464,
+            "operation": "replace"
+          },
+          {
+            "after": "0f50",
+            "after_end": 476,
+            "after_start": 474,
+            "before": "0768",
+            "before_end": 476,
+            "before_start": 474,
+            "operation": "replace"
+          },
+          {
+            "after": "0f50",
+            "after_end": 486,
+            "after_start": 484,
+            "before": "0768",
+            "before_end": 486,
+            "before_start": 484,
+            "operation": "replace"
+          },
+          {
+            "after": "0f50",
+            "after_end": 496,
+            "after_start": 494,
+            "before": "0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768c6100000060d208a0768",
+            "before_end": 546,
+            "before_start": 494,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "dot_spacing_mm",
+      "variant": "c036-dot-spacing-2",
+      "variant_value": 2
+    }
+  ],
+  "manifest": "dot-mode.experiment.json",
+  "manifest_sha256": "e7995aba21f9f4c9881dd0e8fabe17062687c11ef52319ca6d1936138311ce21",
+  "protocol": {
+    "container": "rd",
+    "context": "job",
+    "magic": 136
+  },
+  "provenance": {
+    "lightburn_profile": {
+      "bed_height_mm": 599.947998046875,
+      "bed_width_mm": 991.1080322265625,
+      "connection": "Serial",
+      "controller": "Ruida",
+      "display_name": "Ruida 644XS",
+      "mirror_x": true,
+      "mirror_y": true
+    },
+    "machine": {
+      "display_name": "Boss LS2040",
+      "manufacturer": "Boss Laser",
+      "model": "LS2040",
+      "rotary_hardware_available": false
+    },
+    "publication": {
+      "blocked_rotary_case_ids": [
+        "c045-rotary-enabled-off",
+        "c046-rotary-enabled-on",
+        "c047-rotary-object-diameter-50",
+        "c048-rotary-object-diameter-75",
+        "c049-rotary-mirror-output-off",
+        "c050-rotary-mirror-output-on",
+        "c051-rotary-roller",
+        "c052-rotary-chuck"
+      ],
+      "capture_chain": "original capture hashes retained in capture_origin",
+      "excluded_artifacts": [
+        "LightBurn backup files",
+        "unattested or quarantined exports",
+        "rotary template attempts",
+        "blocked rotary case files"
+      ],
+      "included_case_count": 44,
+      "included_case_ids": [
+        "c001-raster-angle-000-uni",
+        "c002-raster-angle-045-uni",
+        "c003-raster-angle-045-bi",
+        "c004-raster-angle-135-uni",
+        "c005-raster-angle-045-cross-hatch",
+        "c006-laser1-only-static",
+        "c007-lasers-1-and-2-static",
+        "c008-laser2-only-static",
+        "c009-lasers-both-laser1-power-25",
+        "c010-lasers-both-laser2-power-45",
+        "c011-z-per-pass-zero-baseline",
+        "c012-z-per-pass-positive-05",
+        "c013-z-per-pass-negative-05",
+        "c014-material-height-positive-1",
+        "c015-power-scale-omitted",
+        "c016-power-scale-all-000",
+        "c017-power-scale-all-050",
+        "c018-power-scale-all-100",
+        "c019-power-scale-sequence-000-050-100",
+        "c020-power-scale-sequence-100-050-000",
+        "c021-power-scale-sequence-repeated-050",
+        "c022-delay-zero-baseline",
+        "c023-start-delay-100",
+        "c024-start-delay-200",
+        "c025-end-delay-100",
+        "c026-end-delay-200",
+        "c027-cut-through-disabled",
+        "c028-cut-through-start-enabled",
+        "c029-cut-through-end-enabled",
+        "c030-cut-through-start-and-end",
+        "c031-cut-through-laser1-power-35",
+        "c032-cut-through-laser2-power-55",
+        "c033-dot-mode-disabled",
+        "c034-dot-mode-enabled",
+        "c035-dot-time-200",
+        "c036-dot-spacing-2",
+        "c037-frequency-override-disabled-20000",
+        "c038-frequency-override-enabled-20000",
+        "c039-frequency-override-enabled-10000",
+        "c040-fiber-pulse-width-zero",
+        "c041-fiber-pulse-width-100",
+        "c042-fiber-pulse-width-200",
+        "c043-z-offset-positive-1",
+        "c044-z-offset-negative-1"
+      ],
+      "included_families": [
+        "cut-through",
+        "diagonal-raster",
+        "dot-mode",
+        "dwell",
+        "dynamic-vector-power",
+        "frequency",
+        "laser-channel",
+        "pulse-width-candidate",
+        "z-axis-candidate"
+      ],
+      "profile_matrix": {
+        "capture_filename": "lightburn-profile-matrix.json",
+        "original_document_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_size": 3763,
+        "path": "profiles/lightburn-profile-matrix.json",
+        "published_document_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_size": 3763,
+        "redactions": [],
+        "rewrites": [
+          {
+            "json_pointer": "/source/source_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/source/source_document_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/variants/0/variant_sha256",
+            "operation": "replace",
+            "original_value": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+            "published_value": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243"
+          },
+          {
+            "json_pointer": "/variants/0/size",
+            "operation": "replace",
+            "original_value": 2326,
+            "published_value": 2217
+          },
+          {
+            "json_pointer": "/variants/1/variant_sha256",
+            "operation": "replace",
+            "original_value": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+            "published_value": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa"
+          },
+          {
+            "json_pointer": "/variants/1/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/2/variant_sha256",
+            "operation": "replace",
+            "original_value": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+            "published_value": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4"
+          },
+          {
+            "json_pointer": "/variants/2/size",
+            "operation": "replace",
+            "original_value": 2340,
+            "published_value": 2231
+          },
+          {
+            "json_pointer": "/variants/3/variant_sha256",
+            "operation": "replace",
+            "original_value": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+            "published_value": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a"
+          },
+          {
+            "json_pointer": "/variants/3/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/4/variant_sha256",
+            "operation": "replace",
+            "original_value": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+            "published_value": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06"
+          },
+          {
+            "json_pointer": "/variants/4/size",
+            "operation": "replace",
+            "original_value": 2344,
+            "published_value": 2235
+          }
+        ]
+      },
+      "profiles": [
+        {
+          "capture_filename": "research-enable-z.lbdev",
+          "original_document_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_size": 2326,
+          "path": "profiles/research-enable-z.lbdev",
+          "published_document_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_size": 2217,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-fiber.lbdev",
+          "original_document_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_size": 2338,
+          "path": "profiles/research-laser-1-fiber.lbdev",
+          "published_document_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-rf-tube.lbdev",
+          "original_document_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_size": 2340,
+          "path": "profiles/research-laser-1-rf-tube.lbdev",
+          "published_document_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_size": 2231,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-2-enabled.lbdev",
+          "original_document_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_size": 2338,
+          "path": "profiles/research-laser-2-enabled.lbdev",
+          "published_document_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-save-rotary-config.lbdev",
+          "original_document_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_size": 2344,
+          "path": "profiles/research-save-rotary-config.lbdev",
+          "published_document_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_size": 2235,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "ruida-644xs-active.lbdev",
+          "original_document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_size": 2270,
+          "path": "profiles/ruida-644xs-active.lbdev",
+          "published_document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_size": 2161,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        }
+      ],
+      "schema": "ruida-re.capability-publication.v1",
+      "source_manifest_sha256": "32a2059b3a610787f8bb21cfbc0c9481e234deb7a68476866e267f19d2dcf062"
+    },
+    "reference_software": {
+      "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+      "name": "LightBurn",
+      "platform": "macOS",
+      "version": "2.1.03"
+    },
+    "rotary_template": {
+      "blocked_reason": "Supply a LightBurn-exported .lbrn2 project containing exactly one GantryRotaryConfig; its Axis value and unknown content will be preserved rather than inferred.",
+      "status": "required"
+    },
+    "schema": "ruida-re-lightburn-capabilities-v1",
+    "scope": {
+      "default_export_status": "pending",
+      "export_capture": {
+        "attestation_scope": "per-case",
+        "available_case_count": 44,
+        "captured_case_count": 44,
+        "status": "complete"
+      },
+      "project_generation": {
+        "hardware_contacted": false,
+        "lightburn_launched": false,
+        "mode": "offline"
+      }
+    }
+  },
+  "schema": "ruida-re.experiment-report.v1",
+  "strict": true,
+  "valid": true
+}

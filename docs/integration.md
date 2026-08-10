@@ -37,7 +37,12 @@ The public plan types are:
 - `JobPlan`, an ordered tuple of layers;
 - `LayerPlan`, one vector or raster layer and its final ordered events;
 - `TravelTo`, an absolute non-marking XY move;
-- `MarkTo`, an absolute marking XY move; and
+- `MarkTo`, an absolute marking XY move;
+- `LaserChannelPlan`, an explicit head enable state and effective power range;
+- `MarkWithPower`, a vector mark preceded by resolved per-head power;
+- `Dwell`, a stationary non-marking wait;
+- `Pulse`, a stationary timed mark;
+- `RasterSection`, one independently closed host-planned raster path block; and
 - `SetModulation`, a normalized raster modulation change before later marked
   motion.
 
@@ -59,6 +64,20 @@ Every nonzero raster `MarkTo` must lie on the declared axis. Within a
 unidirectional layer, all marked spans must also share one direction; travel
 between rows remains unrestricted. Contradictory plans are rejected before
 encoding.
+
+Diagonal and cross-hatch output use a different, planned-path representation.
+Set `raster_processing="planned-path"`, leave `events` empty, and provide one
+or more nonempty `RasterSection` objects. Each section contains the final
+machine-space `TravelTo` and `MarkTo` sequence and closes independently;
+multiple sections are separated by the observed operation-5 envelope. The
+compiler does not accept an angle and does not rotate or rasterize geometry.
+`SetModulation`, stationary events, and `MarkWithPower` are rejected in these
+sections because controlled diagonal grayscale or mixed-mode evidence does
+not exist. By default the compiler derives metadata bounds and the address-800
+job metric from the supplied path. A host reproducing a producer file may
+instead supply evidenced `declared_metadata_bounds` and
+`reported_job_metric_mm`; those are provenance-bearing metadata overrides,
+not inputs to motion planning.
 
 ```python
 from ruida_re import (
@@ -92,18 +111,43 @@ result = RuidaJobCompiler().compile(JobPlan(layers=(layer,)))
 machine_file = result.encode_rd()
 ```
 
-The currently controlled LightBurn 2.1.03 Ruida 644XS profile supports planar
-XY vector and raster motion, one laser index, the four scan modes above, and
-air assist. It does not support Z or rotary motion, additional laser heads,
-frequency, pulse width, dwell, or arbitrary-angle raster metadata. An adapter
-must reject any such source operation instead of silently discarding it,
-mapping it to a nearby field, or emitting a partially faithful job.
+The conservative `LIGHTBURN_2103_644XS` profile supports planar XY vector and
+raster motion, one laser head, the four native scan modes above, and air
+assist. Planned-path raster sections require the explicit
+`LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH` profile. Its envelope has
+controlled offline fixture evidence; only the earlier mixed cardinal
+vector/raster job has operator-observed execution evidence.
+
+The c001-c044 compiler extensions are intentionally isolated behind opt-in
+profiles whose advanced modes have no hardware-execution evidence:
+
+| Profile | Accepted plan feature | Evidence-backed lowering |
+| --- | --- | --- |
+| `LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH` | exactly one layer-zero planned-path raster | ordered diagonal/cross-hatch `RasterSection` motion |
+| `LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH` | exactly heads 1 and 2 in `laser_channels` | `CA 03` enable mask plus independent layer and active powers |
+| `LIGHTBURN_2103_644XS_STATIONARY_RESEARCH` | vector `Dwell` and `Pulse` | `C6 11` non-marking dwell; `C6 10` marking pulse |
+| `LIGHTBURN_2103_644XS_RF_RESEARCH` | vector `frequency_hz` | two `C6 60` records carrying hertz |
+| `LIGHTBURN_2103_644XS_FIBER_RESEARCH` | vector `pulse_width_ns` | one `C6 66` record carrying nanoseconds |
+| `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` on exactly one native raster layer | inverse `80 03` entry and restore deltas |
+| `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | vector `MarkWithPower` with explicit layer channels | per-mark effective active powers |
+
+Select a research profile explicitly when constructing `RuidaJobCompiler`.
+They are narrow profiles, not a promise that arbitrary combinations of the
+features are supported. The default compiler rejects their plan fields, and
+all profiles reject rotary, cut-through, and unprofiled combinations instead
+of discarding or approximating them. Built-in research bounds are 200 ms for
+stationary events, 10–20 kHz for RF frequency, 0–200 ns for fiber pulse
+width, and 1 mm absolute Z offset.
 
 Pass expansion also belongs to the host. Repeated planar passes can be
-represented by repeated planned motion. A controlled LightBurn four-pass
-3D-slice fixture was byte-identical when `zPerPass` changed from 0 to 0.5 mm,
-so that setting is not treated as evidence for a Ruida Z command. A source
-plan that requires actual Z movement must be rejected by this profile.
+represented by repeated planned motion. Controlled LightBurn four-pass
+3D-slice fixtures were byte-identical when `zPerPass` changed from zero to
+positive or negative 0.5 mm, and changing material height from zero to 1 mm
+was also byte-identical. Neither setting is treated as a Ruida Z command. The
+separate Z research profile reproduces the balanced `80 03` envelope emitted
+for LightBurn's layer `zOffset`; its physical direction and effect remain
+unvalidated, so a normal source plan that requires actual Z movement must
+still be rejected by the conservative profile.
 
 ### Live validation scope
 
@@ -163,7 +207,10 @@ kind, so it is not necessarily one `LayerPlan`. Split the ordered stream into
 contiguous Ruida layers whenever one of those controlled regimes changes.
 Convert Rayforge feed rates from millimetres per minute to millimetres per
 second. Map each configured machine head explicitly to the one-based Ruida
-laser index; do not derive an index from display order.
+laser index; do not derive an index from display order. The conservative
+profile accepts only head 1. A dual-head research plan supplies both indexed
+`LaserChannelPlan` entries, even when one is disabled, so the compiler can
+derive the `CA 03` bitmask and preserve each head's independent power range.
 
 For constant-power scanlines, positive spans become `MarkTo` and exact-zero
 spans become `TravelTo`; use the resolved static output as both layer power
@@ -174,6 +221,29 @@ to `TravelTo`. Do not multiply those samples by an earlier step-power value a
 second time. Planar depth passes are ordinary repeated motion; any remaining
 nonzero Z coordinate is unsupported.
 
+For a non-cardinal raster, Rayforge must perform the rotation, clipping,
+scanline ordering, bidirectional choice, overscan, and cross-hatch expansion.
+Transfer each final pass as a `RasterSection` in a planned-path raster layer.
+Do not pass a source angle or infer a special controller angle opcode: the
+controlled LightBurn files serialize diagonal marks as ordinary signed X/Y
+cut motion. Cross-hatch is two planned path sections, not a boolean Ruida
+mode. Because diagonal grayscale modulation is not established, a host must
+reject that combination rather than silently convert it.
+
+For dynamic vector power, resolve every segment's effective power for every
+configured channel in Rayforge, then use `MarkWithPower`. Do not pass a source
+PowerScale scalar. In the controlled 10%-minimum/70%-maximum case, LightBurn's
+50% scale became an effective head-1 range of 10% through 40%; the compiler
+API represents that resulting range directly. Each mark's enabled channel
+set must match the layer's channel set.
+
+If Rayforge exposes stationary events, map a non-marking wait to `Dwell` and a
+timed stationary mark to `Pulse`; they are not interchangeable. The controlled
+files map them to `C6 11` and `C6 10`, respectively. RF frequency and fiber
+pulse width are layer settings in hertz and nanoseconds. Each mapping requires
+its matching opt-in profile, and the adapter should surface that profile's
+offline-research status to the user.
+
 This mapping requires explicit resolved step metadata: vector or raster kind,
 speed, static and minimum/maximum power, air state, head, scan axis, scan
 strategy, and layer color. A single scanline cannot always reveal its intended
@@ -181,9 +251,15 @@ strategy, and absolute variable-power samples cannot reconstruct the source
 minimum/maximum settings. If Rayforge's final operation stream has discarded
 one of those values, preserve it upstream in step/section markers or a sidecar
 before calling `ruida-re`. Guessing a default in the adapter is not a supported
-fallback. Mid-path vector power changes, arbitrary-angle raster, frequency,
-pulse width, dwell, extra heads, and actual Z motion must likewise be rejected
-until the selected Ruida profile supports them.
+fallback. Planned diagonal paths, mid-path effective vector power, frequency,
+pulse width, dwell/pulse, extra heads, and a paired Z offset may be emitted
+only when the selected profile and plan representation above support them.
+Cut-through remains rejected: enabling either endpoint produced the same
+through-power records, enabling both matched start-only, changing head-1
+through power changed both records, and changing head-2 through power changed
+neither. Those files do not justify endpoint or independent head-2 semantics.
+Rotary remains rejected because c045-c052 are blocked without a
+LightBurn-exported rotary configuration and no rotary hardware was available.
 
 ## Offline codec
 
@@ -698,9 +774,13 @@ particular:
 - absolute negative five-group spelling and several disputed field layouts
   remain open; signed relative X/Y motion is fixture-backed;
 - controlled horizontal and vertical raster motion, grayscale modulation, and
-  host-expanded 3D-slice motion are fixture-backed for one profile; source
-  image reconstruction, arbitrary-angle raster metadata, and native Z motion
-  remain outside that evidence; and
+  host-expanded 3D-slice motion are fixture-backed for one profile;
+  controlled diagonal raster is fixture-backed as host-planned path motion,
+  not as angle metadata, while diagonal grayscale remains untested;
+- two-head power, dynamic effective vector power, stationary dwell/pulse, RF
+  frequency, fiber pulse width, and paired Z-offset serialization have exact
+  offline golden coverage but no hardware-execution evidence; cut-through and
+  rotary remain unsupported; and
 - live behavior has injectable UDP and serial test coverage plus one
   operator-observed Ruida 644XS USB-serial success, but no automatic physical
   verification or public multi-controller compatibility matrix.

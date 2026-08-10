@@ -2,24 +2,30 @@
 
 from __future__ import annotations
 
+import unittest
 from collections import Counter
 from pathlib import Path
-import unittest
+
+from sample_values import sample_value
 
 from ruida_re.codec import swizzle, unswizzle
-from ruida_re.fields import ByteField
+from ruida_re.fields import (
+    AbsoluteMmField,
+    ByteField,
+    RelativeMmField,
+    ScaledU35Field,
+    U35Field,
+)
 from ruida_re.program import KnownCommand, decode
 from ruida_re.registry import (
     DEFAULT_REGISTRY,
     LIGHTBURN_OBSERVED,
     REGISTRIES,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+    SRC_LIGHTBURN_CAPABILITIES,
     get_registry,
 )
 from ruida_re.specs import CommandRegistry, CommandSpec
-
-from sample_values import sample_value
-
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_ROOT = ROOT / "fixtures/lightburn-2.1.03"
@@ -117,16 +123,15 @@ class RegistryTest(unittest.TestCase):
         job = list(get_registry("job"))
         request = get_registry("request")
         reply = get_registry("reply")
-        self.assertEqual(len(job), 184)
+        self.assertEqual(len(job), 186)
         self.assertEqual(len(list(request)), 74)
         self.assertEqual(len(list(reply)), 10)
         self.assertEqual(
             Counter(spec.shape_evidence for spec in job),
             {
-                "uncited-hypothesis": 101,
+                "uncited-hypothesis": 96,
                 "reported": 4,
-                "fixture-observed": 72,
-                "external-fixture-observed": 1,
+                "fixture-observed": 80,
                 "conflicting-reports": 6,
             },
         )
@@ -215,6 +220,169 @@ class RegistryTest(unittest.TestCase):
                         "fixture-observed",
                     )
         self.assertEqual(observed, LIGHTBURN_OBSERVED)
+
+    def test_capability_fixture_shapes_and_units_are_explicit(self) -> None:
+        cases = (
+            (
+                "z_offset_delta",
+                "8003",
+                (("delta_mm", AbsoluteMmField),),
+                "partially-controlled",
+            ),
+            (
+                "cut_relative",
+                "a9",
+                (
+                    ("dx_mm", RelativeMmField),
+                    ("dy_mm", RelativeMmField),
+                ),
+                "controlled-fixture",
+            ),
+            (
+                "laser_interval",
+                "c610",
+                (("time_ms", ScaledU35Field),),
+                "controlled-fixture",
+            ),
+            (
+                "additional_delay",
+                "c611",
+                (("time_ms", ScaledU35Field),),
+                "controlled-fixture",
+            ),
+            (
+                "layer_frequency",
+                "c660",
+                (
+                    ("laser", ByteField),
+                    ("layer", ByteField),
+                    ("frequency_khz", ScaledU35Field),
+                ),
+                "partially-controlled",
+            ),
+            (
+                "layer_fiber_pulse_width",
+                "c666",
+                (
+                    ("selector_a", ByteField),
+                    ("selector_b", ByteField),
+                    ("pulse_width_ns", U35Field),
+                ),
+                "partially-controlled",
+            ),
+        )
+        for name, opcode, fields, semantic_evidence in cases:
+            with self.subTest(command=name):
+                spec = DEFAULT_REGISTRY.name(name)
+                self.assertIsNotNone(spec)
+                self.assertEqual(spec.opcode.hex(), opcode)
+                self.assertEqual(
+                    tuple(
+                        (field.name, type(field))
+                        for field in spec.fields
+                    ),
+                    fields,
+                )
+                self.assertEqual(spec.shape_evidence, "fixture-observed")
+                self.assertEqual(
+                    spec.semantic_evidence,
+                    semantic_evidence,
+                )
+                self.assertEqual(
+                    spec.shape_sources,
+                    (SRC_LIGHTBURN_CAPABILITIES,),
+                )
+                self.assertEqual(
+                    spec.semantic_sources,
+                    (SRC_LIGHTBURN_CAPABILITIES,),
+                )
+
+        self.assertEqual(
+            DEFAULT_REGISTRY.name("laser_interval").fields[0].scale,
+            1000.0,
+        )
+        self.assertEqual(
+            DEFAULT_REGISTRY.name("additional_delay").fields[0].scale,
+            1000.0,
+        )
+        self.assertEqual(
+            DEFAULT_REGISTRY.name("z_offset_delta").encode(
+                {"delta_mm": -1.0}
+            ).hex(),
+            "80030f7f7f7818",
+        )
+        self.assertEqual(
+            DEFAULT_REGISTRY.name("layer_frequency").encode(
+                {
+                    "laser": 0,
+                    "layer": 0,
+                    "frequency_khz": 20,
+                }
+            ).hex(),
+            "c66000000000011c20",
+        )
+        self.assertEqual(
+            DEFAULT_REGISTRY.name("layer_fiber_pulse_width").encode(
+                {
+                    "selector_a": 0,
+                    "selector_b": 0,
+                    "pulse_width_ns": 100,
+                }
+            ).hex(),
+            "c66600000000000064",
+        )
+
+    def test_capability_semantics_stay_within_observed_bounds(self) -> None:
+        laser_enable = DEFAULT_REGISTRY.name(
+            "enable_laser_tube_start"
+        )
+        self.assertEqual(
+            laser_enable.semantic_evidence,
+            "controlled-fixture",
+        )
+        self.assertEqual(
+            laser_enable.semantic_sources,
+            (SRC_LIGHTBURN_CAPABILITIES,),
+        )
+        for mask in (1, 2, 3):
+            with self.subTest(mask=mask):
+                self.assertEqual(
+                    laser_enable.encode({"enabled": mask}),
+                    bytes((0xCA, 0x03, mask)),
+                )
+
+        for name in (
+            "laser_1_min_power",
+            "laser_1_max_power",
+            "laser_2_min_power",
+            "laser_2_max_power",
+            "layer_laser_1_min_power",
+            "layer_laser_1_max_power",
+            "layer_laser_2_min_power",
+            "layer_laser_2_max_power",
+        ):
+            with self.subTest(command=name):
+                spec = DEFAULT_REGISTRY.name(name)
+                self.assertEqual(
+                    spec.semantic_sources,
+                    (SRC_LIGHTBURN_CAPABILITIES,),
+                )
+                self.assertIn("independently vary", spec.notes)
+
+        section = DEFAULT_REGISTRY.name("layer_control")
+        self.assertIn("Operation 5", section.notes)
+        self.assertIn("contextual section boundaries", section.notes)
+        mode = DEFAULT_REGISTRY.name("layer_mode_or_attributes")
+        self.assertIn("Value 0", mode.notes)
+        self.assertIn("does not by itself identify vector", mode.notes)
+
+        reported_z = DEFAULT_REGISTRY.name("move_far_z_reported")
+        self.assertEqual(reported_z.opcode.hex(), "8008")
+        self.assertEqual(reported_z.semantic_evidence, "disputed")
+        self.assertNotIn(
+            SRC_LIGHTBURN_CAPABILITIES,
+            reported_z.semantic_sources,
+        )
 
 
 if __name__ == "__main__":

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LightBurnProject AppVersion="2.1.03" FormatVersion="1" MaterialHeight="0" MirrorX="False" MirrorY="False">
+    <CutSetting type="Cut">
+        <index Value="0" />
+        <name Value="C00" />
+        <minPower Value="20" />
+        <maxPower Value="20" />
+        <minPower2 Value="40" />
+        <maxPower2 Value="40" />
+        <speed Value="10" />
+        <enableLaser1 Value="1" />
+        <enableLaser2 Value="0" />
+        <startDelay Value="0" />
+        <endDelay Value="0" />
+        <throughPower Value="0" />
+        <throughPower2 Value="0" />
+        <enableCutThroughStart Value="0" />
+        <enableCutThroughEnd Value="0" />
+        <frequency Value="20000" />
+        <overrideFrequency Value="0" />
+        <fiberPulseWidth Value="0" />
+        <priority Value="0" />
+        <doOutput Value="1" />
+        <runBlower Value="0" />
+        <autoBlower Value="0" />
+        <numPasses Value="1" />
+        <dotMode Value="1" />
+        <dotTime Value="200" />
+        <dotSpacing Value="1" />
+    </CutSetting>
+    <Shape Type="Path" CutIndex="0">
+        <VertList>V 0 0 V 10 0</VertList>
+        <PrimList>L 0 1</PrimList>
+        <XForm>1 0 0 1 20 20</XForm>
+    </Shape>
+    <Notes ShowOnLoad="0" Notes="" />
+</LightBurnProject>

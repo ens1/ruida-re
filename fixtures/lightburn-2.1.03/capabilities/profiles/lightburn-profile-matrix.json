@@ -1,0 +1,113 @@
+{
+  "schema": "ruida-re.lightburn-profile-matrix",
+  "schema_version": 1,
+  "source": {
+    "controller_identity": {
+      "field": "DeviceList[0].Name",
+      "value": "Ruida"
+    },
+    "display_name": "Ruida 644XS",
+    "filename": "ruida-644xs-active.lbdev",
+    "guid": "ezRmYWY4Yz",
+    "profile_type": "Serial",
+    "source_document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+    "source_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+  },
+  "variants": [
+    {
+      "change_path": [
+        "DeviceList",
+        0,
+        "Settings",
+        "EnableZ"
+      ],
+      "changed_key": "EnableZ",
+      "derivation_sha256": "ca526c4f1ae604dc4d4065a08902952e82a2c1fdaa721c60c3116f9499d56324",
+      "display_name": "RESEARCH ONLY - Ruida 644XS - EnableZ=true",
+      "filename": "research-enable-z.lbdev",
+      "guid": "xu8mR3QUuO",
+      "identifier": "enable-z",
+      "size": 2217,
+      "source_key_present": false,
+      "source_value": null,
+      "target_value": true,
+      "variant_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243"
+    },
+    {
+      "change_path": [
+        "DeviceList",
+        0,
+        "Settings",
+        "Laser2Enabled"
+      ],
+      "changed_key": "Laser2Enabled",
+      "derivation_sha256": "03bff7e94bf422c78155a6ce3debedc582217d45a47734b129f6443db607e4ea",
+      "display_name": "RESEARCH ONLY - Ruida 644XS - Laser2Enabled=true",
+      "filename": "research-laser-2-enabled.lbdev",
+      "guid": "3nZhMzpTrL",
+      "identifier": "laser-2-enabled",
+      "size": 2229,
+      "source_key_present": false,
+      "source_value": null,
+      "target_value": true,
+      "variant_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa"
+    },
+    {
+      "change_path": [
+        "DeviceList",
+        0,
+        "Settings",
+        "Laser1IsRFTube"
+      ],
+      "changed_key": "Laser1IsRFTube",
+      "derivation_sha256": "dd17d05187333e3d8d7dc1971d8d6820c0b20f045e429e4128b54bea6f674d72",
+      "display_name": "RESEARCH ONLY - Ruida 644XS - Laser1IsRFTube=true",
+      "filename": "research-laser-1-rf-tube.lbdev",
+      "guid": "YRDxydy8Kg",
+      "identifier": "laser-1-rf-tube",
+      "size": 2231,
+      "source_key_present": false,
+      "source_value": null,
+      "target_value": true,
+      "variant_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4"
+    },
+    {
+      "change_path": [
+        "DeviceList",
+        0,
+        "Settings",
+        "Laser1IsFiber"
+      ],
+      "changed_key": "Laser1IsFiber",
+      "derivation_sha256": "f87a63c242cc50aff2ce9e2b3894334d209c720470d35ec3bb20d41aeb809eec",
+      "display_name": "RESEARCH ONLY - Ruida 644XS - Laser1IsFiber=true",
+      "filename": "research-laser-1-fiber.lbdev",
+      "guid": "wXX7u3wPgU",
+      "identifier": "laser-1-fiber",
+      "size": 2229,
+      "source_key_present": false,
+      "source_value": null,
+      "target_value": true,
+      "variant_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a"
+    },
+    {
+      "change_path": [
+        "DeviceList",
+        0,
+        "Settings",
+        "SaveRotaryConfig"
+      ],
+      "changed_key": "SaveRotaryConfig",
+      "derivation_sha256": "7ecea7a046d0743effe95dc4a14f97d17a91c6c0502d263efbf916834bfb88a7",
+      "display_name": "RESEARCH ONLY - Ruida 644XS - SaveRotaryConfig=true",
+      "filename": "research-save-rotary-config.lbdev",
+      "guid": "o5X3o16csf",
+      "identifier": "save-rotary-config",
+      "size": 2235,
+      "source_key_present": false,
+      "source_value": null,
+      "target_value": true,
+      "variant_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06"
+    }
+  ]
+}

@@ -1,0 +1,6001 @@
+{
+  "capability": "diagonal-raster",
+  "captures": [
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 81,
+          "matches_source_basis": true,
+          "offset": 518,
+          "value": 25698
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "cfb3c71078be1430206cbfc4eac23f429023942f2b3c4a2100e2c11ae65ff0ea",
+      "id": "c001-raster-angle-000-uni",
+      "issues": [],
+      "known_records": 83,
+      "opaque_records": 0,
+      "path": "c001-raster-angle-000-uni.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "de14a39be3c127381df0b2fd5e55d06119606168a5aff37f6c599c259c2563db",
+          "rd_sha256": "cfb3c71078be1430206cbfc4eac23f429023942f2b3c4a2100e2c11ae65ff0ea"
+        },
+        "comparison": null,
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c001-raster-angle-000-uni.lbrn2": {
+            "sha256": "de14a39be3c127381df0b2fd5e55d06119606168a5aff37f6c599c259c2563db",
+            "size": 1572,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c001-raster-angle-000-uni",
+        "profile_requirements": [],
+        "project": "c001-raster-angle-000-uni.lbrn2",
+        "purpose": "establish the horizontal unidirectional threshold baseline",
+        "rd_file_metadata": {
+          "size": 526,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 83,
+      "round_trip_exact": true,
+      "sha256": "cfb3c71078be1430206cbfc4eac23f429023942f2b3c4a2100e2c11ae65ff0ea",
+      "sha256_matches": true,
+      "size": 526,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 73,
+          "matches_source_basis": true,
+          "offset": 500,
+          "value": 23563
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 45,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "8fdca8c9a07a12c1ee7189d3b96025b609906963b38e9fa87d75f7646821175c",
+      "id": "c002-raster-angle-045-uni",
+      "issues": [],
+      "known_records": 75,
+      "opaque_records": 0,
+      "path": "c002-raster-angle-045-uni.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "9435aeff156a70ef782006cae74dac585c417bfcc95431c528e59082e28fb096",
+          "rd_sha256": "8fdca8c9a07a12c1ee7189d3b96025b609906963b38e9fa87d75f7646821175c"
+        },
+        "comparison": {
+          "baseline": "c001-raster-angle-000-uni",
+          "baseline_value": 0,
+          "case_value": 45,
+          "controlled_differences": [
+            "angle_degrees"
+          ],
+          "independent_variable": "angle_degrees"
+        },
+        "controls": {
+          "angle_degrees": 45,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c002-raster-angle-045-uni.lbrn2": {
+            "sha256": "9435aeff156a70ef782006cae74dac585c417bfcc95431c528e59082e28fb096",
+            "size": 1573,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c002-raster-angle-045-uni",
+        "profile_requirements": [],
+        "project": "c002-raster-angle-045-uni.lbrn2",
+        "purpose": "isolate a 45 degree unidirectional scan angle",
+        "rd_file_metadata": {
+          "size": 508,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 75,
+      "round_trip_exact": true,
+      "sha256": "8fdca8c9a07a12c1ee7189d3b96025b609906963b38e9fa87d75f7646821175c",
+      "sha256_matches": true,
+      "size": 508,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 73,
+          "matches_source_basis": true,
+          "offset": 502,
+          "value": 23431
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 45,
+        "bidirectional": true,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "2aaeb0510f5b7fb617acb0b815db7886be4f10a1d5af1d4b212776ae71d52a0d",
+      "id": "c003-raster-angle-045-bi",
+      "issues": [],
+      "known_records": 75,
+      "opaque_records": 0,
+      "path": "c003-raster-angle-045-bi.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "aa8579c5f4a471696039d68cca4c24c0d87a28c86010c9514fc6d04c4a0cac46",
+          "rd_sha256": "2aaeb0510f5b7fb617acb0b815db7886be4f10a1d5af1d4b212776ae71d52a0d"
+        },
+        "comparison": {
+          "baseline": "c002-raster-angle-045-uni",
+          "baseline_value": false,
+          "case_value": true,
+          "controlled_differences": [
+            "bidirectional"
+          ],
+          "independent_variable": "bidirectional"
+        },
+        "controls": {
+          "angle_degrees": 45,
+          "bidirectional": true,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c003-raster-angle-045-bi.lbrn2": {
+            "sha256": "aa8579c5f4a471696039d68cca4c24c0d87a28c86010c9514fc6d04c4a0cac46",
+            "size": 1572,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c003-raster-angle-045-bi",
+        "profile_requirements": [],
+        "project": "c003-raster-angle-045-bi.lbrn2",
+        "purpose": "isolate bidirectional scanning at 45 degrees",
+        "rd_file_metadata": {
+          "size": 510,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 75,
+      "round_trip_exact": true,
+      "sha256": "2aaeb0510f5b7fb617acb0b815db7886be4f10a1d5af1d4b212776ae71d52a0d",
+      "sha256_matches": true,
+      "size": 510,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 79,
+          "matches_source_basis": true,
+          "offset": 532,
+          "value": 26479
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 135,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "946bba365738e890bd23003610cb7c3b9f80a921bce514c01988318d830a1649",
+      "id": "c004-raster-angle-135-uni",
+      "issues": [],
+      "known_records": 81,
+      "opaque_records": 0,
+      "path": "c004-raster-angle-135-uni.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "a1b1bd9140ddf50d47b0c4bd68a2cb7b0915235daa925bec94717b7906c6b32f",
+          "rd_sha256": "946bba365738e890bd23003610cb7c3b9f80a921bce514c01988318d830a1649"
+        },
+        "comparison": {
+          "baseline": "c002-raster-angle-045-uni",
+          "baseline_value": 45,
+          "case_value": 135,
+          "controlled_differences": [
+            "angle_degrees"
+          ],
+          "independent_variable": "angle_degrees"
+        },
+        "controls": {
+          "angle_degrees": 135,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c004-raster-angle-135-uni.lbrn2": {
+            "sha256": "a1b1bd9140ddf50d47b0c4bd68a2cb7b0915235daa925bec94717b7906c6b32f",
+            "size": 1574,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c004-raster-angle-135-uni",
+        "profile_requirements": [],
+        "project": "c004-raster-angle-135-uni.lbrn2",
+        "purpose": "isolate the direction change from 45 to 135 degrees",
+        "rd_file_metadata": {
+          "size": 540,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 81,
+      "round_trip_exact": true,
+      "sha256": "946bba365738e890bd23003610cb7c3b9f80a921bce514c01988318d830a1649",
+      "sha256_matches": true,
+      "size": 540,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 102,
+          "matches_source_basis": true,
+          "offset": 636,
+          "value": 33337
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 45,
+        "bidirectional": false,
+        "cross_hatch": true,
+        "dither_mode": "threshold",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 2,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 1,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "131e69e02995faac0c8409da1111b02edce75c0513b149804003db841f0a4a36",
+      "id": "c005-raster-angle-045-cross-hatch",
+      "issues": [],
+      "known_records": 104,
+      "opaque_records": 0,
+      "path": "c005-raster-angle-045-cross-hatch.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+          "height_pixels": 4,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "display_name": "Ruida 644XS",
+              "document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "evidence_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+              "filename": "ruida-644xs-active.lbdev",
+              "kind": "lightburn-device-profile",
+              "profile_state": {},
+              "profile_type": "Serial",
+              "size": 2270
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "display_name": "Ruida 644XS",
+            "document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "evidence_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+            "filename": "profiles/ruida-644xs-active.lbdev",
+            "kind": "lightburn-device-profile",
+            "profile_state": {},
+            "profile_type": "Serial",
+            "publication": {
+              "profile": {
+                "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+                "path": "profiles/ruida-644xs-active.lbdev",
+                "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 2161
+          },
+          "profile_requirements": [],
+          "project_sha256": "5cc58813085d8e1a4d09f3752338eb943b93ad494fdc8cd48ff3efccf91b41f5",
+          "rd_sha256": "131e69e02995faac0c8409da1111b02edce75c0513b149804003db841f0a4a36"
+        },
+        "comparison": {
+          "baseline": "c002-raster-angle-045-uni",
+          "baseline_value": false,
+          "case_value": true,
+          "controlled_differences": [
+            "cross_hatch"
+          ],
+          "independent_variable": "cross_hatch"
+        },
+        "controls": {
+          "angle_degrees": 45,
+          "bidirectional": false,
+          "cross_hatch": true,
+          "dither_mode": "threshold",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 2,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 1,
+          "pixels": [
+            [
+              255,
+              0,
+              0,
+              255,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              255,
+              0,
+              0,
+              0,
+              255,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              255,
+              0,
+              0,
+              255,
+              255,
+              255
+            ],
+            [
+              255,
+              0,
+              255,
+              255,
+              0,
+              0,
+              0,
+              255
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": null,
+          "input_status": "controlled-input",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "diagonal-raster",
+        "files": {
+          "c005-raster-angle-045-cross-hatch.lbrn2": {
+            "sha256": "5cc58813085d8e1a4d09f3752338eb943b93ad494fdc8cd48ff3efccf91b41f5",
+            "size": 1581,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c005-raster-angle-045-cross-hatch",
+        "profile_requirements": [],
+        "project": "c005-raster-angle-045-cross-hatch.lbrn2",
+        "purpose": "isolate LightBurn's cross-hatch layer control at 45 degrees",
+        "rd_file_metadata": {
+          "size": 644,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 104,
+      "round_trip_exact": true,
+      "sha256": "131e69e02995faac0c8409da1111b02edce75c0513b149804003db841f0a4a36",
+      "sha256_matches": true,
+      "size": 644,
+      "structured": true,
+      "valid": true
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "c001-raster-angle-000-uni",
+      "baseline_value": 0,
+      "expected_relation": "observe",
+      "id": "c001-raster-angle-000-uni-vs-c002-raster-angle-045-uni",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e505000001380b",
+                "index": 73,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 500,
+                "opcode": "e505",
+                "raw": "e505000001380b",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 23563
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e5050000014862",
+                "index": 81,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 518,
+                "opcode": "e505",
+                "raw": "e5050000014862",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 25698
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 11,
+            "after_records": [
+              {
+                "encoded": "e703000001206e000001212a",
+                "index": 7,
+                "kind": "command",
+                "name": "job_min_point",
+                "offset": 25,
+                "opcode": "e703",
+                "raw": "e703000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e70700000134140000012f14",
+                "index": 8,
+                "kind": "command",
+                "name": "job_max_point",
+                "offset": 37,
+                "opcode": "e707",
+                "raw": "e70700000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e750000001206e000001212a",
+                "index": 9,
+                "kind": "command",
+                "name": "document_min_point",
+                "offset": 49,
+                "opcode": "e750",
+                "raw": "e750000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e75100000134140000012f14",
+                "index": 10,
+                "kind": "command",
+                "name": "document_max_point",
+                "offset": 61,
+                "opcode": "e751",
+                "raw": "e75100000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              }
+            ],
+            "after_start": 7,
+            "before_end": 11,
+            "before_records": [
+              {
+                "encoded": "e703000001220e0000011e1a",
+                "index": 7,
+                "kind": "command",
+                "name": "job_min_point",
+                "offset": 25,
+                "opcode": "e703",
+                "raw": "e703000001220e0000011e1a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              },
+              {
+                "encoded": "e7070000013d3a0000012976",
+                "index": 8,
+                "kind": "command",
+                "name": "job_max_point",
+                "offset": 37,
+                "opcode": "e707",
+                "raw": "e7070000013d3a0000012976",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              },
+              {
+                "encoded": "e750000001220e0000011e1a",
+                "index": 9,
+                "kind": "command",
+                "name": "document_min_point",
+                "offset": 49,
+                "opcode": "e750",
+                "raw": "e750000001220e0000011e1a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              },
+              {
+                "encoded": "e7510000013d3a0000012976",
+                "index": 10,
+                "kind": "command",
+                "name": "document_max_point",
+                "offset": 61,
+                "opcode": "e751",
+                "raw": "e7510000013d3a0000012976",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              }
+            ],
+            "before_start": 7,
+            "operation": "replace"
+          },
+          {
+            "after_end": 24,
+            "after_records": [
+              {
+                "encoded": "ca410000",
+                "index": 19,
+                "kind": "command",
+                "name": "layer_mode_or_attributes",
+                "offset": 128,
+                "opcode": "ca41",
+                "raw": "ca410000",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "value": 0
+                }
+              },
+              {
+                "encoded": "e75200000001206e000001212a",
+                "index": 20,
+                "kind": "command",
+                "name": "layer_min_point",
+                "offset": 132,
+                "opcode": "e752",
+                "raw": "e75200000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e7530000000134140000012f14",
+                "index": 21,
+                "kind": "command",
+                "name": "layer_max_point",
+                "offset": 145,
+                "opcode": "e753",
+                "raw": "e7530000000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e76100000001206e000001212a",
+                "index": 22,
+                "kind": "command",
+                "name": "layer_extended_min_point",
+                "offset": 158,
+                "opcode": "e761",
+                "raw": "e76100000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e7620000000134140000012f14",
+                "index": 23,
+                "kind": "command",
+                "name": "layer_extended_max_point",
+                "offset": 171,
+                "opcode": "e762",
+                "raw": "e7620000000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              }
+            ],
+            "after_start": 19,
+            "before_end": 24,
+            "before_records": [
+              {
+                "encoded": "ca410001",
+                "index": 19,
+                "kind": "command",
+                "name": "layer_mode_or_attributes",
+                "offset": 128,
+                "opcode": "ca41",
+                "raw": "ca410001",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "value": 1
+                }
+              },
+              {
+                "encoded": "e75200000001220e0000011e1a",
+                "index": 20,
+                "kind": "command",
+                "name": "layer_min_point",
+                "offset": 132,
+                "opcode": "e752",
+                "raw": "e75200000001220e0000011e1a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              },
+              {
+                "encoded": "e753000000013d3a0000012976",
+                "index": 21,
+                "kind": "command",
+                "name": "layer_max_point",
+                "offset": 145,
+                "opcode": "e753",
+                "raw": "e753000000013d3a0000012976",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              },
+              {
+                "encoded": "e76100000001220e0000011e1a",
+                "index": 22,
+                "kind": "command",
+                "name": "layer_extended_min_point",
+                "offset": 158,
+                "opcode": "e761",
+                "raw": "e76100000001220e0000011e1a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              },
+              {
+                "encoded": "e762000000013d3a0000012976",
+                "index": 23,
+                "kind": "command",
+                "name": "layer_extended_max_point",
+                "offset": 171,
+                "opcode": "e762",
+                "raw": "e762000000013d3a0000012976",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              }
+            ],
+            "before_start": 19,
+            "operation": "replace"
+          },
+          {
+            "after_end": 38,
+            "after_records": [
+              {
+                "encoded": "f203000001206e000001212a",
+                "index": 35,
+                "kind": "command",
+                "name": "element_array_min_point",
+                "offset": 255,
+                "opcode": "f203",
+                "raw": "f203000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "f20400000134140000012f14",
+                "index": 36,
+                "kind": "command",
+                "name": "element_array_max_point",
+                "offset": 267,
+                "opcode": "f204",
+                "raw": "f20400000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "f2050001000100000013260000000d6a",
+                "index": 37,
+                "kind": "command",
+                "name": "element_copies",
+                "offset": 279,
+                "opcode": "f205",
+                "raw": "f2050001000100000013260000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.47,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "after_start": 35,
+            "before_end": 38,
+            "before_records": [
+              {
+                "encoded": "f203000001220e0000011e1a",
+                "index": 35,
+                "kind": "command",
+                "name": "element_array_min_point",
+                "offset": 255,
+                "opcode": "f203",
+                "raw": "f203000001220e0000011e1a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              },
+              {
+                "encoded": "f2040000013d3a0000012976",
+                "index": 36,
+                "kind": "command",
+                "name": "element_array_max_point",
+                "offset": 267,
+                "opcode": "f204",
+                "raw": "f2040000013d3a0000012976",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              },
+              {
+                "encoded": "f205000100010000001b2c0000000b5c",
+                "index": 37,
+                "kind": "command",
+                "name": "element_copies",
+                "offset": 279,
+                "opcode": "f205",
+                "raw": "f205000100010000001b2c0000000b5c",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 3.5,
+                  "y_step_mm": 1.5
+                }
+              }
+            ],
+            "before_start": 35,
+            "operation": "replace"
+          },
+          {
+            "after_end": 45,
+            "after_records": [
+              {
+                "encoded": "e713000001206e000001212a",
+                "index": 42,
+                "kind": "command",
+                "name": "array_min_point",
+                "offset": 315,
+                "opcode": "e713",
+                "raw": "e713000001206e000001212a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e71700000134140000012f14",
+                "index": 43,
+                "kind": "command",
+                "name": "array_max_point",
+                "offset": 327,
+                "opcode": "e717",
+                "raw": "e71700000134140000012f14",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e723000001206e000001212a",
+                "index": 44,
+                "kind": "command",
+                "name": "array_add",
+                "offset": 339,
+                "opcode": "e723",
+                "raw": "e723000001206e000001212a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              }
+            ],
+            "after_start": 42,
+            "before_end": 45,
+            "before_records": [
+              {
+                "encoded": "e713000001220e0000011e1a",
+                "index": 42,
+                "kind": "command",
+                "name": "array_min_point",
+                "offset": 315,
+                "opcode": "e713",
+                "raw": "e713000001220e0000011e1a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              },
+              {
+                "encoded": "e7170000013d3a0000012976",
+                "index": 43,
+                "kind": "command",
+                "name": "array_max_point",
+                "offset": 327,
+                "opcode": "e717",
+                "raw": "e7170000013d3a0000012976",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              },
+              {
+                "encoded": "e723000001220e0000011e1a",
+                "index": 44,
+                "kind": "command",
+                "name": "array_add",
+                "offset": 339,
+                "opcode": "e723",
+                "raw": "e723000001220e0000011e1a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.75,
+                  "y_mm": 20.25
+                }
+              }
+            ],
+            "before_start": 42,
+            "operation": "replace"
+          },
+          {
+            "after_end": 49,
+            "after_records": [
+              {
+                "encoded": "e73700000134140000012f14",
+                "index": 46,
+                "kind": "command",
+                "name": "array_even_distance",
+                "offset": 354,
+                "opcode": "e737",
+                "raw": "e73700000134140000012f14",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e7080001000100000013260000000d6a",
+                "index": 47,
+                "kind": "command",
+                "name": "array_copies",
+                "offset": 366,
+                "opcode": "e708",
+                "raw": "e7080001000100000013260000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.47,
+                  "y_step_mm": 1.77
+                }
+              },
+              {
+                "encoded": "ca0100",
+                "index": 48,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 382,
+                "opcode": "ca01",
+                "raw": "ca0100",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 0
+                }
+              }
+            ],
+            "after_start": 46,
+            "before_end": 49,
+            "before_records": [
+              {
+                "encoded": "e7370000013d3a0000012976",
+                "index": 46,
+                "kind": "command",
+                "name": "array_even_distance",
+                "offset": 354,
+                "opcode": "e737",
+                "raw": "e7370000013d3a0000012976",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 24.25,
+                  "y_mm": 21.75
+                }
+              },
+              {
+                "encoded": "e708000100010000001b2c0000000b5c",
+                "index": 47,
+                "kind": "command",
+                "name": "array_copies",
+                "offset": 366,
+                "opcode": "e708",
+                "raw": "e708000100010000001b2c0000000b5c",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 3.5,
+                  "y_step_mm": 1.5
+                }
+              },
+              {
+                "encoded": "ca0102",
+                "index": 48,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 382,
+                "opcode": "ca01",
+                "raw": "ca0102",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 2
+                }
+              }
+            ],
+            "before_start": 46,
+            "operation": "replace"
+          },
+          {
+            "after_end": 69,
+            "after_records": [
+              {
+                "encoded": "88000001290e0000012f0e",
+                "index": 61,
+                "kind": "command",
+                "name": "move_absolute",
+                "offset": 437,
+                "opcode": "88",
+                "raw": "88000001290e0000012f0e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 21.646,
+                  "y_mm": 22.414
+                }
+              },
+              {
+                "encoded": "a97d1f7d1f",
+                "index": 62,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 448,
+                "opcode": "a9",
+                "raw": "a97d1f7d1f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.353,
+                  "dy_mm": -0.353
+                }
+              },
+              {
+                "encoded": "8a0543",
+                "index": 63,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 453,
+                "opcode": "8a",
+                "raw": "8a0543",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707
+                }
+              },
+              {
+                "encoded": "a97a3d7a3d",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 456,
+                "opcode": "a9",
+                "raw": "a97a3d7a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897d1e7d1e",
+                "index": 65,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 461,
+                "opcode": "89",
+                "raw": "897d1e7d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.354,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a97d1f7d1e",
+                "index": 66,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 466,
+                "opcode": "a9",
+                "raw": "a97d1f7d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "89132b0d68",
+                "index": 67,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 471,
+                "opcode": "89",
+                "raw": "89132b0d68",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.475,
+                  "dy_mm": 1.768
+                }
+              },
+              {
+                "encoded": "a972187218",
+                "index": 68,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 476,
+                "opcode": "a9",
+                "raw": "a972187218",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.768,
+                  "dy_mm": -1.768
+                }
+              }
+            ],
+            "after_start": 61,
+            "before_end": 77,
+            "before_records": [
+              {
+                "encoded": "8800000139460000012976",
+                "index": 61,
+                "kind": "command",
+                "name": "move_absolute",
+                "offset": 437,
+                "opcode": "88",
+                "raw": "8800000139460000012976",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.75,
+                  "y_mm": 21.75
+                }
+              },
+              {
+                "encoded": "aa7818",
+                "index": 62,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 448,
+                "opcode": "aa",
+                "raw": "aa7818",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.0
+                }
+              },
+              {
+                "encoded": "8a7c0c",
+                "index": 63,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 451,
+                "opcode": "8a",
+                "raw": "8a7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.5
+                }
+              },
+              {
+                "encoded": "aa7c0c",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 454,
+                "opcode": "aa",
+                "raw": "aa7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.5
+                }
+              },
+              {
+                "encoded": "890b5c7c0c",
+                "index": 65,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 457,
+                "opcode": "89",
+                "raw": "890b5c7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.5,
+                  "dy_mm": -0.5
+                }
+              },
+              {
+                "encoded": "aa7424",
+                "index": 66,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 462,
+                "opcode": "aa",
+                "raw": "aa7424",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.5
+                }
+              },
+              {
+                "encoded": "8a7c0c",
+                "index": 67,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 465,
+                "opcode": "8a",
+                "raw": "8a7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.5
+                }
+              },
+              {
+                "encoded": "aa7c0c",
+                "index": 68,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 468,
+                "opcode": "aa",
+                "raw": "aa7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.5
+                }
+              },
+              {
+                "encoded": "891b2c7c0c",
+                "index": 69,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 471,
+                "opcode": "89",
+                "raw": "891b2c7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 3.5,
+                  "dy_mm": -0.5
+                }
+              },
+              {
+                "encoded": "aa7c0c",
+                "index": 70,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 476,
+                "opcode": "aa",
+                "raw": "aa7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.5
+                }
+              },
+              {
+                "encoded": "8a7818",
+                "index": 71,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 479,
+                "opcode": "8a",
+                "raw": "8a7818",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.0
+                }
+              },
+              {
+                "encoded": "aa7818",
+                "index": 72,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 482,
+                "opcode": "aa",
+                "raw": "aa7818",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.0
+                }
+              },
+              {
+                "encoded": "890f507c0c",
+                "index": 73,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 485,
+                "opcode": "89",
+                "raw": "890f507c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.0,
+                  "dy_mm": -0.5
+                }
+              },
+              {
+                "encoded": "aa7c0c",
+                "index": 74,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 490,
+                "opcode": "aa",
+                "raw": "aa7c0c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.5
+                }
+              },
+              {
+                "encoded": "8a7818",
+                "index": 75,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 493,
+                "opcode": "8a",
+                "raw": "8a7818",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.0
+                }
+              },
+              {
+                "encoded": "aa7424",
+                "index": 76,
+                "kind": "command",
+                "name": "cut_horizontal",
+                "offset": 496,
+                "opcode": "aa",
+                "raw": "aa7424",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.5
+                }
+              }
+            ],
+            "before_start": 61,
+            "operation": "replace"
+          },
+          {
+            "after_end": 73,
+            "after_records": [
+              {
+                "encoded": "da01062000000000060000000006",
+                "index": 72,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 486,
+                "opcode": "da01",
+                "raw": "da01062000000000060000000006",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 6,
+                  "second_value": 6
+                }
+              }
+            ],
+            "after_start": 72,
+            "before_end": 81,
+            "before_records": [
+              {
+                "encoded": "da01062000000000070000000007",
+                "index": 80,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 504,
+                "opcode": "da01",
+                "raw": "da01062000000000070000000007",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 7,
+                  "second_value": 7
+                }
+              }
+            ],
+            "before_start": 80,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "380b",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "4862",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "206e",
+            "after_end": 32,
+            "after_start": 30,
+            "before": "220e",
+            "before_end": 32,
+            "before_start": 30,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 37,
+            "after_start": 35,
+            "before": "1e1a",
+            "before_end": 37,
+            "before_start": 35,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 44,
+            "after_start": 42,
+            "before": "3d3a",
+            "before_end": 44,
+            "before_start": 42,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 49,
+            "after_start": 47,
+            "before": "2976",
+            "before_end": 49,
+            "before_start": 47,
+            "operation": "replace"
+          },
+          {
+            "after": "206e",
+            "after_end": 56,
+            "after_start": 54,
+            "before": "220e",
+            "before_end": 56,
+            "before_start": 54,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 61,
+            "after_start": 59,
+            "before": "1e1a",
+            "before_end": 61,
+            "before_start": 59,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 68,
+            "after_start": 66,
+            "before": "3d3a",
+            "before_end": 68,
+            "before_start": 66,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 73,
+            "after_start": 71,
+            "before": "2976",
+            "before_end": 73,
+            "before_start": 71,
+            "operation": "replace"
+          },
+          {
+            "after": "00",
+            "after_end": 132,
+            "after_start": 131,
+            "before": "01",
+            "before_end": 132,
+            "before_start": 131,
+            "operation": "replace"
+          },
+          {
+            "after": "206e",
+            "after_end": 140,
+            "after_start": 138,
+            "before": "220e",
+            "before_end": 140,
+            "before_start": 138,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 145,
+            "after_start": 143,
+            "before": "1e1a",
+            "before_end": 145,
+            "before_start": 143,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 153,
+            "after_start": 151,
+            "before": "3d3a",
+            "before_end": 153,
+            "before_start": 151,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 158,
+            "after_start": 156,
+            "before": "2976",
+            "before_end": 158,
+            "before_start": 156,
+            "operation": "replace"
+          },
+          {
+            "after": "206e",
+            "after_end": 166,
+            "after_start": 164,
+            "before": "220e",
+            "before_end": 166,
+            "before_start": 164,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 171,
+            "after_start": 169,
+            "before": "1e1a",
+            "before_end": 171,
+            "before_start": 169,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 179,
+            "after_start": 177,
+            "before": "3d3a",
+            "before_end": 179,
+            "before_start": 177,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 184,
+            "after_start": 182,
+            "before": "2976",
+            "before_end": 184,
+            "before_start": 182,
+            "operation": "replace"
+          },
+          {
+            "after": "206e",
+            "after_end": 262,
+            "after_start": 260,
+            "before": "220e",
+            "before_end": 262,
+            "before_start": 260,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 267,
+            "after_start": 265,
+            "before": "1e1a",
+            "before_end": 267,
+            "before_start": 265,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 274,
+            "after_start": 272,
+            "before": "3d3a",
+            "before_end": 274,
+            "before_start": 272,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 279,
+            "after_start": 277,
+            "before": "2976",
+            "before_end": 279,
+            "before_start": 277,
+            "operation": "replace"
+          },
+          {
+            "after": "1326",
+            "after_end": 290,
+            "after_start": 288,
+            "before": "1b2c",
+            "before_end": 290,
+            "before_start": 288,
+            "operation": "replace"
+          },
+          {
+            "after": "0d6a",
+            "after_end": 295,
+            "after_start": 293,
+            "before": "0b5c",
+            "before_end": 295,
+            "before_start": 293,
+            "operation": "replace"
+          },
+          {
+            "after": "206e",
+            "after_end": 322,
+            "after_start": 320,
+            "before": "220e",
+            "before_end": 322,
+            "before_start": 320,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 327,
+            "after_start": 325,
+            "before": "1e1a",
+            "before_end": 327,
+            "before_start": 325,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 334,
+            "after_start": 332,
+            "before": "3d3a",
+            "before_end": 334,
+            "before_start": 332,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 339,
+            "after_start": 337,
+            "before": "2976",
+            "before_end": 339,
+            "before_start": 337,
+            "operation": "replace"
+          },
+          {
+            "after": "206e",
+            "after_end": 346,
+            "after_start": 344,
+            "before": "220e",
+            "before_end": 346,
+            "before_start": 344,
+            "operation": "replace"
+          },
+          {
+            "after": "212a",
+            "after_end": 351,
+            "after_start": 349,
+            "before": "1e1a",
+            "before_end": 351,
+            "before_start": 349,
+            "operation": "replace"
+          },
+          {
+            "after": "3414",
+            "after_end": 361,
+            "after_start": 359,
+            "before": "3d3a",
+            "before_end": 361,
+            "before_start": 359,
+            "operation": "replace"
+          },
+          {
+            "after": "2f14",
+            "after_end": 366,
+            "after_start": 364,
+            "before": "2976",
+            "before_end": 366,
+            "before_start": 364,
+            "operation": "replace"
+          },
+          {
+            "after": "1326",
+            "after_end": 377,
+            "after_start": 375,
+            "before": "1b2c",
+            "before_end": 377,
+            "before_start": 375,
+            "operation": "replace"
+          },
+          {
+            "after": "0d6a",
+            "after_end": 382,
+            "after_start": 380,
+            "before": "0b5c",
+            "before_end": 382,
+            "before_start": 380,
+            "operation": "replace"
+          },
+          {
+            "after": "00",
+            "after_end": 385,
+            "after_start": 384,
+            "before": "02",
+            "before_end": 385,
+            "before_start": 384,
+            "operation": "replace"
+          },
+          {
+            "after": "290e",
+            "after_end": 443,
+            "after_start": 441,
+            "before": "3946",
+            "before_end": 443,
+            "before_start": 441,
+            "operation": "replace"
+          },
+          {
+            "after": "2f0ea97d1f7d1f8a0543a97a3d7a3d897d1e7d1ea97d1f7d1e89132b0d68a972",
+            "after_end": 478,
+            "after_start": 446,
+            "before": "2976aa78",
+            "before_end": 450,
+            "before_start": 446,
+            "operation": "replace"
+          },
+          {
+            "after": "72",
+            "after_end": 480,
+            "after_start": 479,
+            "before": "8a7c0caa7c0c890b5c7c0caa74248a7c0caa7c0c891b2c7c0caa7c0c8a78",
+            "before_end": 481,
+            "before_start": 451,
+            "operation": "replace"
+          },
+          {
+            "after": "",
+            "after_end": 481,
+            "after_start": 481,
+            "before": "aa7818890f507c0caa7c0c8a7818aa7424",
+            "before_end": 499,
+            "before_start": 482,
+            "operation": "delete"
+          },
+          {
+            "after": "06",
+            "after_end": 495,
+            "after_start": 494,
+            "before": "07",
+            "before_end": 513,
+            "before_start": 512,
+            "operation": "replace"
+          },
+          {
+            "after": "06",
+            "after_end": 500,
+            "after_start": 499,
+            "before": "07",
+            "before_end": 518,
+            "before_start": 517,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "angle_degrees",
+      "variant": "c002-raster-angle-045-uni",
+      "variant_value": 45
+    },
+    {
+      "baseline": "c002-raster-angle-045-uni",
+      "baseline_value": false,
+      "expected_relation": "observe",
+      "id": "c002-raster-angle-045-uni-vs-c003-raster-angle-045-bi",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e5050000013707",
+                "index": 73,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 502,
+                "opcode": "e505",
+                "raw": "e5050000013707",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 23431
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e505000001380b",
+                "index": 73,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 500,
+                "opcode": "e505",
+                "raw": "e505000001380b",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 23563
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 68,
+            "after_records": [
+              {
+                "encoded": "897a3d7479",
+                "index": 63,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 453,
+                "opcode": "89",
+                "raw": "897a3d7479",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": -1.415
+                }
+              },
+              {
+                "encoded": "a902610262",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 458,
+                "opcode": "a9",
+                "raw": "a902610262",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.353,
+                  "dy_mm": 0.354
+                }
+              },
+              {
+                "encoded": "8902620262",
+                "index": 65,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 463,
+                "opcode": "89",
+                "raw": "8902620262",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.354,
+                  "dy_mm": 0.354
+                }
+              },
+              {
+                "encoded": "a905430543",
+                "index": 66,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 468,
+                "opcode": "a9",
+                "raw": "a905430543",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": 0.707
+                }
+              },
+              {
+                "encoded": "8908250261",
+                "index": 67,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 473,
+                "opcode": "89",
+                "raw": "8908250261",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.061,
+                  "dy_mm": 0.353
+                }
+              }
+            ],
+            "after_start": 63,
+            "before_end": 68,
+            "before_records": [
+              {
+                "encoded": "8a0543",
+                "index": 63,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 453,
+                "opcode": "8a",
+                "raw": "8a0543",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707
+                }
+              },
+              {
+                "encoded": "a97a3d7a3d",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 456,
+                "opcode": "a9",
+                "raw": "a97a3d7a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897d1e7d1e",
+                "index": 65,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 461,
+                "opcode": "89",
+                "raw": "897d1e7d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.354,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a97d1f7d1e",
+                "index": 66,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 466,
+                "opcode": "a9",
+                "raw": "a97d1f7d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "89132b0d68",
+                "index": 67,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 471,
+                "opcode": "89",
+                "raw": "89132b0d68",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.475,
+                  "dy_mm": 1.768
+                }
+              }
+            ],
+            "before_start": 63,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "3707",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "380b",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "897a3d7479a9026102628902620262a9",
+            "after_end": 469,
+            "after_start": 453,
+            "before": "8a",
+            "before_end": 454,
+            "before_start": 453,
+            "operation": "replace"
+          },
+          {
+            "after": "0543",
+            "after_end": 473,
+            "after_start": 471,
+            "before": "a97a3d7a3d",
+            "before_end": 461,
+            "before_start": 456,
+            "operation": "replace"
+          },
+          {
+            "after": "08250261",
+            "after_end": 478,
+            "after_start": 474,
+            "before": "7d1e7d1ea97d1f7d1e89132b0d68",
+            "before_end": 476,
+            "before_start": 462,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "bidirectional",
+      "variant": "c003-raster-angle-045-bi",
+      "variant_value": true
+    },
+    {
+      "baseline": "c002-raster-angle-045-uni",
+      "baseline_value": 45,
+      "expected_relation": "observe",
+      "id": "c002-raster-angle-045-uni-vs-c004-raster-angle-135-uni",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e5050000014e6f",
+                "index": 79,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 532,
+                "opcode": "e505",
+                "raw": "e5050000014e6f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 26479
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e505000001380b",
+                "index": 73,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 500,
+                "opcode": "e505",
+                "raw": "e505000001380b",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 23563
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 11,
+            "after_records": [
+              {
+                "encoded": "e703000001234c0000011e42",
+                "index": 7,
+                "kind": "command",
+                "name": "job_min_point",
+                "offset": 25,
+                "opcode": "e703",
+                "raw": "e703000001234c0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e707000001395a0000012c2c",
+                "index": 8,
+                "kind": "command",
+                "name": "job_max_point",
+                "offset": 37,
+                "opcode": "e707",
+                "raw": "e707000001395a0000012c2c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              },
+              {
+                "encoded": "e750000001234c0000011e42",
+                "index": 9,
+                "kind": "command",
+                "name": "document_min_point",
+                "offset": 49,
+                "opcode": "e750",
+                "raw": "e750000001234c0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e751000001395a0000012c2c",
+                "index": 10,
+                "kind": "command",
+                "name": "document_max_point",
+                "offset": 61,
+                "opcode": "e751",
+                "raw": "e751000001395a0000012c2c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              }
+            ],
+            "after_start": 7,
+            "before_end": 11,
+            "before_records": [
+              {
+                "encoded": "e703000001206e000001212a",
+                "index": 7,
+                "kind": "command",
+                "name": "job_min_point",
+                "offset": 25,
+                "opcode": "e703",
+                "raw": "e703000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e70700000134140000012f14",
+                "index": 8,
+                "kind": "command",
+                "name": "job_max_point",
+                "offset": 37,
+                "opcode": "e707",
+                "raw": "e70700000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e750000001206e000001212a",
+                "index": 9,
+                "kind": "command",
+                "name": "document_min_point",
+                "offset": 49,
+                "opcode": "e750",
+                "raw": "e750000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e75100000134140000012f14",
+                "index": 10,
+                "kind": "command",
+                "name": "document_max_point",
+                "offset": 61,
+                "opcode": "e751",
+                "raw": "e75100000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              }
+            ],
+            "before_start": 7,
+            "operation": "replace"
+          },
+          {
+            "after_end": 24,
+            "after_records": [
+              {
+                "encoded": "e75200000001234c0000011e42",
+                "index": 20,
+                "kind": "command",
+                "name": "layer_min_point",
+                "offset": 132,
+                "opcode": "e752",
+                "raw": "e75200000001234c0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e75300000001395a0000012c2c",
+                "index": 21,
+                "kind": "command",
+                "name": "layer_max_point",
+                "offset": 145,
+                "opcode": "e753",
+                "raw": "e75300000001395a0000012c2c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              },
+              {
+                "encoded": "e76100000001234c0000011e42",
+                "index": 22,
+                "kind": "command",
+                "name": "layer_extended_min_point",
+                "offset": 158,
+                "opcode": "e761",
+                "raw": "e76100000001234c0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e76200000001395a0000012c2c",
+                "index": 23,
+                "kind": "command",
+                "name": "layer_extended_max_point",
+                "offset": 171,
+                "opcode": "e762",
+                "raw": "e76200000001395a0000012c2c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              }
+            ],
+            "after_start": 20,
+            "before_end": 24,
+            "before_records": [
+              {
+                "encoded": "e75200000001206e000001212a",
+                "index": 20,
+                "kind": "command",
+                "name": "layer_min_point",
+                "offset": 132,
+                "opcode": "e752",
+                "raw": "e75200000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e7530000000134140000012f14",
+                "index": 21,
+                "kind": "command",
+                "name": "layer_max_point",
+                "offset": 145,
+                "opcode": "e753",
+                "raw": "e7530000000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e76100000001206e000001212a",
+                "index": 22,
+                "kind": "command",
+                "name": "layer_extended_min_point",
+                "offset": 158,
+                "opcode": "e761",
+                "raw": "e76100000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e7620000000134140000012f14",
+                "index": 23,
+                "kind": "command",
+                "name": "layer_extended_max_point",
+                "offset": 171,
+                "opcode": "e762",
+                "raw": "e7620000000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              }
+            ],
+            "before_start": 20,
+            "operation": "replace"
+          },
+          {
+            "after_end": 38,
+            "after_records": [
+              {
+                "encoded": "f203000001234c0000011e42",
+                "index": 35,
+                "kind": "command",
+                "name": "element_array_min_point",
+                "offset": 255,
+                "opcode": "f203",
+                "raw": "f203000001234c0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "f204000001395a0000012c2c",
+                "index": 36,
+                "kind": "command",
+                "name": "element_array_max_point",
+                "offset": 267,
+                "opcode": "f204",
+                "raw": "f204000001395a0000012c2c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              },
+              {
+                "encoded": "f20500010001000000160e0000000d6a",
+                "index": 37,
+                "kind": "command",
+                "name": "element_copies",
+                "offset": 279,
+                "opcode": "f205",
+                "raw": "f20500010001000000160e0000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.83,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "after_start": 35,
+            "before_end": 38,
+            "before_records": [
+              {
+                "encoded": "f203000001206e000001212a",
+                "index": 35,
+                "kind": "command",
+                "name": "element_array_min_point",
+                "offset": 255,
+                "opcode": "f203",
+                "raw": "f203000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "f20400000134140000012f14",
+                "index": 36,
+                "kind": "command",
+                "name": "element_array_max_point",
+                "offset": 267,
+                "opcode": "f204",
+                "raw": "f20400000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "f2050001000100000013260000000d6a",
+                "index": 37,
+                "kind": "command",
+                "name": "element_copies",
+                "offset": 279,
+                "opcode": "f205",
+                "raw": "f2050001000100000013260000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.47,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "before_start": 35,
+            "operation": "replace"
+          },
+          {
+            "after_end": 45,
+            "after_records": [
+              {
+                "encoded": "e713000001234c0000011e42",
+                "index": 42,
+                "kind": "command",
+                "name": "array_min_point",
+                "offset": 315,
+                "opcode": "e713",
+                "raw": "e713000001234c0000011e42",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e717000001395a0000012c2c",
+                "index": 43,
+                "kind": "command",
+                "name": "array_max_point",
+                "offset": 327,
+                "opcode": "e717",
+                "raw": "e717000001395a0000012c2c",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              },
+              {
+                "encoded": "e723000001234c0000011e42",
+                "index": 44,
+                "kind": "command",
+                "name": "array_add",
+                "offset": 339,
+                "opcode": "e723",
+                "raw": "e723000001234c0000011e42",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.94,
+                  "y_mm": 20.29
+                }
+              }
+            ],
+            "after_start": 42,
+            "before_end": 45,
+            "before_records": [
+              {
+                "encoded": "e713000001206e000001212a",
+                "index": 42,
+                "kind": "command",
+                "name": "array_min_point",
+                "offset": 315,
+                "opcode": "e713",
+                "raw": "e713000001206e000001212a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e71700000134140000012f14",
+                "index": 43,
+                "kind": "command",
+                "name": "array_max_point",
+                "offset": 327,
+                "opcode": "e717",
+                "raw": "e71700000134140000012f14",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e723000001206e000001212a",
+                "index": 44,
+                "kind": "command",
+                "name": "array_add",
+                "offset": 339,
+                "opcode": "e723",
+                "raw": "e723000001206e000001212a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              }
+            ],
+            "before_start": 42,
+            "operation": "replace"
+          },
+          {
+            "after_end": 48,
+            "after_records": [
+              {
+                "encoded": "e737000001395a0000012c2c",
+                "index": 46,
+                "kind": "command",
+                "name": "array_even_distance",
+                "offset": 354,
+                "opcode": "e737",
+                "raw": "e737000001395a0000012c2c",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.06
+                }
+              },
+              {
+                "encoded": "e70800010001000000160e0000000d6a",
+                "index": 47,
+                "kind": "command",
+                "name": "array_copies",
+                "offset": 366,
+                "opcode": "e708",
+                "raw": "e70800010001000000160e0000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.83,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "after_start": 46,
+            "before_end": 48,
+            "before_records": [
+              {
+                "encoded": "e73700000134140000012f14",
+                "index": 46,
+                "kind": "command",
+                "name": "array_even_distance",
+                "offset": 354,
+                "opcode": "e737",
+                "raw": "e73700000134140000012f14",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e7080001000100000013260000000d6a",
+                "index": 47,
+                "kind": "command",
+                "name": "array_copies",
+                "offset": 366,
+                "opcode": "e708",
+                "raw": "e7080001000100000013260000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.47,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "before_start": 46,
+            "operation": "replace"
+          },
+          {
+            "after_end": 75,
+            "after_records": [
+              {
+                "encoded": "88000001234b0000012408",
+                "index": 61,
+                "kind": "command",
+                "name": "move_absolute",
+                "offset": 437,
+                "opcode": "88",
+                "raw": "88000001234b0000012408",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.939,
+                  "y_mm": 21.0
+                }
+              },
+              {
+                "encoded": "a905437a3d",
+                "index": 62,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 448,
+                "opcode": "a9",
+                "raw": "a905437a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897a3d0b06",
+                "index": 63,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 453,
+                "opcode": "89",
+                "raw": "897a3d0b06",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": 1.414
+                }
+              },
+              {
+                "encoded": "a902627d1f",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 458,
+                "opcode": "a9",
+                "raw": "a902627d1f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.354,
+                  "dy_mm": -0.353
+                }
+              },
+              {
+                "encoded": "8902617d1e",
+                "index": 65,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 463,
+                "opcode": "89",
+                "raw": "8902617d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a905447a3d",
+                "index": 66,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 468,
+                "opcode": "a9",
+                "raw": "a905447a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.708,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897d1e0825",
+                "index": 67,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 473,
+                "opcode": "89",
+                "raw": "897d1e0825",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.354,
+                  "dy_mm": 1.061
+                }
+              },
+              {
+                "encoded": "a905437a3c",
+                "index": 68,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 478,
+                "opcode": "a9",
+                "raw": "a905437a3c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": -0.708
+                }
+              },
+              {
+                "encoded": "897a3d0b07",
+                "index": 69,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 483,
+                "opcode": "89",
+                "raw": "897a3d0b07",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": 1.415
+                }
+              },
+              {
+                "encoded": "a90825775b",
+                "index": 70,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 488,
+                "opcode": "a9",
+                "raw": "a90825775b",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.061,
+                  "dy_mm": -1.061
+                }
+              },
+              {
+                "encoded": "8902617d1e",
+                "index": 71,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 493,
+                "opcode": "89",
+                "raw": "8902617d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a902627d1f",
+                "index": 72,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 498,
+                "opcode": "a9",
+                "raw": "a902627d1f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.354,
+                  "dy_mm": -0.353
+                }
+              },
+              {
+                "encoded": "89775b0d68",
+                "index": 73,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 503,
+                "opcode": "89",
+                "raw": "89775b0d68",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.061,
+                  "dy_mm": 1.768
+                }
+              },
+              {
+                "encoded": "a905437a3d",
+                "index": 74,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 508,
+                "opcode": "a9",
+                "raw": "a905437a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": -0.707
+                }
+              }
+            ],
+            "after_start": 61,
+            "before_end": 69,
+            "before_records": [
+              {
+                "encoded": "88000001290e0000012f0e",
+                "index": 61,
+                "kind": "command",
+                "name": "move_absolute",
+                "offset": 437,
+                "opcode": "88",
+                "raw": "88000001290e0000012f0e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 21.646,
+                  "y_mm": 22.414
+                }
+              },
+              {
+                "encoded": "a97d1f7d1f",
+                "index": 62,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 448,
+                "opcode": "a9",
+                "raw": "a97d1f7d1f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.353,
+                  "dy_mm": -0.353
+                }
+              },
+              {
+                "encoded": "8a0543",
+                "index": 63,
+                "kind": "command",
+                "name": "move_horizontal",
+                "offset": 453,
+                "opcode": "8a",
+                "raw": "8a0543",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707
+                }
+              },
+              {
+                "encoded": "a97a3d7a3d",
+                "index": 64,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 456,
+                "opcode": "a9",
+                "raw": "a97a3d7a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897d1e7d1e",
+                "index": 65,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 461,
+                "opcode": "89",
+                "raw": "897d1e7d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.354,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a97d1f7d1e",
+                "index": 66,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 466,
+                "opcode": "a9",
+                "raw": "a97d1f7d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "89132b0d68",
+                "index": 67,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 471,
+                "opcode": "89",
+                "raw": "89132b0d68",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 2.475,
+                  "dy_mm": 1.768
+                }
+              },
+              {
+                "encoded": "a972187218",
+                "index": 68,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 476,
+                "opcode": "a9",
+                "raw": "a972187218",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.768,
+                  "dy_mm": -1.768
+                }
+              }
+            ],
+            "before_start": 61,
+            "operation": "replace"
+          },
+          {
+            "after_end": 79,
+            "after_records": [
+              {
+                "encoded": "da01062000000000080000000008",
+                "index": 78,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 518,
+                "opcode": "da01",
+                "raw": "da01062000000000080000000008",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 8,
+                  "second_value": 8
+                }
+              }
+            ],
+            "after_start": 78,
+            "before_end": 73,
+            "before_records": [
+              {
+                "encoded": "da01062000000000060000000006",
+                "index": 72,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 486,
+                "opcode": "da01",
+                "raw": "da01062000000000060000000006",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 6,
+                  "second_value": 6
+                }
+              }
+            ],
+            "before_start": 72,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "4e6f",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "380b",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "234c",
+            "after_end": 32,
+            "after_start": 30,
+            "before": "206e",
+            "before_end": 32,
+            "before_start": 30,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 37,
+            "after_start": 35,
+            "before": "212a",
+            "before_end": 37,
+            "before_start": 35,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 44,
+            "after_start": 42,
+            "before": "3414",
+            "before_end": 44,
+            "before_start": 42,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 49,
+            "after_start": 47,
+            "before": "2f14",
+            "before_end": 49,
+            "before_start": 47,
+            "operation": "replace"
+          },
+          {
+            "after": "234c",
+            "after_end": 56,
+            "after_start": 54,
+            "before": "206e",
+            "before_end": 56,
+            "before_start": 54,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 61,
+            "after_start": 59,
+            "before": "212a",
+            "before_end": 61,
+            "before_start": 59,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 68,
+            "after_start": 66,
+            "before": "3414",
+            "before_end": 68,
+            "before_start": 66,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 73,
+            "after_start": 71,
+            "before": "2f14",
+            "before_end": 73,
+            "before_start": 71,
+            "operation": "replace"
+          },
+          {
+            "after": "234c",
+            "after_end": 140,
+            "after_start": 138,
+            "before": "206e",
+            "before_end": 140,
+            "before_start": 138,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 145,
+            "after_start": 143,
+            "before": "212a",
+            "before_end": 145,
+            "before_start": 143,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 153,
+            "after_start": 151,
+            "before": "3414",
+            "before_end": 153,
+            "before_start": 151,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 158,
+            "after_start": 156,
+            "before": "2f14",
+            "before_end": 158,
+            "before_start": 156,
+            "operation": "replace"
+          },
+          {
+            "after": "234c",
+            "after_end": 166,
+            "after_start": 164,
+            "before": "206e",
+            "before_end": 166,
+            "before_start": 164,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 171,
+            "after_start": 169,
+            "before": "212a",
+            "before_end": 171,
+            "before_start": 169,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 179,
+            "after_start": 177,
+            "before": "3414",
+            "before_end": 179,
+            "before_start": 177,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 184,
+            "after_start": 182,
+            "before": "2f14",
+            "before_end": 184,
+            "before_start": 182,
+            "operation": "replace"
+          },
+          {
+            "after": "234c",
+            "after_end": 262,
+            "after_start": 260,
+            "before": "206e",
+            "before_end": 262,
+            "before_start": 260,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 267,
+            "after_start": 265,
+            "before": "212a",
+            "before_end": 267,
+            "before_start": 265,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 274,
+            "after_start": 272,
+            "before": "3414",
+            "before_end": 274,
+            "before_start": 272,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 279,
+            "after_start": 277,
+            "before": "2f14",
+            "before_end": 279,
+            "before_start": 277,
+            "operation": "replace"
+          },
+          {
+            "after": "160e",
+            "after_end": 290,
+            "after_start": 288,
+            "before": "1326",
+            "before_end": 290,
+            "before_start": 288,
+            "operation": "replace"
+          },
+          {
+            "after": "234c",
+            "after_end": 322,
+            "after_start": 320,
+            "before": "206e",
+            "before_end": 322,
+            "before_start": 320,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 327,
+            "after_start": 325,
+            "before": "212a",
+            "before_end": 327,
+            "before_start": 325,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 334,
+            "after_start": 332,
+            "before": "3414",
+            "before_end": 334,
+            "before_start": 332,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 339,
+            "after_start": 337,
+            "before": "2f14",
+            "before_end": 339,
+            "before_start": 337,
+            "operation": "replace"
+          },
+          {
+            "after": "234c",
+            "after_end": 346,
+            "after_start": 344,
+            "before": "206e",
+            "before_end": 346,
+            "before_start": 344,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 351,
+            "after_start": 349,
+            "before": "212a",
+            "before_end": 351,
+            "before_start": 349,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 361,
+            "after_start": 359,
+            "before": "3414",
+            "before_end": 361,
+            "before_start": 359,
+            "operation": "replace"
+          },
+          {
+            "after": "2c2c",
+            "after_end": 366,
+            "after_start": 364,
+            "before": "2f14",
+            "before_end": 366,
+            "before_start": 364,
+            "operation": "replace"
+          },
+          {
+            "after": "160e",
+            "after_end": 377,
+            "after_start": 375,
+            "before": "1326",
+            "before_end": 377,
+            "before_start": 375,
+            "operation": "replace"
+          },
+          {
+            "after": "234b",
+            "after_end": 443,
+            "after_start": 441,
+            "before": "290e",
+            "before_end": 443,
+            "before_start": 441,
+            "operation": "replace"
+          },
+          {
+            "after": "2408",
+            "after_end": 448,
+            "after_start": 446,
+            "before": "2f0e",
+            "before_end": 448,
+            "before_start": 446,
+            "operation": "replace"
+          },
+          {
+            "after": "05437a3d897a3d0b06a90262",
+            "after_end": 461,
+            "after_start": 449,
+            "before": "",
+            "before_end": 449,
+            "before_start": 449,
+            "operation": "insert"
+          },
+          {
+            "after": "890261",
+            "after_end": 466,
+            "after_start": 463,
+            "before": "",
+            "before_end": 451,
+            "before_start": 451,
+            "operation": "insert"
+          },
+          {
+            "after": "1ea9",
+            "after_end": 469,
+            "after_start": 467,
+            "before": "1f8a",
+            "before_end": 454,
+            "before_start": 452,
+            "operation": "replace"
+          },
+          {
+            "after": "44",
+            "after_end": 471,
+            "after_start": 470,
+            "before": "43a97a3d",
+            "before_end": 459,
+            "before_start": 455,
+            "operation": "replace"
+          },
+          {
+            "after": "0825a905437a3c897a3d0b07a90825775b890261",
+            "after_end": 496,
+            "after_start": 476,
+            "before": "",
+            "before_end": 464,
+            "before_start": 464,
+            "operation": "insert"
+          },
+          {
+            "after": "0262",
+            "after_end": 501,
+            "after_start": 499,
+            "before": "",
+            "before_end": 467,
+            "before_start": 467,
+            "operation": "insert"
+          },
+          {
+            "after": "",
+            "after_end": 503,
+            "after_start": 503,
+            "before": "7d1e",
+            "before_end": 471,
+            "before_start": 469,
+            "operation": "delete"
+          },
+          {
+            "after": "775b",
+            "after_end": 506,
+            "after_start": 504,
+            "before": "132b",
+            "before_end": 474,
+            "before_start": 472,
+            "operation": "replace"
+          },
+          {
+            "after": "05437a3d",
+            "after_end": 513,
+            "after_start": 509,
+            "before": "72187218",
+            "before_end": 481,
+            "before_start": 477,
+            "operation": "replace"
+          },
+          {
+            "after": "08",
+            "after_end": 527,
+            "after_start": 526,
+            "before": "06",
+            "before_end": 495,
+            "before_start": 494,
+            "operation": "replace"
+          },
+          {
+            "after": "08",
+            "after_end": 532,
+            "after_start": 531,
+            "before": "06",
+            "before_end": 500,
+            "before_start": 499,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "angle_degrees",
+      "variant": "c004-raster-angle-135-uni",
+      "variant_value": 135
+    },
+    {
+      "baseline": "c002-raster-angle-045-uni",
+      "baseline_value": false,
+      "expected_relation": "observe",
+      "id": "c002-raster-angle-045-uni-vs-c005-raster-angle-045-cross-hatch",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e5050000020439",
+                "index": 102,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 636,
+                "opcode": "e505",
+                "raw": "e5050000020439",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 33337
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e505000001380b",
+                "index": 73,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 500,
+                "opcode": "e505",
+                "raw": "e505000001380b",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 23563
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 11,
+            "after_records": [
+              {
+                "encoded": "e703000001206e0000011e42",
+                "index": 7,
+                "kind": "command",
+                "name": "job_min_point",
+                "offset": 25,
+                "opcode": "e703",
+                "raw": "e703000001206e0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e707000001395a0000012f0a",
+                "index": 8,
+                "kind": "command",
+                "name": "job_max_point",
+                "offset": 37,
+                "opcode": "e707",
+                "raw": "e707000001395a0000012f0a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              },
+              {
+                "encoded": "e750000001206e0000011e42",
+                "index": 9,
+                "kind": "command",
+                "name": "document_min_point",
+                "offset": 49,
+                "opcode": "e750",
+                "raw": "e750000001206e0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e751000001395a0000012f0a",
+                "index": 10,
+                "kind": "command",
+                "name": "document_max_point",
+                "offset": 61,
+                "opcode": "e751",
+                "raw": "e751000001395a0000012f0a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              }
+            ],
+            "after_start": 7,
+            "before_end": 11,
+            "before_records": [
+              {
+                "encoded": "e703000001206e000001212a",
+                "index": 7,
+                "kind": "command",
+                "name": "job_min_point",
+                "offset": 25,
+                "opcode": "e703",
+                "raw": "e703000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e70700000134140000012f14",
+                "index": 8,
+                "kind": "command",
+                "name": "job_max_point",
+                "offset": 37,
+                "opcode": "e707",
+                "raw": "e70700000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e750000001206e000001212a",
+                "index": 9,
+                "kind": "command",
+                "name": "document_min_point",
+                "offset": 49,
+                "opcode": "e750",
+                "raw": "e750000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e75100000134140000012f14",
+                "index": 10,
+                "kind": "command",
+                "name": "document_max_point",
+                "offset": 61,
+                "opcode": "e751",
+                "raw": "e75100000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              }
+            ],
+            "before_start": 7,
+            "operation": "replace"
+          },
+          {
+            "after_end": 24,
+            "after_records": [
+              {
+                "encoded": "e75200000001206e0000011e42",
+                "index": 20,
+                "kind": "command",
+                "name": "layer_min_point",
+                "offset": 132,
+                "opcode": "e752",
+                "raw": "e75200000001206e0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e75300000001395a0000012f0a",
+                "index": 21,
+                "kind": "command",
+                "name": "layer_max_point",
+                "offset": 145,
+                "opcode": "e753",
+                "raw": "e75300000001395a0000012f0a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              },
+              {
+                "encoded": "e76100000001206e0000011e42",
+                "index": 22,
+                "kind": "command",
+                "name": "layer_extended_min_point",
+                "offset": 158,
+                "opcode": "e761",
+                "raw": "e76100000001206e0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e76200000001395a0000012f0a",
+                "index": 23,
+                "kind": "command",
+                "name": "layer_extended_max_point",
+                "offset": 171,
+                "opcode": "e762",
+                "raw": "e76200000001395a0000012f0a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              }
+            ],
+            "after_start": 20,
+            "before_end": 24,
+            "before_records": [
+              {
+                "encoded": "e75200000001206e000001212a",
+                "index": 20,
+                "kind": "command",
+                "name": "layer_min_point",
+                "offset": 132,
+                "opcode": "e752",
+                "raw": "e75200000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e7530000000134140000012f14",
+                "index": 21,
+                "kind": "command",
+                "name": "layer_max_point",
+                "offset": 145,
+                "opcode": "e753",
+                "raw": "e7530000000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e76100000001206e000001212a",
+                "index": 22,
+                "kind": "command",
+                "name": "layer_extended_min_point",
+                "offset": 158,
+                "opcode": "e761",
+                "raw": "e76100000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e7620000000134140000012f14",
+                "index": 23,
+                "kind": "command",
+                "name": "layer_extended_max_point",
+                "offset": 171,
+                "opcode": "e762",
+                "raw": "e7620000000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0,
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              }
+            ],
+            "before_start": 20,
+            "operation": "replace"
+          },
+          {
+            "after_end": 38,
+            "after_records": [
+              {
+                "encoded": "f203000001206e0000011e42",
+                "index": 35,
+                "kind": "command",
+                "name": "element_array_min_point",
+                "offset": 255,
+                "opcode": "f203",
+                "raw": "f203000001206e0000011e42",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "f204000001395a0000012f0a",
+                "index": 36,
+                "kind": "command",
+                "name": "element_array_max_point",
+                "offset": 267,
+                "opcode": "f204",
+                "raw": "f204000001395a0000012f0a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              },
+              {
+                "encoded": "f20500010001000000186c0000001048",
+                "index": 37,
+                "kind": "command",
+                "name": "element_copies",
+                "offset": 279,
+                "opcode": "f205",
+                "raw": "f20500010001000000186c0000001048",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 3.18,
+                  "y_step_mm": 2.12
+                }
+              }
+            ],
+            "after_start": 35,
+            "before_end": 38,
+            "before_records": [
+              {
+                "encoded": "f203000001206e000001212a",
+                "index": 35,
+                "kind": "command",
+                "name": "element_array_min_point",
+                "offset": 255,
+                "opcode": "f203",
+                "raw": "f203000001206e000001212a",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "f20400000134140000012f14",
+                "index": 36,
+                "kind": "command",
+                "name": "element_array_max_point",
+                "offset": 267,
+                "opcode": "f204",
+                "raw": "f20400000134140000012f14",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "f2050001000100000013260000000d6a",
+                "index": 37,
+                "kind": "command",
+                "name": "element_copies",
+                "offset": 279,
+                "opcode": "f205",
+                "raw": "f2050001000100000013260000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.47,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "before_start": 35,
+            "operation": "replace"
+          },
+          {
+            "after_end": 45,
+            "after_records": [
+              {
+                "encoded": "e713000001206e0000011e42",
+                "index": 42,
+                "kind": "command",
+                "name": "array_min_point",
+                "offset": 315,
+                "opcode": "e713",
+                "raw": "e713000001206e0000011e42",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              },
+              {
+                "encoded": "e717000001395a0000012f0a",
+                "index": 43,
+                "kind": "command",
+                "name": "array_max_point",
+                "offset": 327,
+                "opcode": "e717",
+                "raw": "e717000001395a0000012f0a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              },
+              {
+                "encoded": "e723000001206e0000011e42",
+                "index": 44,
+                "kind": "command",
+                "name": "array_add",
+                "offset": 339,
+                "opcode": "e723",
+                "raw": "e723000001206e0000011e42",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.29
+                }
+              }
+            ],
+            "after_start": 42,
+            "before_end": 45,
+            "before_records": [
+              {
+                "encoded": "e713000001206e000001212a",
+                "index": 42,
+                "kind": "command",
+                "name": "array_min_point",
+                "offset": 315,
+                "opcode": "e713",
+                "raw": "e713000001206e000001212a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              },
+              {
+                "encoded": "e71700000134140000012f14",
+                "index": 43,
+                "kind": "command",
+                "name": "array_max_point",
+                "offset": 327,
+                "opcode": "e717",
+                "raw": "e71700000134140000012f14",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e723000001206e000001212a",
+                "index": 44,
+                "kind": "command",
+                "name": "array_add",
+                "offset": 339,
+                "opcode": "e723",
+                "raw": "e723000001206e000001212a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.59,
+                  "y_mm": 20.65
+                }
+              }
+            ],
+            "before_start": 42,
+            "operation": "replace"
+          },
+          {
+            "after_end": 48,
+            "after_records": [
+              {
+                "encoded": "e737000001395a0000012f0a",
+                "index": 46,
+                "kind": "command",
+                "name": "array_even_distance",
+                "offset": 354,
+                "opcode": "e737",
+                "raw": "e737000001395a0000012f0a",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.77,
+                  "y_mm": 22.41
+                }
+              },
+              {
+                "encoded": "e70800010001000000186c0000001048",
+                "index": 47,
+                "kind": "command",
+                "name": "array_copies",
+                "offset": 366,
+                "opcode": "e708",
+                "raw": "e70800010001000000186c0000001048",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 3.18,
+                  "y_step_mm": 2.12
+                }
+              }
+            ],
+            "after_start": 46,
+            "before_end": 48,
+            "before_records": [
+              {
+                "encoded": "e73700000134140000012f14",
+                "index": 46,
+                "kind": "command",
+                "name": "array_even_distance",
+                "offset": 354,
+                "opcode": "e737",
+                "raw": "e73700000134140000012f14",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 23.06,
+                  "y_mm": 22.42
+                }
+              },
+              {
+                "encoded": "e7080001000100000013260000000d6a",
+                "index": 47,
+                "kind": "command",
+                "name": "array_copies",
+                "offset": 366,
+                "opcode": "e708",
+                "raw": "e7080001000100000013260000000d6a",
+                "semantic_evidence": "disputed",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "columns": 1,
+                  "rows": 1,
+                  "x_step_mm": 2.47,
+                  "y_step_mm": 1.77
+                }
+              }
+            ],
+            "before_start": 46,
+            "operation": "replace"
+          },
+          {
+            "after_end": 99,
+            "after_records": [
+              {
+                "encoded": "ca0105",
+                "index": 70,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 483,
+                "opcode": "ca01",
+                "raw": "ca0105",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 5
+                }
+              },
+              {
+                "encoded": "ca0100",
+                "index": 71,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 486,
+                "opcode": "ca01",
+                "raw": "ca0100",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 0
+                }
+              },
+              {
+                "encoded": "ca0200",
+                "index": 72,
+                "kind": "command",
+                "name": "select_layer",
+                "offset": 489,
+                "opcode": "ca02",
+                "raw": "ca0200",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0
+                }
+              },
+              {
+                "encoded": "ca0130",
+                "index": 73,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 492,
+                "opcode": "ca01",
+                "raw": "ca0130",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 48
+                }
+              },
+              {
+                "encoded": "ca0110",
+                "index": 74,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 495,
+                "opcode": "ca01",
+                "raw": "ca0110",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 16
+                }
+              },
+              {
+                "encoded": "ca0112",
+                "index": 75,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 498,
+                "opcode": "ca01",
+                "raw": "ca0112",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 18
+                }
+              },
+              {
+                "encoded": "c9020000060d20",
+                "index": 76,
+                "kind": "command",
+                "name": "active_speed",
+                "offset": 501,
+                "opcode": "c902",
+                "raw": "c9020000060d20",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "speed_mm_s": 100.0
+                }
+              },
+              {
+                "encoded": "c6014000",
+                "index": 77,
+                "kind": "command",
+                "name": "laser_1_min_power",
+                "offset": 508,
+                "opcode": "c601",
+                "raw": "c6014000",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "power_percent": 50.003051944088384
+                }
+              },
+              {
+                "encoded": "c6024000",
+                "index": 78,
+                "kind": "command",
+                "name": "laser_1_max_power",
+                "offset": 512,
+                "opcode": "c602",
+                "raw": "c6024000",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "power_percent": 50.003051944088384
+                }
+              },
+              {
+                "encoded": "c6214000",
+                "index": 79,
+                "kind": "command",
+                "name": "laser_2_min_power",
+                "offset": 516,
+                "opcode": "c621",
+                "raw": "c6214000",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "power_percent": 50.003051944088384
+                }
+              },
+              {
+                "encoded": "c6224000",
+                "index": 80,
+                "kind": "command",
+                "name": "laser_2_max_power",
+                "offset": 520,
+                "opcode": "c622",
+                "raw": "c6224000",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "power_percent": 50.003051944088384
+                }
+              },
+              {
+                "encoded": "c6120000000000",
+                "index": 81,
+                "kind": "command",
+                "name": "laser_on_delay",
+                "offset": 524,
+                "opcode": "c612",
+                "raw": "c6120000000000",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 0.0
+                }
+              },
+              {
+                "encoded": "c6130000000000",
+                "index": 82,
+                "kind": "command",
+                "name": "laser_off_delay",
+                "offset": 531,
+                "opcode": "c613",
+                "raw": "c6130000000000",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "time_ms": 0.0
+                }
+              },
+              {
+                "encoded": "ca0301",
+                "index": 83,
+                "kind": "command",
+                "name": "enable_laser_tube_start",
+                "offset": 538,
+                "opcode": "ca03",
+                "raw": "ca0301",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "enabled": 1
+                }
+              },
+              {
+                "encoded": "88000001234b0000012408",
+                "index": 84,
+                "kind": "command",
+                "name": "move_absolute",
+                "offset": 541,
+                "opcode": "88",
+                "raw": "88000001234b0000012408",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "x_mm": 20.939,
+                  "y_mm": 21.0
+                }
+              },
+              {
+                "encoded": "a905437a3d",
+                "index": 85,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 552,
+                "opcode": "a9",
+                "raw": "a905437a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897a3d0b06",
+                "index": 86,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 557,
+                "opcode": "89",
+                "raw": "897a3d0b06",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": 1.414
+                }
+              },
+              {
+                "encoded": "a902627d1f",
+                "index": 87,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 562,
+                "opcode": "a9",
+                "raw": "a902627d1f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.354,
+                  "dy_mm": -0.353
+                }
+              },
+              {
+                "encoded": "8902617d1e",
+                "index": 88,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 567,
+                "opcode": "89",
+                "raw": "8902617d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a905447a3d",
+                "index": 89,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 572,
+                "opcode": "a9",
+                "raw": "a905447a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.708,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "897d1e0825",
+                "index": 90,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 577,
+                "opcode": "89",
+                "raw": "897d1e0825",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.354,
+                  "dy_mm": 1.061
+                }
+              },
+              {
+                "encoded": "a905437a3c",
+                "index": 91,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 582,
+                "opcode": "a9",
+                "raw": "a905437a3c",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": -0.708
+                }
+              },
+              {
+                "encoded": "897a3d0b07",
+                "index": 92,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 587,
+                "opcode": "89",
+                "raw": "897a3d0b07",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -0.707,
+                  "dy_mm": 1.415
+                }
+              },
+              {
+                "encoded": "a90825775b",
+                "index": 93,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 592,
+                "opcode": "a9",
+                "raw": "a90825775b",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 1.061,
+                  "dy_mm": -1.061
+                }
+              },
+              {
+                "encoded": "8902617d1e",
+                "index": 94,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 597,
+                "opcode": "89",
+                "raw": "8902617d1e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.353,
+                  "dy_mm": -0.354
+                }
+              },
+              {
+                "encoded": "a902627d1f",
+                "index": 95,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 602,
+                "opcode": "a9",
+                "raw": "a902627d1f",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.354,
+                  "dy_mm": -0.353
+                }
+              },
+              {
+                "encoded": "89775b0d68",
+                "index": 96,
+                "kind": "command",
+                "name": "move_relative",
+                "offset": 607,
+                "opcode": "89",
+                "raw": "89775b0d68",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": -1.061,
+                  "dy_mm": 1.768
+                }
+              },
+              {
+                "encoded": "a905437a3d",
+                "index": 97,
+                "kind": "command",
+                "name": "cut_relative",
+                "offset": 612,
+                "opcode": "a9",
+                "raw": "a905437a3d",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "dx_mm": 0.707,
+                  "dy_mm": -0.707
+                }
+              },
+              {
+                "encoded": "e700",
+                "index": 98,
+                "kind": "command",
+                "name": "block_end",
+                "offset": 617,
+                "opcode": "e700",
+                "raw": "e700",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {}
+              }
+            ],
+            "after_start": 70,
+            "before_end": 70,
+            "before_records": [],
+            "before_start": 70,
+            "operation": "insert"
+          },
+          {
+            "after_end": 102,
+            "after_records": [
+              {
+                "encoded": "da010620000000000e000000000e",
+                "index": 101,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 622,
+                "opcode": "da01",
+                "raw": "da010620000000000e000000000e",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 14,
+                  "second_value": 14
+                }
+              }
+            ],
+            "after_start": 101,
+            "before_end": 73,
+            "before_records": [
+              {
+                "encoded": "da01062000000000060000000006",
+                "index": 72,
+                "kind": "command",
+                "name": "set_setting",
+                "offset": 486,
+                "opcode": "da01",
+                "raw": "da01062000000000060000000006",
+                "semantic_evidence": "reported",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "address": 800,
+                  "first_value": 6,
+                  "second_value": 6
+                }
+              }
+            ],
+            "before_start": 72,
+            "operation": "replace"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "020439",
+            "after_end": 7,
+            "after_start": 4,
+            "before": "01380b",
+            "before_end": 7,
+            "before_start": 4,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "1e42",
+            "after_end": 37,
+            "after_start": 35,
+            "before": "212a",
+            "before_end": 37,
+            "before_start": 35,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 44,
+            "after_start": 42,
+            "before": "3414",
+            "before_end": 44,
+            "before_start": 42,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 49,
+            "after_start": 48,
+            "before": "14",
+            "before_end": 49,
+            "before_start": 48,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 61,
+            "after_start": 59,
+            "before": "212a",
+            "before_end": 61,
+            "before_start": 59,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 68,
+            "after_start": 66,
+            "before": "3414",
+            "before_end": 68,
+            "before_start": 66,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 73,
+            "after_start": 72,
+            "before": "14",
+            "before_end": 73,
+            "before_start": 72,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 145,
+            "after_start": 143,
+            "before": "212a",
+            "before_end": 145,
+            "before_start": 143,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 153,
+            "after_start": 151,
+            "before": "3414",
+            "before_end": 153,
+            "before_start": 151,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 158,
+            "after_start": 157,
+            "before": "14",
+            "before_end": 158,
+            "before_start": 157,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 171,
+            "after_start": 169,
+            "before": "212a",
+            "before_end": 171,
+            "before_start": 169,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 179,
+            "after_start": 177,
+            "before": "3414",
+            "before_end": 179,
+            "before_start": 177,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 184,
+            "after_start": 183,
+            "before": "14",
+            "before_end": 184,
+            "before_start": 183,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 267,
+            "after_start": 265,
+            "before": "212a",
+            "before_end": 267,
+            "before_start": 265,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 274,
+            "after_start": 272,
+            "before": "3414",
+            "before_end": 274,
+            "before_start": 272,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 279,
+            "after_start": 278,
+            "before": "14",
+            "before_end": 279,
+            "before_start": 278,
+            "operation": "replace"
+          },
+          {
+            "after": "186c",
+            "after_end": 290,
+            "after_start": 288,
+            "before": "1326",
+            "before_end": 290,
+            "before_start": 288,
+            "operation": "replace"
+          },
+          {
+            "after": "1048",
+            "after_end": 295,
+            "after_start": 293,
+            "before": "0d6a",
+            "before_end": 295,
+            "before_start": 293,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 327,
+            "after_start": 325,
+            "before": "212a",
+            "before_end": 327,
+            "before_start": 325,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 334,
+            "after_start": 332,
+            "before": "3414",
+            "before_end": 334,
+            "before_start": 332,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 339,
+            "after_start": 338,
+            "before": "14",
+            "before_end": 339,
+            "before_start": 338,
+            "operation": "replace"
+          },
+          {
+            "after": "1e42",
+            "after_end": 351,
+            "after_start": 349,
+            "before": "212a",
+            "before_end": 351,
+            "before_start": 349,
+            "operation": "replace"
+          },
+          {
+            "after": "395a",
+            "after_end": 361,
+            "after_start": 359,
+            "before": "3414",
+            "before_end": 361,
+            "before_start": 359,
+            "operation": "replace"
+          },
+          {
+            "after": "0a",
+            "after_end": 366,
+            "after_start": 365,
+            "before": "14",
+            "before_end": 366,
+            "before_start": 365,
+            "operation": "replace"
+          },
+          {
+            "after": "186c",
+            "after_end": 377,
+            "after_start": 375,
+            "before": "1326",
+            "before_end": 377,
+            "before_start": 375,
+            "operation": "replace"
+          },
+          {
+            "after": "1048",
+            "after_end": 382,
+            "after_start": 380,
+            "before": "0d6a",
+            "before_end": 382,
+            "before_start": 380,
+            "operation": "replace"
+          },
+          {
+            "after": "ca0105ca0100ca0200ca0130ca0110ca0112c9020000060d20c6014000c6024000c6214000c6224000c6120000000000c6130000000000ca030188000001234b0000012408a905437a3d897a3d0b06a902627d1f8902617d1ea905447a3d897d1e0825a905437a3c897a3d0b07a90825775b8902617d1ea902627d1f89775b0d68a905437a3de700",
+            "after_end": 619,
+            "after_start": 483,
+            "before": "",
+            "before_end": 483,
+            "before_start": 483,
+            "operation": "insert"
+          },
+          {
+            "after": "0e",
+            "after_end": 631,
+            "after_start": 630,
+            "before": "06",
+            "before_end": 495,
+            "before_start": 494,
+            "operation": "replace"
+          },
+          {
+            "after": "0e",
+            "after_end": 636,
+            "after_start": 635,
+            "before": "06",
+            "before_end": 500,
+            "before_start": 499,
+            "operation": "replace"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "cross_hatch",
+      "variant": "c005-raster-angle-045-cross-hatch",
+      "variant_value": true
+    }
+  ],
+  "manifest": "diagonal-raster.experiment.json",
+  "manifest_sha256": "b6ae1b1ebe5bf781d94848599bdef084fa4f20ee40958cbaf65431b13a631a93",
+  "protocol": {
+    "container": "rd",
+    "context": "job",
+    "magic": 136
+  },
+  "provenance": {
+    "lightburn_profile": {
+      "bed_height_mm": 599.947998046875,
+      "bed_width_mm": 991.1080322265625,
+      "connection": "Serial",
+      "controller": "Ruida",
+      "display_name": "Ruida 644XS",
+      "mirror_x": true,
+      "mirror_y": true
+    },
+    "machine": {
+      "display_name": "Boss LS2040",
+      "manufacturer": "Boss Laser",
+      "model": "LS2040",
+      "rotary_hardware_available": false
+    },
+    "publication": {
+      "blocked_rotary_case_ids": [
+        "c045-rotary-enabled-off",
+        "c046-rotary-enabled-on",
+        "c047-rotary-object-diameter-50",
+        "c048-rotary-object-diameter-75",
+        "c049-rotary-mirror-output-off",
+        "c050-rotary-mirror-output-on",
+        "c051-rotary-roller",
+        "c052-rotary-chuck"
+      ],
+      "capture_chain": "original capture hashes retained in capture_origin",
+      "excluded_artifacts": [
+        "LightBurn backup files",
+        "unattested or quarantined exports",
+        "rotary template attempts",
+        "blocked rotary case files"
+      ],
+      "included_case_count": 44,
+      "included_case_ids": [
+        "c001-raster-angle-000-uni",
+        "c002-raster-angle-045-uni",
+        "c003-raster-angle-045-bi",
+        "c004-raster-angle-135-uni",
+        "c005-raster-angle-045-cross-hatch",
+        "c006-laser1-only-static",
+        "c007-lasers-1-and-2-static",
+        "c008-laser2-only-static",
+        "c009-lasers-both-laser1-power-25",
+        "c010-lasers-both-laser2-power-45",
+        "c011-z-per-pass-zero-baseline",
+        "c012-z-per-pass-positive-05",
+        "c013-z-per-pass-negative-05",
+        "c014-material-height-positive-1",
+        "c015-power-scale-omitted",
+        "c016-power-scale-all-000",
+        "c017-power-scale-all-050",
+        "c018-power-scale-all-100",
+        "c019-power-scale-sequence-000-050-100",
+        "c020-power-scale-sequence-100-050-000",
+        "c021-power-scale-sequence-repeated-050",
+        "c022-delay-zero-baseline",
+        "c023-start-delay-100",
+        "c024-start-delay-200",
+        "c025-end-delay-100",
+        "c026-end-delay-200",
+        "c027-cut-through-disabled",
+        "c028-cut-through-start-enabled",
+        "c029-cut-through-end-enabled",
+        "c030-cut-through-start-and-end",
+        "c031-cut-through-laser1-power-35",
+        "c032-cut-through-laser2-power-55",
+        "c033-dot-mode-disabled",
+        "c034-dot-mode-enabled",
+        "c035-dot-time-200",
+        "c036-dot-spacing-2",
+        "c037-frequency-override-disabled-20000",
+        "c038-frequency-override-enabled-20000",
+        "c039-frequency-override-enabled-10000",
+        "c040-fiber-pulse-width-zero",
+        "c041-fiber-pulse-width-100",
+        "c042-fiber-pulse-width-200",
+        "c043-z-offset-positive-1",
+        "c044-z-offset-negative-1"
+      ],
+      "included_families": [
+        "cut-through",
+        "diagonal-raster",
+        "dot-mode",
+        "dwell",
+        "dynamic-vector-power",
+        "frequency",
+        "laser-channel",
+        "pulse-width-candidate",
+        "z-axis-candidate"
+      ],
+      "profile_matrix": {
+        "capture_filename": "lightburn-profile-matrix.json",
+        "original_document_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_size": 3763,
+        "path": "profiles/lightburn-profile-matrix.json",
+        "published_document_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_size": 3763,
+        "redactions": [],
+        "rewrites": [
+          {
+            "json_pointer": "/source/source_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/source/source_document_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/variants/0/variant_sha256",
+            "operation": "replace",
+            "original_value": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+            "published_value": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243"
+          },
+          {
+            "json_pointer": "/variants/0/size",
+            "operation": "replace",
+            "original_value": 2326,
+            "published_value": 2217
+          },
+          {
+            "json_pointer": "/variants/1/variant_sha256",
+            "operation": "replace",
+            "original_value": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+            "published_value": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa"
+          },
+          {
+            "json_pointer": "/variants/1/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/2/variant_sha256",
+            "operation": "replace",
+            "original_value": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+            "published_value": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4"
+          },
+          {
+            "json_pointer": "/variants/2/size",
+            "operation": "replace",
+            "original_value": 2340,
+            "published_value": 2231
+          },
+          {
+            "json_pointer": "/variants/3/variant_sha256",
+            "operation": "replace",
+            "original_value": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+            "published_value": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a"
+          },
+          {
+            "json_pointer": "/variants/3/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/4/variant_sha256",
+            "operation": "replace",
+            "original_value": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+            "published_value": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06"
+          },
+          {
+            "json_pointer": "/variants/4/size",
+            "operation": "replace",
+            "original_value": 2344,
+            "published_value": 2235
+          }
+        ]
+      },
+      "profiles": [
+        {
+          "capture_filename": "research-enable-z.lbdev",
+          "original_document_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_size": 2326,
+          "path": "profiles/research-enable-z.lbdev",
+          "published_document_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_size": 2217,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-fiber.lbdev",
+          "original_document_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_size": 2338,
+          "path": "profiles/research-laser-1-fiber.lbdev",
+          "published_document_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-rf-tube.lbdev",
+          "original_document_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_size": 2340,
+          "path": "profiles/research-laser-1-rf-tube.lbdev",
+          "published_document_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_size": 2231,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-2-enabled.lbdev",
+          "original_document_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_size": 2338,
+          "path": "profiles/research-laser-2-enabled.lbdev",
+          "published_document_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-save-rotary-config.lbdev",
+          "original_document_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_size": 2344,
+          "path": "profiles/research-save-rotary-config.lbdev",
+          "published_document_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_size": 2235,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "ruida-644xs-active.lbdev",
+          "original_document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_size": 2270,
+          "path": "profiles/ruida-644xs-active.lbdev",
+          "published_document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_size": 2161,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        }
+      ],
+      "schema": "ruida-re.capability-publication.v1",
+      "source_manifest_sha256": "32a2059b3a610787f8bb21cfbc0c9481e234deb7a68476866e267f19d2dcf062"
+    },
+    "reference_software": {
+      "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+      "name": "LightBurn",
+      "platform": "macOS",
+      "version": "2.1.03"
+    },
+    "rotary_template": {
+      "blocked_reason": "Supply a LightBurn-exported .lbrn2 project containing exactly one GantryRotaryConfig; its Axis value and unknown content will be preserved rather than inferred.",
+      "status": "required"
+    },
+    "schema": "ruida-re-lightburn-capabilities-v1",
+    "scope": {
+      "default_export_status": "pending",
+      "export_capture": {
+        "attestation_scope": "per-case",
+        "available_case_count": 44,
+        "captured_case_count": 44,
+        "status": "complete"
+      },
+      "project_generation": {
+        "hardware_contacted": false,
+        "lightburn_launched": false,
+        "mode": "offline"
+      }
+    }
+  },
+  "schema": "ruida-re.experiment-report.v1",
+  "strict": true,
+  "valid": true
+}

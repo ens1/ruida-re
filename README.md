@@ -30,10 +30,10 @@ The project separates two different claims:
    shape or meaning to a physical-controller observation. It does not promote
    the same opcode in another context or claim universal controller behavior.
 
-The current registries contain 184 host/job shapes, 74 provisional request
+The current registries contain 186 host/job shapes, 74 provisional request
 candidates, and 10 reply shapes spanning hardware observation, reports,
-disputes, and simulation. Twenty-five checked-in LightBurn exports exercise
-72 unique job shapes; all 25 parse without opaque frames and reproduce
+disputes, and simulation. Sixty-nine checked-in LightBurn exports exercise
+80 unique job shapes; all 69 parse without opaque frames and reproduce
 byte-for-byte. A temporary LibLaserCut golden file exercises 123 frames with
 the same result. Those results validate the current framing model and exact
 translation, not every mnemonic, request, reply, or controller dialect in the
@@ -111,15 +111,44 @@ preserve explicit step regimes such as process kind, speed, power limits, air,
 head, scan axis, and scan strategy. It must split layers when a regime changes
 and reject missing or ambiguous metadata rather than infer controller state.
 
-The controlled LightBurn 2.1.03 Ruida 644XS profile supports planar XY vector
-motion, one laser index, air assist, and raster plans using horizontal or
-vertical axes with unidirectional or bidirectional scanning. Z or rotary
-motion, additional laser heads, frequency, pulse width, dwell, and
-arbitrary-angle raster metadata are not supported. An integration adapter
-must reject those features instead of dropping them or approximating them.
-Passes remain host-expanded. A controlled four-pass fixture with `zPerPass`
-changed from 0 to 0.5 mm produced a byte-identical `.rd`; that is not evidence
-for Z-axis encoding.
+The conservative `LIGHTBURN_2103_644XS` profile supports planar XY vector
+motion, one laser head, air assist, and the four native horizontal/vertical
+scan modes. Diagonal and cross-hatch output requires the explicit
+`LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH` profile. The host supplies final
+`TravelTo`/`MarkTo` paths grouped into `RasterSection` objects and sets
+`raster_processing="planned-path"`. LightBurn's controlled diagonal exports
+use general signed X/Y path motion; there is no evidenced Ruida angle field
+for the compiler to fill in. `SetModulation` is not yet supported in a
+planned-path section.
+
+Every capability without hardware execution evidence is available only
+through an explicit offline-research profile:
+
+| Profile | Plan surface | Controlled serialization |
+| --- | --- | --- |
+| `LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH` | one planned-path raster layer | host-planned diagonal/cross-hatch XY sections |
+| `LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH` | two `LaserChannelPlan` entries | head-enable mask and independent layer/active power |
+| `LIGHTBURN_2103_644XS_STATIONARY_RESEARCH` | `Dwell`, `Pulse` | non-marking `C6 11` dwell and marking `C6 10` pulse |
+| `LIGHTBURN_2103_644XS_RF_RESEARCH` | `frequency_hz` | paired `C6 60` values in hertz |
+| `LIGHTBURN_2103_644XS_FIBER_RESEARCH` | `pulse_width_ns` | `C6 66` value in nanoseconds |
+| `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` | balanced, inverse `80 03` deltas around one native raster layer |
+| `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | `MarkWithPower` | explicit effective channel powers immediately before a vector mark |
+
+These profiles reproduce controlled LightBurn machine files exactly, but none
+of the advanced behavior has been executed on hardware. They are opt-in and
+intentionally narrow; the default compiler still rejects those fields. The
+fixture-derived built-in limits are 200 ms for stationary events, 10–20 kHz
+for RF frequency, 0–200 ns for fiber pulse width, and 1 mm absolute Z offset.
+The dual-head, stationary, RF, fiber, and dynamic-power profiles accept
+exactly one vector layer at index zero. Planned-path and Z profiles each
+accept exactly one raster layer at index zero; Z requires native raster. The
+host must provide resolved per-head powers to `MarkWithPower`, not a source
+application's PowerScale value. Cut-through remains unsupported because the
+fixtures do not distinguish start from end behavior or establish independent
+head-2 through power. Rotary remains blocked without an exported rotary
+template and hardware. Passes remain host-expanded. Controlled changes to
+`zPerPass` and material height produced byte-identical `.rd` files, so neither
+is treated as a Z command.
 
 ### First live validation
 
@@ -413,7 +442,27 @@ ruida-fixture generate
 ruida-matrix generate
 ruida-advanced generate
 ruida-raster-fixture generate
+ruida-capability-fixture generate \
+  --directory work/lightburn-2.1.03/capabilities
 ```
+
+The advanced-capability matrix uses explicit profile evidence. On macOS, make
+an offline snapshot of the one Ruida device entry in a caller-selected
+LightBurn preferences JSON file, then derive five deterministic research
+clones:
+
+```sh
+capability_root=work/lightburn-2.1.03/capabilities
+ruida-lightburn-profile snapshot LIGHTBURN_PREFS_JSON \
+  "$capability_root/profiles/ruida-644xs-active.lbdev"
+ruida-lightburn-profile generate \
+  "$capability_root/profiles/ruida-644xs-active.lbdev" \
+  "$capability_root/profiles/research"
+```
+
+The clones change exactly one setting: `EnableZ`, `Laser2Enabled`,
+`Laser1IsRFTube`, `Laser1IsFiber`, or `SaveRotaryConfig`. Generating or
+snapshotting profiles does not launch LightBurn or contact a controller.
 
 LightBurn 2.1.03 does not expose a supported headless machine-file export. On
 macOS, the optional helper drives only **File → Save RD file** through
@@ -434,10 +483,58 @@ ruida-advanced record
 ruida-raster-fixture record
 ```
 
+Capability recording is incremental and requires both the profile artifact
+used for the export and an explicit attestation that LightBurn's **Save RD
+file** action was used. For example, record an ungated export against the
+active profile, or a Z-gated export against the `enable-z` matrix variant:
+
+```sh
+capability_root=work/lightburn-2.1.03/capabilities
+ruida-capability-fixture record --directory "$capability_root" \
+  --profile-evidence \
+  "$capability_root/profiles/ruida-644xs-active.lbdev" \
+  --attest-lightburn-save-rd
+
+ruida-capability-fixture record --directory "$capability_root" \
+  --profile-evidence \
+  "$capability_root/profiles/research/lightburn-profile-matrix.json" \
+  --profile-variant enable-z --attest-lightburn-save-rd
+```
+
+Record each newly exported profile group before adding exports made with a
+different profile. The manifest binds the project, `.rd`, selected profile,
+and attestation hashes. The attestation states that no job was transmitted;
+whether LightBurn itself opened a configured controller connection is
+deliberately recorded as `not-attested`.
+
+Derive and strictly analyze one family without launching LightBurn:
+
+```sh
+capability_root=work/lightburn-2.1.03/capabilities
+ruida-experiment derive "$capability_root/capabilities.json" diagonal-raster
+ruida-experiment analyze \
+  "$capability_root/diagonal-raster.experiment.json" \
+  --output "$capability_root/diagonal-raster.report.json" --strict
+```
+
+Maintainers can publish a captured matrix through the no-clobber promotion
+step. It copies only captured c001-c044 project/RD pairs, keeps c045-c052
+blocked, sanitizes volatile local profile paths, retains the original profile
+hashes separately from the published hashes, and regenerates strict reports:
+
+```sh
+capability_root=work/lightburn-2.1.03/capabilities
+ruida-capability-fixture promote --directory "$capability_root" \
+  --output-directory fixtures/lightburn-2.1.03/capabilities
+```
+
 Raster discovery projects embed tiny synthetic grayscale PNGs and remain
 `pending` until every project has a corresponding LightBurn `.rd` export.
 They cover protocol-facing scan direction, scan axis, interval, variable
-power, and four-pass 3D slicing. They do not implement image processing or
+power, and four-pass 3D slicing. The capability matrix adds diagonal planned
+paths, two laser heads, effective per-mark vector power, stationary dwell and
+pulse, RF frequency, fiber pulse width, Z-offset candidates, and negative
+results for other controls. These tools do not implement image processing or
 send data to a controller.
 
 Advanced recording is incremental: it records every available export and

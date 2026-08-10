@@ -1,0 +1,2390 @@
+{
+  "capability": "z-axis-candidate",
+  "captures": [
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 80,
+          "matches_source_basis": true,
+          "offset": 523,
+          "value": 24896
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "3dslice",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 1,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 4,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "id": "c011-z-per-pass-zero-baseline",
+      "issues": [],
+      "known_records": 82,
+      "opaque_records": 0,
+      "path": "c011-z-per-pass-zero-baseline.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+          "height_pixels": 2,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "evidence_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+              "filename": "lightburn-profile-matrix.json",
+              "identifier": "enable-z",
+              "kind": "lightburn-profile-matrix",
+              "profile_filename": "research-enable-z.lbdev",
+              "profile_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+              "profile_state": {
+                "EnableZ": true
+              },
+              "profile_type": "Serial",
+              "size": 3763
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "evidence_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+            "filename": "profiles/lightburn-profile-matrix.json",
+            "identifier": "enable-z",
+            "kind": "lightburn-profile-matrix",
+            "profile_filename": "profiles/research-enable-z.lbdev",
+            "profile_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+            "profile_state": {
+              "EnableZ": true
+            },
+            "profile_type": "Serial",
+            "publication": {
+              "matrix": {
+                "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+                "path": "profiles/lightburn-profile-matrix.json",
+                "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+                "redactions": []
+              },
+              "selected_profile": {
+                "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+                "path": "profiles/research-enable-z.lbdev",
+                "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 3763
+          },
+          "profile_requirements": [
+            "EnableZ"
+          ],
+          "project_sha256": "0934551494a2c9c4619ecea1a0b918c68196a647b36e53c6cebcd0b8cff1e7d7",
+          "rd_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17"
+        },
+        "comparison": null,
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "3dslice",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 1,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 4,
+          "pixels": [
+            [
+              255,
+              224,
+              192,
+              160,
+              128,
+              96,
+              64,
+              0
+            ],
+            [
+              128,
+              0,
+              224,
+              64,
+              255,
+              160,
+              96,
+              192
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": "zPerPass is LightBurn project metadata whose Ruida output effect is not yet established",
+          "input_status": "hypothesis",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "z-axis-candidate",
+        "files": {
+          "c011-z-per-pass-zero-baseline.lbrn2": {
+            "sha256": "0934551494a2c9c4619ecea1a0b918c68196a647b36e53c6cebcd0b8cff1e7d7",
+            "size": 1576,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c011-z-per-pass-zero-baseline",
+        "profile_requirements": [
+          "EnableZ"
+        ],
+        "project": "c011-z-per-pass-zero-baseline.lbrn2",
+        "purpose": "establish a four-pass 3D-slice project with no Z step",
+        "rd_file_metadata": {
+          "size": 531,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 82,
+      "round_trip_exact": true,
+      "sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "sha256_matches": true,
+      "size": 531,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 80,
+          "matches_source_basis": true,
+          "offset": 523,
+          "value": 24896
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "3dslice",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 1,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 4,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0.5
+      },
+      "expected_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "id": "c012-z-per-pass-positive-05",
+      "issues": [],
+      "known_records": 82,
+      "opaque_records": 0,
+      "path": "c012-z-per-pass-positive-05.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+          "height_pixels": 2,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "evidence_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+              "filename": "lightburn-profile-matrix.json",
+              "identifier": "enable-z",
+              "kind": "lightburn-profile-matrix",
+              "profile_filename": "research-enable-z.lbdev",
+              "profile_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+              "profile_state": {
+                "EnableZ": true
+              },
+              "profile_type": "Serial",
+              "size": 3763
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "evidence_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+            "filename": "profiles/lightburn-profile-matrix.json",
+            "identifier": "enable-z",
+            "kind": "lightburn-profile-matrix",
+            "profile_filename": "profiles/research-enable-z.lbdev",
+            "profile_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+            "profile_state": {
+              "EnableZ": true
+            },
+            "profile_type": "Serial",
+            "publication": {
+              "matrix": {
+                "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+                "path": "profiles/lightburn-profile-matrix.json",
+                "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+                "redactions": []
+              },
+              "selected_profile": {
+                "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+                "path": "profiles/research-enable-z.lbdev",
+                "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 3763
+          },
+          "profile_requirements": [
+            "EnableZ"
+          ],
+          "project_sha256": "85d2e00e73ffb0e66020070e53069c4c2981414b1379ca69aa4f3a68fc44a8c0",
+          "rd_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17"
+        },
+        "comparison": {
+          "baseline": "c011-z-per-pass-zero-baseline",
+          "baseline_value": 0,
+          "case_value": 0.5,
+          "controlled_differences": [
+            "z_per_pass_mm"
+          ],
+          "independent_variable": "z_per_pass_mm"
+        },
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "3dslice",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 1,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 4,
+          "pixels": [
+            [
+              255,
+              224,
+              192,
+              160,
+              128,
+              96,
+              64,
+              0
+            ],
+            [
+              128,
+              0,
+              224,
+              64,
+              255,
+              160,
+              96,
+              192
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0.5
+        },
+        "evidence": {
+          "hypothesis": "a positive zPerPass may emit positive inter-pass Z motion",
+          "input_status": "hypothesis",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "z-axis-candidate",
+        "files": {
+          "c012-z-per-pass-positive-05.lbrn2": {
+            "sha256": "85d2e00e73ffb0e66020070e53069c4c2981414b1379ca69aa4f3a68fc44a8c0",
+            "size": 1576,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c012-z-per-pass-positive-05",
+        "profile_requirements": [
+          "EnableZ"
+        ],
+        "project": "c012-z-per-pass-positive-05.lbrn2",
+        "purpose": "test whether a positive zPerPass emits inter-pass Z motion",
+        "rd_file_metadata": {
+          "size": 531,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 82,
+      "round_trip_exact": true,
+      "sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "sha256_matches": true,
+      "size": 531,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 80,
+          "matches_source_basis": true,
+          "offset": 523,
+          "value": 24896
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "3dslice",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 1,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 4,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": -0.5
+      },
+      "expected_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "id": "c013-z-per-pass-negative-05",
+      "issues": [],
+      "known_records": 82,
+      "opaque_records": 0,
+      "path": "c013-z-per-pass-negative-05.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+          "height_pixels": 2,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "evidence_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+              "filename": "lightburn-profile-matrix.json",
+              "identifier": "enable-z",
+              "kind": "lightburn-profile-matrix",
+              "profile_filename": "research-enable-z.lbdev",
+              "profile_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+              "profile_state": {
+                "EnableZ": true
+              },
+              "profile_type": "Serial",
+              "size": 3763
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "evidence_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+            "filename": "profiles/lightburn-profile-matrix.json",
+            "identifier": "enable-z",
+            "kind": "lightburn-profile-matrix",
+            "profile_filename": "profiles/research-enable-z.lbdev",
+            "profile_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+            "profile_state": {
+              "EnableZ": true
+            },
+            "profile_type": "Serial",
+            "publication": {
+              "matrix": {
+                "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+                "path": "profiles/lightburn-profile-matrix.json",
+                "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+                "redactions": []
+              },
+              "selected_profile": {
+                "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+                "path": "profiles/research-enable-z.lbdev",
+                "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 3763
+          },
+          "profile_requirements": [
+            "EnableZ"
+          ],
+          "project_sha256": "1b9132aeac4d0e11dec9314d10b0a39605be253a6ed33ba228049ce502a35ccf",
+          "rd_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17"
+        },
+        "comparison": {
+          "baseline": "c011-z-per-pass-zero-baseline",
+          "baseline_value": 0,
+          "case_value": -0.5,
+          "controlled_differences": [
+            "z_per_pass_mm"
+          ],
+          "independent_variable": "z_per_pass_mm"
+        },
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "3dslice",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 1,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 4,
+          "pixels": [
+            [
+              255,
+              224,
+              192,
+              160,
+              128,
+              96,
+              64,
+              0
+            ],
+            [
+              128,
+              0,
+              224,
+              64,
+              255,
+              160,
+              96,
+              192
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": -0.5
+        },
+        "evidence": {
+          "hypothesis": "a negative zPerPass may emit negative inter-pass Z motion",
+          "input_status": "hypothesis",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "z-axis-candidate",
+        "files": {
+          "c013-z-per-pass-negative-05.lbrn2": {
+            "sha256": "1b9132aeac4d0e11dec9314d10b0a39605be253a6ed33ba228049ce502a35ccf",
+            "size": 1577,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c013-z-per-pass-negative-05",
+        "profile_requirements": [
+          "EnableZ"
+        ],
+        "project": "c013-z-per-pass-negative-05.lbrn2",
+        "purpose": "test whether a negative zPerPass emits inter-pass Z motion",
+        "rd_file_metadata": {
+          "size": 531,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 82,
+      "round_trip_exact": true,
+      "sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "sha256_matches": true,
+      "size": 531,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 80,
+          "matches_source_basis": true,
+          "offset": 523,
+          "value": 24896
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "3dslice",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 1,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 1,
+        "num_passes": 4,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 0,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "id": "c014-material-height-positive-1",
+      "issues": [],
+      "known_records": 82,
+      "opaque_records": 0,
+      "path": "c014-material-height-positive-1.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+          "height_pixels": 2,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "evidence_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+              "filename": "lightburn-profile-matrix.json",
+              "identifier": "enable-z",
+              "kind": "lightburn-profile-matrix",
+              "profile_filename": "research-enable-z.lbdev",
+              "profile_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+              "profile_state": {
+                "EnableZ": true
+              },
+              "profile_type": "Serial",
+              "size": 3763
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "evidence_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+            "filename": "profiles/lightburn-profile-matrix.json",
+            "identifier": "enable-z",
+            "kind": "lightburn-profile-matrix",
+            "profile_filename": "profiles/research-enable-z.lbdev",
+            "profile_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+            "profile_state": {
+              "EnableZ": true
+            },
+            "profile_type": "Serial",
+            "publication": {
+              "matrix": {
+                "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+                "path": "profiles/lightburn-profile-matrix.json",
+                "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+                "redactions": []
+              },
+              "selected_profile": {
+                "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+                "path": "profiles/research-enable-z.lbdev",
+                "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 3763
+          },
+          "profile_requirements": [
+            "EnableZ"
+          ],
+          "project_sha256": "5d5bc301e457099d9ac9b4898c90a31df489e3ccd16667024f2a7e2adc2d473f",
+          "rd_sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17"
+        },
+        "comparison": {
+          "baseline": "c011-z-per-pass-zero-baseline",
+          "baseline_value": 0,
+          "case_value": 1,
+          "controlled_differences": [
+            "material_height_mm"
+          ],
+          "independent_variable": "material_height_mm"
+        },
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "3dslice",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 1,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 1,
+          "num_passes": 4,
+          "pixels": [
+            [
+              255,
+              224,
+              192,
+              160,
+              128,
+              96,
+              64,
+              0
+            ],
+            [
+              128,
+              0,
+              224,
+              64,
+              255,
+              160,
+              96,
+              192
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 0,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": "MaterialHeight may influence emitted job-level Z state",
+          "input_status": "hypothesis",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "z-axis-candidate",
+        "files": {
+          "c014-material-height-positive-1.lbrn2": {
+            "sha256": "5d5bc301e457099d9ac9b4898c90a31df489e3ccd16667024f2a7e2adc2d473f",
+            "size": 1578,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c014-material-height-positive-1",
+        "profile_requirements": [
+          "EnableZ"
+        ],
+        "project": "c014-material-height-positive-1.lbrn2",
+        "purpose": "test MaterialHeight as a possible job-level Z input",
+        "rd_file_metadata": {
+          "size": 531,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 82,
+      "round_trip_exact": true,
+      "sha256": "d11d67466916b3abe7256c0361f31756aae43ecc8d31f6ad917549f13e456e17",
+      "sha256_matches": true,
+      "size": 531,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 96,
+          "matches_source_basis": true,
+          "offset": 587,
+          "value": 28958
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "3dslice",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 1,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 4,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": 1,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "51e1c1e908c64850f0949c7c5912df6250b4b359c40bf7fcdb9e85308cc89c5c",
+      "id": "c043-z-offset-positive-1",
+      "issues": [],
+      "known_records": 98,
+      "opaque_records": 0,
+      "path": "c043-z-offset-positive-1.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+          "height_pixels": 2,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "evidence_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+              "filename": "lightburn-profile-matrix.json",
+              "identifier": "enable-z",
+              "kind": "lightburn-profile-matrix",
+              "profile_filename": "research-enable-z.lbdev",
+              "profile_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+              "profile_state": {
+                "EnableZ": true
+              },
+              "profile_type": "Serial",
+              "size": 3763
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "evidence_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+            "filename": "profiles/lightburn-profile-matrix.json",
+            "identifier": "enable-z",
+            "kind": "lightburn-profile-matrix",
+            "profile_filename": "profiles/research-enable-z.lbdev",
+            "profile_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+            "profile_state": {
+              "EnableZ": true
+            },
+            "profile_type": "Serial",
+            "publication": {
+              "matrix": {
+                "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+                "path": "profiles/lightburn-profile-matrix.json",
+                "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+                "redactions": []
+              },
+              "selected_profile": {
+                "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+                "path": "profiles/research-enable-z.lbdev",
+                "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 3763
+          },
+          "profile_requirements": [
+            "EnableZ"
+          ],
+          "project_sha256": "795cd353e5af775af1986626f15c8e1cbcd5c120d90878d436ab44c5135b33af",
+          "rd_sha256": "51e1c1e908c64850f0949c7c5912df6250b4b359c40bf7fcdb9e85308cc89c5c"
+        },
+        "comparison": {
+          "baseline": "c011-z-per-pass-zero-baseline",
+          "baseline_value": 0,
+          "case_value": 1,
+          "controlled_differences": [
+            "z_offset_mm"
+          ],
+          "independent_variable": "z_offset_mm"
+        },
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "3dslice",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 1,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 4,
+          "pixels": [
+            [
+              255,
+              224,
+              192,
+              160,
+              128,
+              96,
+              64,
+              0
+            ],
+            [
+              128,
+              0,
+              224,
+              64,
+              255,
+              160,
+              96,
+              192
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": 1,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": "a positive zOffset may emit positive job-level Z motion",
+          "input_status": "hypothesis",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "z-axis-candidate",
+        "files": {
+          "c043-z-offset-positive-1.lbrn2": {
+            "sha256": "795cd353e5af775af1986626f15c8e1cbcd5c120d90878d436ab44c5135b33af",
+            "size": 1571,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c043-z-offset-positive-1",
+        "profile_requirements": [
+          "EnableZ"
+        ],
+        "project": "c043-z-offset-positive-1.lbrn2",
+        "purpose": "test whether positive zOffset emits job-level Z motion",
+        "rd_file_metadata": {
+          "size": 595,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 98,
+      "round_trip_exact": true,
+      "sha256": "51e1c1e908c64850f0949c7c5912df6250b4b359c40bf7fcdb9e85308cc89c5c",
+      "sha256_matches": true,
+      "size": 595,
+      "structured": true,
+      "valid": true
+    },
+    {
+      "checksum_consistent": true,
+      "checksum_records": [
+        {
+          "index": 96,
+          "matches_source_basis": true,
+          "offset": 587,
+          "value": 28958
+        }
+      ],
+      "checksum_required": true,
+      "controls": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "cross_hatch": false,
+        "dither_mode": "3dslice",
+        "enable_laser1": true,
+        "enable_laser2": false,
+        "height_mm": 1,
+        "interval_mm": 0.5,
+        "laser1_power_percent": 50,
+        "laser2_power_percent": 50,
+        "material_height_mm": 0,
+        "num_passes": 4,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "project_kind": "raster",
+        "speed_mm_s": 100,
+        "width_mm": 4,
+        "z_offset_mm": -1,
+        "z_per_pass_mm": 0
+      },
+      "expected_sha256": "62dbc24d8ce686c44c9063b09f616cb83957a701685dd992739dc7fed4641cef",
+      "id": "c044-z-offset-negative-1",
+      "issues": [],
+      "known_records": 98,
+      "opaque_records": 0,
+      "path": "c044-z-offset-negative-1.rd",
+      "provenance": {
+        "bitmap": {
+          "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+          "height_pixels": 2,
+          "width_pixels": 8
+        },
+        "blocked_reason": null,
+        "capture": {
+          "export_attestation": {
+            "controller_connection": "not-attested",
+            "job_transmitted": false,
+            "lightburn_launched": true,
+            "machine_file_action": "save-rd"
+          },
+          "profile_evidence": {
+            "capture_origin": {
+              "controller_identity": {
+                "field": "DeviceList[0].Name",
+                "value": "Ruida"
+              },
+              "evidence_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+              "filename": "lightburn-profile-matrix.json",
+              "identifier": "enable-z",
+              "kind": "lightburn-profile-matrix",
+              "profile_filename": "research-enable-z.lbdev",
+              "profile_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+              "profile_state": {
+                "EnableZ": true
+              },
+              "profile_type": "Serial",
+              "size": 3763
+            },
+            "controller_identity": {
+              "field": "DeviceList[0].Name",
+              "value": "Ruida"
+            },
+            "evidence_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+            "filename": "profiles/lightburn-profile-matrix.json",
+            "identifier": "enable-z",
+            "kind": "lightburn-profile-matrix",
+            "profile_filename": "profiles/research-enable-z.lbdev",
+            "profile_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+            "profile_state": {
+              "EnableZ": true
+            },
+            "profile_type": "Serial",
+            "publication": {
+              "matrix": {
+                "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+                "path": "profiles/lightburn-profile-matrix.json",
+                "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+                "redactions": []
+              },
+              "selected_profile": {
+                "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+                "path": "profiles/research-enable-z.lbdev",
+                "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+                "redactions": [
+                  {
+                    "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+                    "operation": "remove",
+                    "original_type": "string",
+                    "original_utf8_size": 74,
+                    "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+                    "reason": "volatile-path-setting"
+                  }
+                ]
+              },
+              "stage": "sanitized-publication"
+            },
+            "size": 3763
+          },
+          "profile_requirements": [
+            "EnableZ"
+          ],
+          "project_sha256": "8dd760e83d02109457d4b3698910a5f3482f5e11c99fc3fb95b92bfa327ffcdf",
+          "rd_sha256": "62dbc24d8ce686c44c9063b09f616cb83957a701685dd992739dc7fed4641cef"
+        },
+        "comparison": {
+          "baseline": "c011-z-per-pass-zero-baseline",
+          "baseline_value": 0,
+          "case_value": -1,
+          "controlled_differences": [
+            "z_offset_mm"
+          ],
+          "independent_variable": "z_offset_mm"
+        },
+        "controls": {
+          "angle_degrees": 0,
+          "bidirectional": false,
+          "cross_hatch": false,
+          "dither_mode": "3dslice",
+          "enable_laser1": true,
+          "enable_laser2": false,
+          "height_mm": 1,
+          "interval_mm": 0.5,
+          "laser1_power_percent": 50,
+          "laser2_power_percent": 50,
+          "material_height_mm": 0,
+          "num_passes": 4,
+          "pixels": [
+            [
+              255,
+              224,
+              192,
+              160,
+              128,
+              96,
+              64,
+              0
+            ],
+            [
+              128,
+              0,
+              224,
+              64,
+              255,
+              160,
+              96,
+              192
+            ]
+          ],
+          "project_kind": "raster",
+          "speed_mm_s": 100,
+          "width_mm": 4,
+          "z_offset_mm": -1,
+          "z_per_pass_mm": 0
+        },
+        "evidence": {
+          "hypothesis": "a negative zOffset may emit negative job-level Z motion",
+          "input_status": "hypothesis",
+          "protocol_interpretation": "pending"
+        },
+        "export_status": "captured",
+        "family": "z-axis-candidate",
+        "files": {
+          "c044-z-offset-negative-1.lbrn2": {
+            "sha256": "8dd760e83d02109457d4b3698910a5f3482f5e11c99fc3fb95b92bfa327ffcdf",
+            "size": 1572,
+            "stage": "generated-input"
+          }
+        },
+        "fixture_status": "generated",
+        "identifier": "c044-z-offset-negative-1",
+        "profile_requirements": [
+          "EnableZ"
+        ],
+        "project": "c044-z-offset-negative-1.lbrn2",
+        "purpose": "test whether negative zOffset emits job-level Z motion",
+        "rd_file_metadata": {
+          "size": 595,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "records": 98,
+      "round_trip_exact": true,
+      "sha256": "62dbc24d8ce686c44c9063b09f616cb83957a701685dd992739dc7fed4641cef",
+      "sha256_matches": true,
+      "size": 595,
+      "structured": true,
+      "valid": true
+    }
+  ],
+  "comparisons": [
+    {
+      "baseline": "c011-z-per-pass-zero-baseline",
+      "baseline_value": 0,
+      "expected_relation": "observe",
+      "id": "c011-z-per-pass-zero-baseline-vs-c012-z-per-pass-positive-05",
+      "protocol_relation": "identical",
+      "raw_relation": "identical",
+      "record_diff": {
+        "checksum_derived": [],
+        "non_checksum": []
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [],
+        "non_checksum": []
+      },
+      "valid": true,
+      "variable": "z_per_pass_mm",
+      "variant": "c012-z-per-pass-positive-05",
+      "variant_value": 0.5
+    },
+    {
+      "baseline": "c011-z-per-pass-zero-baseline",
+      "baseline_value": 0,
+      "expected_relation": "observe",
+      "id": "c011-z-per-pass-zero-baseline-vs-c013-z-per-pass-negative-05",
+      "protocol_relation": "identical",
+      "raw_relation": "identical",
+      "record_diff": {
+        "checksum_derived": [],
+        "non_checksum": []
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [],
+        "non_checksum": []
+      },
+      "valid": true,
+      "variable": "z_per_pass_mm",
+      "variant": "c013-z-per-pass-negative-05",
+      "variant_value": -0.5
+    },
+    {
+      "baseline": "c011-z-per-pass-zero-baseline",
+      "baseline_value": 0,
+      "expected_relation": "observe",
+      "id": "c011-z-per-pass-zero-baseline-vs-c014-material-height-positive-1",
+      "protocol_relation": "identical",
+      "raw_relation": "identical",
+      "record_diff": {
+        "checksum_derived": [],
+        "non_checksum": []
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [],
+        "non_checksum": []
+      },
+      "valid": true,
+      "variable": "material_height_mm",
+      "variant": "c014-material-height-positive-1",
+      "variant_value": 1
+    },
+    {
+      "baseline": "c011-z-per-pass-zero-baseline",
+      "baseline_value": 0,
+      "expected_relation": "observe",
+      "id": "c011-z-per-pass-zero-baseline-vs-c043-z-offset-positive-1",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e505000001621e",
+                "index": 96,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 587,
+                "opcode": "e505",
+                "raw": "e505000001621e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 28958
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e5050000014240",
+                "index": 80,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 523,
+                "opcode": "e505",
+                "raw": "e5050000014240",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 24896
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 56,
+            "after_records": [
+              {
+                "encoded": "ca0105",
+                "index": 48,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 382,
+                "opcode": "ca01",
+                "raw": "ca0105",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 5
+                }
+              },
+              {
+                "encoded": "c9030000007518",
+                "index": 49,
+                "kind": "command",
+                "name": "axis_speed",
+                "offset": 385,
+                "opcode": "c903",
+                "raw": "c9030000007518",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "speed_mm_s": 15.0
+                }
+              },
+              {
+                "encoded": "ca0100",
+                "index": 50,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 392,
+                "opcode": "ca01",
+                "raw": "ca0100",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 0
+                }
+              },
+              {
+                "encoded": "ca0200",
+                "index": 51,
+                "kind": "command",
+                "name": "select_layer",
+                "offset": 395,
+                "opcode": "ca02",
+                "raw": "ca0200",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0
+                }
+              },
+              {
+                "encoded": "ca0130",
+                "index": 52,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 398,
+                "opcode": "ca01",
+                "raw": "ca0130",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 48
+                }
+              },
+              {
+                "encoded": "ca0110",
+                "index": 53,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 401,
+                "opcode": "ca01",
+                "raw": "ca0110",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 16
+                }
+              },
+              {
+                "encoded": "ca0303",
+                "index": 54,
+                "kind": "command",
+                "name": "enable_laser_tube_start",
+                "offset": 404,
+                "opcode": "ca03",
+                "raw": "ca0303",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "enabled": 3
+                }
+              },
+              {
+                "encoded": "80030f7f7f7818",
+                "index": 55,
+                "kind": "command",
+                "name": "z_offset_delta",
+                "offset": 407,
+                "opcode": "8003",
+                "raw": "80030f7f7f7818",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "delta_mm": -1.0
+                }
+              }
+            ],
+            "after_start": 48,
+            "before_end": 48,
+            "before_records": [],
+            "before_start": 48,
+            "operation": "insert"
+          },
+          {
+            "after_end": 93,
+            "after_records": [
+              {
+                "encoded": "ca0105",
+                "index": 85,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 538,
+                "opcode": "ca01",
+                "raw": "ca0105",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 5
+                }
+              },
+              {
+                "encoded": "c9030000007518",
+                "index": 86,
+                "kind": "command",
+                "name": "axis_speed",
+                "offset": 541,
+                "opcode": "c903",
+                "raw": "c9030000007518",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "speed_mm_s": 15.0
+                }
+              },
+              {
+                "encoded": "ca0100",
+                "index": 87,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 548,
+                "opcode": "ca01",
+                "raw": "ca0100",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 0
+                }
+              },
+              {
+                "encoded": "ca0200",
+                "index": 88,
+                "kind": "command",
+                "name": "select_layer",
+                "offset": 551,
+                "opcode": "ca02",
+                "raw": "ca0200",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0
+                }
+              },
+              {
+                "encoded": "ca0130",
+                "index": 89,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 554,
+                "opcode": "ca01",
+                "raw": "ca0130",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 48
+                }
+              },
+              {
+                "encoded": "ca0110",
+                "index": 90,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 557,
+                "opcode": "ca01",
+                "raw": "ca0110",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 16
+                }
+              },
+              {
+                "encoded": "ca0303",
+                "index": 91,
+                "kind": "command",
+                "name": "enable_laser_tube_start",
+                "offset": 560,
+                "opcode": "ca03",
+                "raw": "ca0303",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "enabled": 3
+                }
+              },
+              {
+                "encoded": "80030000000768",
+                "index": 92,
+                "kind": "command",
+                "name": "z_offset_delta",
+                "offset": 563,
+                "opcode": "8003",
+                "raw": "80030000000768",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "delta_mm": 1.0
+                }
+              }
+            ],
+            "after_start": 85,
+            "before_end": 77,
+            "before_records": [],
+            "before_start": 77,
+            "operation": "insert"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "621e",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "4240",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "ca0105c9030000007518ca0100ca0200ca0130ca0110ca030380030f7f7f7818",
+            "after_end": 414,
+            "after_start": 382,
+            "before": "",
+            "before_end": 382,
+            "before_start": 382,
+            "operation": "insert"
+          },
+          {
+            "after": "ca0105c9030000007518ca0100ca0200ca0130ca0110ca030380030000000768",
+            "after_end": 570,
+            "after_start": 538,
+            "before": "",
+            "before_end": 506,
+            "before_start": 506,
+            "operation": "insert"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "z_offset_mm",
+      "variant": "c043-z-offset-positive-1",
+      "variant_value": 1
+    },
+    {
+      "baseline": "c011-z-per-pass-zero-baseline",
+      "baseline_value": 0,
+      "expected_relation": "observe",
+      "id": "c011-z-per-pass-zero-baseline-vs-c044-z-offset-negative-1",
+      "protocol_relation": "different",
+      "raw_relation": "different",
+      "record_diff": {
+        "checksum_derived": [
+          {
+            "after_end": 1,
+            "after_records": [
+              {
+                "encoded": "e505000001621e",
+                "index": 96,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 587,
+                "opcode": "e505",
+                "raw": "e505000001621e",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 28958
+                }
+              }
+            ],
+            "after_start": 0,
+            "before_end": 1,
+            "before_records": [
+              {
+                "encoded": "e5050000014240",
+                "index": 80,
+                "kind": "command",
+                "name": "file_checksum",
+                "offset": 523,
+                "opcode": "e505",
+                "raw": "e5050000014240",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "value": 24896
+                }
+              }
+            ],
+            "before_start": 0,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after_end": 56,
+            "after_records": [
+              {
+                "encoded": "ca0105",
+                "index": 48,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 382,
+                "opcode": "ca01",
+                "raw": "ca0105",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 5
+                }
+              },
+              {
+                "encoded": "c9030000007518",
+                "index": 49,
+                "kind": "command",
+                "name": "axis_speed",
+                "offset": 385,
+                "opcode": "c903",
+                "raw": "c9030000007518",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "speed_mm_s": 15.0
+                }
+              },
+              {
+                "encoded": "ca0100",
+                "index": 50,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 392,
+                "opcode": "ca01",
+                "raw": "ca0100",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 0
+                }
+              },
+              {
+                "encoded": "ca0200",
+                "index": 51,
+                "kind": "command",
+                "name": "select_layer",
+                "offset": 395,
+                "opcode": "ca02",
+                "raw": "ca0200",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0
+                }
+              },
+              {
+                "encoded": "ca0130",
+                "index": 52,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 398,
+                "opcode": "ca01",
+                "raw": "ca0130",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 48
+                }
+              },
+              {
+                "encoded": "ca0110",
+                "index": 53,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 401,
+                "opcode": "ca01",
+                "raw": "ca0110",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 16
+                }
+              },
+              {
+                "encoded": "ca0303",
+                "index": 54,
+                "kind": "command",
+                "name": "enable_laser_tube_start",
+                "offset": 404,
+                "opcode": "ca03",
+                "raw": "ca0303",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "enabled": 3
+                }
+              },
+              {
+                "encoded": "80030000000768",
+                "index": 55,
+                "kind": "command",
+                "name": "z_offset_delta",
+                "offset": 407,
+                "opcode": "8003",
+                "raw": "80030000000768",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "delta_mm": 1.0
+                }
+              }
+            ],
+            "after_start": 48,
+            "before_end": 48,
+            "before_records": [],
+            "before_start": 48,
+            "operation": "insert"
+          },
+          {
+            "after_end": 93,
+            "after_records": [
+              {
+                "encoded": "ca0105",
+                "index": 85,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 538,
+                "opcode": "ca01",
+                "raw": "ca0105",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 5
+                }
+              },
+              {
+                "encoded": "c9030000007518",
+                "index": 86,
+                "kind": "command",
+                "name": "axis_speed",
+                "offset": 541,
+                "opcode": "c903",
+                "raw": "c9030000007518",
+                "semantic_evidence": "uncited-hypothesis",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "speed_mm_s": 15.0
+                }
+              },
+              {
+                "encoded": "ca0100",
+                "index": 87,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 548,
+                "opcode": "ca01",
+                "raw": "ca0100",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 0
+                }
+              },
+              {
+                "encoded": "ca0200",
+                "index": 88,
+                "kind": "command",
+                "name": "select_layer",
+                "offset": 551,
+                "opcode": "ca02",
+                "raw": "ca0200",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "layer": 0
+                }
+              },
+              {
+                "encoded": "ca0130",
+                "index": 89,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 554,
+                "opcode": "ca01",
+                "raw": "ca0130",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 48
+                }
+              },
+              {
+                "encoded": "ca0110",
+                "index": 90,
+                "kind": "command",
+                "name": "layer_control",
+                "offset": 557,
+                "opcode": "ca01",
+                "raw": "ca0110",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "operation": 16
+                }
+              },
+              {
+                "encoded": "ca0303",
+                "index": 91,
+                "kind": "command",
+                "name": "enable_laser_tube_start",
+                "offset": 560,
+                "opcode": "ca03",
+                "raw": "ca0303",
+                "semantic_evidence": "controlled-fixture",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "enabled": 3
+                }
+              },
+              {
+                "encoded": "80030f7f7f7818",
+                "index": 92,
+                "kind": "command",
+                "name": "z_offset_delta",
+                "offset": 563,
+                "opcode": "8003",
+                "raw": "80030f7f7f7818",
+                "semantic_evidence": "partially-controlled",
+                "shape_evidence": "fixture-observed",
+                "values": {
+                  "delta_mm": -1.0
+                }
+              }
+            ],
+            "after_start": 85,
+            "before_end": 77,
+            "before_records": [],
+            "before_start": 77,
+            "operation": "insert"
+          }
+        ]
+      },
+      "relation_matches": true,
+      "unswizzled_diff": {
+        "checksum_derived": [
+          {
+            "after": "621e",
+            "after_end": 7,
+            "after_start": 5,
+            "before": "4240",
+            "before_end": 7,
+            "before_start": 5,
+            "operation": "replace"
+          }
+        ],
+        "non_checksum": [
+          {
+            "after": "ca0105c9030000007518ca0100ca0200ca0130ca0110ca030380030000000768",
+            "after_end": 414,
+            "after_start": 382,
+            "before": "",
+            "before_end": 382,
+            "before_start": 382,
+            "operation": "insert"
+          },
+          {
+            "after": "ca0105c9030000007518ca0100ca0200ca0130ca0110ca030380030f7f7f7818",
+            "after_end": 570,
+            "after_start": 538,
+            "before": "",
+            "before_end": 506,
+            "before_start": 506,
+            "operation": "insert"
+          }
+        ]
+      },
+      "valid": true,
+      "variable": "z_offset_mm",
+      "variant": "c044-z-offset-negative-1",
+      "variant_value": -1
+    }
+  ],
+  "manifest": "z-axis-candidate.experiment.json",
+  "manifest_sha256": "c5031208cfafd100f7e5e7f0ddbb01446c75c8a74eda93f053f5afd5d0ca29d2",
+  "protocol": {
+    "container": "rd",
+    "context": "job",
+    "magic": 136
+  },
+  "provenance": {
+    "lightburn_profile": {
+      "bed_height_mm": 599.947998046875,
+      "bed_width_mm": 991.1080322265625,
+      "connection": "Serial",
+      "controller": "Ruida",
+      "display_name": "Ruida 644XS",
+      "mirror_x": true,
+      "mirror_y": true
+    },
+    "machine": {
+      "display_name": "Boss LS2040",
+      "manufacturer": "Boss Laser",
+      "model": "LS2040",
+      "rotary_hardware_available": false
+    },
+    "publication": {
+      "blocked_rotary_case_ids": [
+        "c045-rotary-enabled-off",
+        "c046-rotary-enabled-on",
+        "c047-rotary-object-diameter-50",
+        "c048-rotary-object-diameter-75",
+        "c049-rotary-mirror-output-off",
+        "c050-rotary-mirror-output-on",
+        "c051-rotary-roller",
+        "c052-rotary-chuck"
+      ],
+      "capture_chain": "original capture hashes retained in capture_origin",
+      "excluded_artifacts": [
+        "LightBurn backup files",
+        "unattested or quarantined exports",
+        "rotary template attempts",
+        "blocked rotary case files"
+      ],
+      "included_case_count": 44,
+      "included_case_ids": [
+        "c001-raster-angle-000-uni",
+        "c002-raster-angle-045-uni",
+        "c003-raster-angle-045-bi",
+        "c004-raster-angle-135-uni",
+        "c005-raster-angle-045-cross-hatch",
+        "c006-laser1-only-static",
+        "c007-lasers-1-and-2-static",
+        "c008-laser2-only-static",
+        "c009-lasers-both-laser1-power-25",
+        "c010-lasers-both-laser2-power-45",
+        "c011-z-per-pass-zero-baseline",
+        "c012-z-per-pass-positive-05",
+        "c013-z-per-pass-negative-05",
+        "c014-material-height-positive-1",
+        "c015-power-scale-omitted",
+        "c016-power-scale-all-000",
+        "c017-power-scale-all-050",
+        "c018-power-scale-all-100",
+        "c019-power-scale-sequence-000-050-100",
+        "c020-power-scale-sequence-100-050-000",
+        "c021-power-scale-sequence-repeated-050",
+        "c022-delay-zero-baseline",
+        "c023-start-delay-100",
+        "c024-start-delay-200",
+        "c025-end-delay-100",
+        "c026-end-delay-200",
+        "c027-cut-through-disabled",
+        "c028-cut-through-start-enabled",
+        "c029-cut-through-end-enabled",
+        "c030-cut-through-start-and-end",
+        "c031-cut-through-laser1-power-35",
+        "c032-cut-through-laser2-power-55",
+        "c033-dot-mode-disabled",
+        "c034-dot-mode-enabled",
+        "c035-dot-time-200",
+        "c036-dot-spacing-2",
+        "c037-frequency-override-disabled-20000",
+        "c038-frequency-override-enabled-20000",
+        "c039-frequency-override-enabled-10000",
+        "c040-fiber-pulse-width-zero",
+        "c041-fiber-pulse-width-100",
+        "c042-fiber-pulse-width-200",
+        "c043-z-offset-positive-1",
+        "c044-z-offset-negative-1"
+      ],
+      "included_families": [
+        "cut-through",
+        "diagonal-raster",
+        "dot-mode",
+        "dwell",
+        "dynamic-vector-power",
+        "frequency",
+        "laser-channel",
+        "pulse-width-candidate",
+        "z-axis-candidate"
+      ],
+      "profile_matrix": {
+        "capture_filename": "lightburn-profile-matrix.json",
+        "original_document_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_sha256": "3db182e00925b7dd055d0a26d23edd7900b905bc236e36969990d0e69618b9cb",
+        "original_size": 3763,
+        "path": "profiles/lightburn-profile-matrix.json",
+        "published_document_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_sha256": "46a98e15982cb0ff7f3deea8f8f42da3282fddd675051566f13955c954a3f94d",
+        "published_size": 3763,
+        "redactions": [],
+        "rewrites": [
+          {
+            "json_pointer": "/source/source_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/source/source_document_sha256",
+            "operation": "replace",
+            "original_value": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+            "published_value": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15"
+          },
+          {
+            "json_pointer": "/variants/0/variant_sha256",
+            "operation": "replace",
+            "original_value": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+            "published_value": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243"
+          },
+          {
+            "json_pointer": "/variants/0/size",
+            "operation": "replace",
+            "original_value": 2326,
+            "published_value": 2217
+          },
+          {
+            "json_pointer": "/variants/1/variant_sha256",
+            "operation": "replace",
+            "original_value": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+            "published_value": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa"
+          },
+          {
+            "json_pointer": "/variants/1/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/2/variant_sha256",
+            "operation": "replace",
+            "original_value": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+            "published_value": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4"
+          },
+          {
+            "json_pointer": "/variants/2/size",
+            "operation": "replace",
+            "original_value": 2340,
+            "published_value": 2231
+          },
+          {
+            "json_pointer": "/variants/3/variant_sha256",
+            "operation": "replace",
+            "original_value": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+            "published_value": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a"
+          },
+          {
+            "json_pointer": "/variants/3/size",
+            "operation": "replace",
+            "original_value": 2338,
+            "published_value": 2229
+          },
+          {
+            "json_pointer": "/variants/4/variant_sha256",
+            "operation": "replace",
+            "original_value": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+            "published_value": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06"
+          },
+          {
+            "json_pointer": "/variants/4/size",
+            "operation": "replace",
+            "original_value": 2344,
+            "published_value": 2235
+          }
+        ]
+      },
+      "profiles": [
+        {
+          "capture_filename": "research-enable-z.lbdev",
+          "original_document_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_sha256": "d9afa5c48b99608728b2e75a1db13b9b5f31c78c5dd9cfcca4a14555c37c2012",
+          "original_size": 2326,
+          "path": "profiles/research-enable-z.lbdev",
+          "published_document_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_sha256": "cab1e3515d9996213de4be3c20c47a5c381954f6c6c78bd17448939e5242d243",
+          "published_size": 2217,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-fiber.lbdev",
+          "original_document_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_sha256": "d7005bc3d8a649c0a52d22a71f55ed8f8c64f16447cdd058f715868c2126cf82",
+          "original_size": 2338,
+          "path": "profiles/research-laser-1-fiber.lbdev",
+          "published_document_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_sha256": "11bc001e359eedd29817b9628dbb73b67442e683ba334af1af620fcfa550c62a",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-1-rf-tube.lbdev",
+          "original_document_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_sha256": "ce78e1f1d1bd49a50734f35c327425f6c2df1cac7670c1904ff51664ce4d855d",
+          "original_size": 2340,
+          "path": "profiles/research-laser-1-rf-tube.lbdev",
+          "published_document_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_sha256": "edd6f3e2622e245060238e6d8fe711a771437f293abbf43faca5fd61075c67b4",
+          "published_size": 2231,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-laser-2-enabled.lbdev",
+          "original_document_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_sha256": "12f1abbda0bbb3927a0d918ee92cb0a9cc2de127808783902231f5c99acfdaf6",
+          "original_size": 2338,
+          "path": "profiles/research-laser-2-enabled.lbdev",
+          "published_document_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_sha256": "f73524f8c36415673d5767f118acd0bb9b7aa53d16b3e2affab1ad03d3fcf3fa",
+          "published_size": 2229,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "research-save-rotary-config.lbdev",
+          "original_document_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_sha256": "d2a5dfbfb78e95dc6aa3e9212afaa4245f94c9ea7a6f5c37be717d56819ed919",
+          "original_size": 2344,
+          "path": "profiles/research-save-rotary-config.lbdev",
+          "published_document_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_sha256": "8e858ba97f761cd2391dfa880165d231447ed80d8d0b4094e5d5b663e5e3ae06",
+          "published_size": 2235,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        },
+        {
+          "capture_filename": "ruida-644xs-active.lbdev",
+          "original_document_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_sha256": "4794289587d1d4f3dfa8a94fb717aae367f2a7bb1deef9027f7a086885071487",
+          "original_size": 2270,
+          "path": "profiles/ruida-644xs-active.lbdev",
+          "published_document_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_sha256": "d75588b23622a364ca8237194b9abe827c11237b718a652984a51f7c07484e15",
+          "published_size": 2161,
+          "redactions": [
+            {
+              "json_pointer": "/DeviceList/0/Settings/LastMachineFilePath",
+              "operation": "remove",
+              "original_type": "string",
+              "original_utf8_size": 74,
+              "original_value_sha256": "06370a66e8a29e5589c6159e103a8d686ee47b8b277b5193595a057223b409e7",
+              "reason": "volatile-path-setting"
+            }
+          ]
+        }
+      ],
+      "schema": "ruida-re.capability-publication.v1",
+      "source_manifest_sha256": "32a2059b3a610787f8bb21cfbc0c9481e234deb7a68476866e267f19d2dcf062"
+    },
+    "reference_software": {
+      "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+      "name": "LightBurn",
+      "platform": "macOS",
+      "version": "2.1.03"
+    },
+    "rotary_template": {
+      "blocked_reason": "Supply a LightBurn-exported .lbrn2 project containing exactly one GantryRotaryConfig; its Axis value and unknown content will be preserved rather than inferred.",
+      "status": "required"
+    },
+    "schema": "ruida-re-lightburn-capabilities-v1",
+    "scope": {
+      "default_export_status": "pending",
+      "export_capture": {
+        "attestation_scope": "per-case",
+        "available_case_count": 44,
+        "captured_case_count": 44,
+        "status": "complete"
+      },
+      "project_generation": {
+        "hardware_contacted": false,
+        "lightburn_launched": false,
+        "mode": "offline"
+      }
+    }
+  },
+  "schema": "ruida-re.experiment-report.v1",
+  "strict": true,
+  "valid": true
+}

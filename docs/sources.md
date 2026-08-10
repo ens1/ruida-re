@@ -9,22 +9,43 @@ source expression were not translated into this repository.
 
 - LightBurn 2.1.03 on macOS.
 - User-configured `Ruida 644XS` profile.
-- One baseline, 12 one-variable exports, three advanced exports, and nine raster
-  exports checked into `fixtures/lightburn-2.1.03`.
+- One baseline, 12 one-variable exports, three advanced exports, nine raster
+  exports, and 44 advanced-capability exports checked into
+  `fixtures/lightburn-2.1.03`, for 69 `.rd` files total.
 - The advanced corpus includes a real two-layer file, signed relative X/Y
   motion, and a mixed vector/raster job. A generated project crosses negative
   machine X; LightBurn rejects it as out of bounds, so no `.rd` is claimed for
   that case.
+- Capability cases c001-c044 cover planned-path diagonal raster, two laser
+  heads, effective per-mark vector power, stationary dwell and pulse, RF
+  frequency, fiber pulse width, paired Z-offset candidates, and controlled
+  ambiguity or no-op results for cut-through, `zPerPass`, and material height.
+  Nine family experiment manifests and nine strict reports bind those
+  comparisons; every capture has zero opaque records and reproduces exactly.
+- Rotary cases c045-c052 remain blocked. They require a LightBurn-exported
+  project containing exactly one `GantryRotaryConfig` so its axis and unknown
+  content can be preserved. No such authoritative template or rotary hardware
+  was available, so no rotary project, `.rd`, or semantic claim is published.
 - Project and machine-file SHA-256 values recorded in adjacent JSON manifests.
 - LightBurn application SHA-256, complete profile dimensions/mirroring, and
   per-file generation stage recorded in those manifests. The baseline project
   is the generated input; matrix projects are the post-LightBurn normalized
   form saved after export.
+- Capability captures bind the exact active profile or one of five controlled
+  clones that enables only `EnableZ`, `Laser2Enabled`, `Laser1IsRFTube`,
+  `Laser1IsFiber`, or `SaveRotaryConfig`. Published `.lbdev` files remove
+  volatile local path settings. The publication manifest records each JSON
+  Pointer removal, original-value digest and size, original profile hash, and
+  sanitized published hash; capture-time identity is retained under
+  `capture_origin` rather than falsely claiming that the two byte streams are
+  identical.
 - Raster projects embed deterministic synthetic PNGs and vary one scan,
   power, interval, or pass setting at a time. Their machine files were created
-  with LightBurn's offline **Save RD file** action. The automation invokes no
-  Start, Send, or Run action, and none of these fixture jobs was uploaded or
-  executed on a controller.
+  with LightBurn's **Save RD file** action. Per-case attestations record
+  `job_transmitted=false`; no Start, Send, or Run action was initiated for the
+  fixture capture. Whether LightBurn itself opened its configured controller
+  connection is explicitly `not-attested`, so offline file provenance is not
+  overstated as proof of no controller contact.
 
 The separate live-validation job described below is not one of these fixture
 exports. Its execution does not change the offline provenance of the fixture

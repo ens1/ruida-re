@@ -25,6 +25,9 @@ def _spec(code: str, name: str, *fields) -> CommandSpec:
 
 
 SRC_LIGHTBURN = "local:lightburn-2.1.03-fixtures"
+SRC_LIGHTBURN_CAPABILITIES = (
+    "local:lightburn-2.1.03-capability-fixtures"
+)
 SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1 = (
     "local:hardware-ruida-644xs-usb-serial-v1"
 )
@@ -47,6 +50,7 @@ SRC_LIBLASERCUT = (
 CATALOG_SOURCES = (
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN,
+    SRC_LIGHTBURN_CAPABILITIES,
     SRC_LIBLASERCUT,
     SRC_MEERK40T,
     SRC_RUIDA_LASER,
@@ -75,6 +79,7 @@ HARDWARE_SETTING_REPLY_NOTES = (
 
 
 SPECS = (
+    _spec("8003", "z_offset_delta", AbsoluteMmField("delta_mm")),
     *(
         _spec(code, name, AbsoluteMmField("position_mm"))
         for code, name in (
@@ -203,6 +208,13 @@ SPECS = (
         ByteField("laser"),
         ByteField("layer"),
         ScaledU35Field("frequency_khz"),
+    ),
+    _spec(
+        "c666",
+        "layer_fiber_pulse_width",
+        ByteField("selector_a"),
+        ByteField("selector_b"),
+        U35Field("pulse_width_ns"),
     ),
     _spec("c902", "active_speed", ScaledU35Field("speed_mm_s")),
     _spec("c903", "axis_speed", ScaledU35Field("speed_mm_s")),
@@ -511,16 +523,20 @@ SPECS = (
 
 
 LIGHTBURN_OBSERVED = {
+    "8003",
     "88",
     "89",
     "8a",
     "8b",
     "a8",
+    "a9",
     "aa",
     "ab",
     "c2",
     "c601",
     "c602",
+    "c610",
+    "c611",
     "c612",
     "c613",
     "c621",
@@ -531,13 +547,17 @@ LIGHTBURN_OBSERVED = {
     "c642",
     "c650",
     "c651",
+    "c660",
+    "c666",
     "c7",
     "c902",
+    "c903",
     "c904",
     "ca01",
     "ca02",
     "ca03",
     "ca06",
+    "ca10",
     "ca22",
     "ca41",
     "d7",
@@ -612,10 +632,13 @@ CONTROLLED_SEMANTICS = {
     "8a",
     "8b",
     "a8",
+    "a9",
     "aa",
     "ab",
     "c601",
     "c602",
+    "c610",
+    "c611",
     "c621",
     "c622",
     "c631",
@@ -625,6 +648,7 @@ CONTROLLED_SEMANTICS = {
     "c902",
     "c904",
     "ca06",
+    "ca03",
     "ca02",
     "ca22",
     "e505",
@@ -642,8 +666,11 @@ CONTROLLED_SEMANTICS = {
 
 
 PARTIALLY_CONTROLLED_SEMANTICS = {
+    "8003",
     "c2",
     "c7",
+    "c660",
+    "c666",
     "ca01",
     "ca41",
 }
@@ -666,8 +693,17 @@ DISPUTED_SEMANTICS = {
 
 
 SEMANTIC_NOTES = {
+    "8003": (
+        "Controlled positive and negative LightBurn Z-offset fixtures emit "
+        "paired inverse signed millimetre deltas around job geometry. The "
+        "physical axis effect has not been validated on hardware."
+    ),
     "8008": "Axis identity differs across prior implementations.",
     "a000": "Axis identity differs across prior implementations.",
+    "a9": (
+        "Controlled diagonal-raster fixtures use signed relative X/Y cut "
+        "motion to emit non-cardinal marked segments."
+    ),
     "c3": "Tentative and encoder tables disagree on the laser index.",
     "c4": "Tentative and encoder tables disagree on the laser index.",
     "c2": (
@@ -679,6 +715,61 @@ SEMANTIC_NOTES = {
         "Controlled grayscale fixtures emit this immediately before C2 "
         "with a normalized modulation value independent of layer minimum "
         "power."
+    ),
+    "c601": (
+        "Controlled dual-head fixtures independently vary the laser 1 "
+        "normal minimum-power command while laser 2 power remains fixed."
+    ),
+    "c602": (
+        "Controlled dual-head fixtures independently vary the laser 1 "
+        "normal maximum-power command while laser 2 power remains fixed."
+    ),
+    "c610": (
+        "Controlled stationary-pulse fixtures interleave this command with "
+        "non-cut moves. Its five-group payload is pulse duration in "
+        "milliseconds scaled by 1000."
+    ),
+    "c611": (
+        "Controlled start- and end-delay fixtures place this non-marking "
+        "dwell before or after cut motion. Its five-group payload is dwell "
+        "duration in milliseconds scaled by 1000."
+    ),
+    "c621": (
+        "Controlled dual-head fixtures independently vary the laser 2 "
+        "normal minimum-power command while laser 1 power remains fixed."
+    ),
+    "c622": (
+        "Controlled dual-head fixtures independently vary the laser 2 "
+        "normal maximum-power command while laser 1 power remains fixed."
+    ),
+    "c631": (
+        "Controlled dual-head fixtures independently vary the layer's "
+        "laser 1 normal minimum power while laser 2 power remains fixed."
+    ),
+    "c632": (
+        "Controlled dual-head fixtures independently vary the layer's "
+        "laser 1 normal maximum power while laser 2 power remains fixed."
+    ),
+    "c641": (
+        "Controlled dual-head fixtures independently vary the layer's "
+        "laser 2 normal minimum power while laser 1 power remains fixed."
+    ),
+    "c642": (
+        "Controlled dual-head fixtures independently vary the layer's "
+        "laser 2 normal maximum power while laser 1 power remains fixed."
+    ),
+    "c660": (
+        "Controlled RF-tube profile fixtures emit two layer-adjacent "
+        "records whose U35 payload follows the selected frequency in hertz. "
+        "The legacy laser and layer field names are retained for catalog-v1 "
+        "compatibility, but their physical selector roles are not "
+        "independently established."
+    ),
+    "c666": (
+        "Controlled fiber-profile fixtures vary the U35 payload with the "
+        "selected pulse width in nanoseconds. Both selector bytes remain "
+        "cautiously named because their roles are not independently "
+        "established."
     ),
     "c615": "Timing meaning differs across prior implementations.",
     "c616": "Timing meaning differs across prior implementations.",
@@ -697,13 +788,22 @@ SEMANTIC_NOTES = {
         "Controlled leading operations select vector 0, horizontal "
         "bidirectional 1, horizontal unidirectional 2, vertical "
         "bidirectional 3, and vertical unidirectional 4. Air operations "
-        "0x12 and 0x13 were also varied; 0x10 and 0x30 remain unnamed."
+        "0x12 and 0x13 were also varied. Operation 5 occurs at contextual "
+        "section boundaries, but is not evidence of diagonal or cross-hatch "
+        "semantics. Operations 0x10 and 0x30 remain unnamed."
+    ),
+    "ca03": (
+        "Controlled dual-head fixtures establish an enable bitmask: bit 0 "
+        "enables head 1 and bit 1 enables head 2, producing values 1, 2, "
+        "and 3 for head 1, head 2, and both heads."
     ),
     "ca41": (
-        "For the controlled LightBurn 2.1.03 Ruida 644XS profile, values "
-        "0 through 4 select vector, horizontal unidirectional, horizontal "
-        "bidirectional, vertical unidirectional, and vertical "
-        "bidirectional processing respectively."
+        "For controlled LightBurn 2.1.03 Ruida profiles, values 1 through "
+        "4 select horizontal unidirectional, horizontal bidirectional, "
+        "vertical unidirectional, and vertical bidirectional processing. "
+        "Value 0 covers general path-emitted processing, including vector "
+        "work and diagonal raster paths represented as cut motion, so it "
+        "does not by itself identify vector intent."
     ),
     "e704": "Field interpretation differs across prior implementations.",
     "e708": "Field interpretation differs across prior implementations.",
@@ -742,6 +842,39 @@ REPORTED_SEMANTIC_SOURCES = {
 }
 
 
+CAPABILITY_SHAPE_OBSERVED = {
+    "8003",
+    "a9",
+    "c610",
+    "c611",
+    "c660",
+    "c666",
+    "c903",
+    "ca10",
+}
+
+
+CAPABILITY_SEMANTICS = {
+    "8003",
+    "a9",
+    "c601",
+    "c602",
+    "c610",
+    "c611",
+    "c621",
+    "c622",
+    "c631",
+    "c632",
+    "c641",
+    "c642",
+    "c660",
+    "c666",
+    "ca01",
+    "ca03",
+    "ca41",
+}
+
+
 CONTROLLER_INTERACTIONS = {
     "da00": {
         "controller_effect": "read-only",
@@ -774,9 +907,17 @@ def _with_evidence(spec: CommandSpec) -> CommandSpec:
             spec,
             shape_evidence="fixture-observed",
             semantic_evidence=semantic_evidence,
-            shape_sources=(SRC_LIGHTBURN,),
+            shape_sources=(
+                (SRC_LIGHTBURN_CAPABILITIES,)
+                if opcode in CAPABILITY_SHAPE_OBSERVED
+                else (SRC_LIGHTBURN,)
+            ),
             semantic_sources=(
-                (SRC_LIGHTBURN,)
+                (
+                    (SRC_LIGHTBURN_CAPABILITIES,)
+                    if opcode in CAPABILITY_SEMANTICS
+                    else (SRC_LIGHTBURN,)
+                )
                 if semantic_evidence
                 in ("controlled-fixture", "partially-controlled")
                 else DISPUTED_SEMANTIC_SOURCES.get(
@@ -785,18 +926,6 @@ def _with_evidence(spec: CommandSpec) -> CommandSpec:
                 )
             ),
             notes=SEMANTIC_NOTES.get(opcode, spec.notes),
-        )
-    if opcode == "c660":
-        return replace(
-            spec,
-            shape_evidence="external-fixture-observed",
-            semantic_evidence="disputed",
-            shape_sources=(SRC_LIBLASERCUT,),
-            semantic_sources=(SRC_RUIDA_PA, SRC_MEERK40T),
-            notes=(
-                "The shape occurs in the pinned LibLaserCut golden; "
-                "laser/layer ordering and frequency units remain disputed."
-            ),
         )
     if opcode in PROVISIONAL:
         return replace(

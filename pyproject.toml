@@ -32,6 +32,7 @@ test = ["jsonschema>=4.23"]
 [project.scripts]
 ruida-advanced = "ruida_re.advanced:main"
 ruida-catalog = "ruida_re.catalog:main"
+ruida-capability-fixture = "ruida_re.capability_fixture:main"
 ruida-conformance = "ruida_re.conformance:main"
 ruida-controller = "ruida_re.controller_cli:main"
 ruida-decode = "ruida_re.decode_cli:main"
@@ -41,8 +42,10 @@ ruida-fixture = "ruida_re.fixture:main"
 ruida-spec = "ruida_re.spec_cli:main"
 ruida-verify = "ruida_re.verify:main"
 ruida-lightburn-export = "ruida_re.lightburn_export:main"
+ruida-lightburn-profile = "ruida_re.lightburn_profile:main"
 ruida-matrix = "ruida_re.matrix:main"
 ruida-raster-fixture = "ruida_re.raster_fixture:main"
+ruida-experiment = "ruida_re.experiment:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

@@ -92,12 +92,24 @@ class ResourcesTest(unittest.TestCase):
             "ruida_re.conformance:main",
         )
         self.assertEqual(
+            project["project"]["scripts"]["ruida-capability-fixture"],
+            "ruida_re.capability_fixture:main",
+        )
+        self.assertEqual(
             project["project"]["scripts"]["ruida-controller"],
             "ruida_re.controller_cli:main",
         )
         self.assertEqual(
             project["project"]["scripts"]["ruida-raster-fixture"],
             "ruida_re.raster_fixture:main",
+        )
+        self.assertEqual(
+            project["project"]["scripts"]["ruida-lightburn-profile"],
+            "ruida_re.lightburn_profile:main",
+        )
+        self.assertEqual(
+            project["project"]["scripts"]["ruida-experiment"],
+            "ruida_re.experiment:main",
         )
         optional = project["project"]["optional-dependencies"]
         self.assertIn("pyserial>=3.5", optional["serial"])

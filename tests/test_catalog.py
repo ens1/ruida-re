@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from contextlib import redirect_stderr
-from io import StringIO
 import json
-from pathlib import Path
 import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr
+from io import StringIO
+from pathlib import Path
 from unittest.mock import patch
 
 from ruida_re.catalog import (
@@ -36,6 +36,8 @@ from ruida_re.fields import (
 )
 from ruida_re.program import (
     SCHEMA as PROGRAM_SCHEMA,
+)
+from ruida_re.program import (
     KnownCommand,
     Program,
     RawSpan,
@@ -44,9 +46,9 @@ from ruida_re.registry import (
     CATALOG_SOURCES,
     REGISTRIES,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+    SRC_LIGHTBURN_CAPABILITIES,
 )
 from ruida_re.specs import SEMANTIC_EVIDENCE, SHAPE_EVIDENCE
-
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "spec/catalog-v1.json"
@@ -370,6 +372,15 @@ class CatalogTest(unittest.TestCase):
                     self.assertTrue(source["local_path"].startswith(
                         "fixtures/"
                     ))
+        capability_source = sources[SRC_LIGHTBURN_CAPABILITIES]
+        self.assertEqual(
+            capability_source["local_path"],
+            "fixtures/lightburn-2.1.03/capabilities/capabilities.json",
+        )
+        self.assertEqual(
+            capability_source["revision"],
+            "2.1.03-capabilities-v1",
+        )
 
     def test_declared_padding_variants_match_python_decoders(self) -> None:
         codecs = {

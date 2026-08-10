@@ -119,7 +119,7 @@ configured payload limit without inspecting command semantics, and the
 streaming decoder produces the same logical result for every read split. A
 command may cross a packet boundary in either direction.
 
-The LightBurn `E5 05` job checksum is separate. Across all 25 checked-in
+The LightBurn `E5 05` job checksum is separate. Across all 69 checked-in
 exports it equals the sum of every logical job byte except the seven-byte
 `E5 05` frame itself, including the final `D7`. Checksum policy is explicit:
 `preserve` retains the represented value, while `recompute` always derives a
@@ -330,11 +330,83 @@ changing a four-pass 3D-slice project's `zPerPass` from 0 to 0.5 mm produces a
 byte-identical `.rd` file. That is evidence that this setting does not encode
 Z motion here, not evidence for any reported Z-axis opcode.
 
+## Advanced capability evidence
+
+Forty-four additional LightBurn 2.1.03 exports, c001 through c044, isolate
+advanced controls under the active Ruida 644XS profile and five one-setting
+research clones. All 44 pass strict decoding with no opaque frames, a
+consistent job checksum, and exact byte reproduction. Together with the 25
+earlier exports, they bring the checked LightBurn corpus to 69 files and the
+observed job-shape set to 80.
+
+The diagonal-raster family establishes a planned-path representation rather
+than an angle command. The 45-degree and 135-degree files use `CA 41 00`, a
+leading `CA 01 00`, and ordinary absolute or signed relative X/Y travel and cut
+motion, including `A9` for non-cardinal marked segments. Bidirectional choice
+changes host-planned ordering. Cross-hatch emits a second complete path block
+after `E7 00`, separated by contextual `CA 01 05`, and closes that block with
+another `E7 00`. Operation 5 is therefore used as a section separator in this
+envelope; it is not named as a diagonal or cross-hatch opcode. Controlled
+diagonal grayscale modulation is not present. Address-800 values are 6, 6, 8,
+and 14 for the two 45-degree cases, 135-degree case, and cross-hatch case;
+they do not establish a general geometric formula. The compiler has a
+deterministic path-derived default and accepts an explicit
+`reported_job_metric_mm` only when a host has producer provenance for that
+metadata value.
+
+The remaining controlled results are:
+
+- **Two laser heads (c006-c010).** `CA 03` is an enable bitmask: values 1, 2,
+  and 3 enable head 1, head 2, and both. `C6 01`/`C6 02` and
+  `C6 31`/`C6 32` carry head-1 active and layer power; `C6 21`/`C6 22` and
+  `C6 41`/`C6 42` independently carry head-2 active and layer power.
+- **Dynamic vector power (c015-c021).** A 50% source PowerScale on a layer
+  ranging from 10% to 70% inserts an operation-5/select-layer envelope with
+  effective head-1 power from 10% through 40% immediately before each affected
+  mark. Omitted, explicit 0%, and explicit 100% cases do not establish three
+  distinct wire states. The compiler consequently accepts resolved per-mark
+  channel powers, not a PowerScale scalar or formula.
+- **Stationary timing (c022-c026 and c033-c036).** `C6 11` follows controlled
+  start/end delay placement and carries a non-marking dwell duration in
+  milliseconds scaled by 1000. Dot mode uses `C6 10` between non-cut moves;
+  its value tracks timed marking pulses in the same units. These are exposed
+  separately as `Dwell` and `Pulse`.
+- **RF and fiber profiles (c037-c042).** Enabling RF override inserts two
+  `C6 60` records whose U35 value tracks 20,000 or 10,000 hertz. The two
+  selectors remain cautiously named. Under the fiber clone, `C6 66` tracks
+  pulse width at 0, 100, or 200 nanoseconds; its selector roles likewise
+  remain unverified.
+- **Paired Z offset (c043-c044).** Positive LightBurn `zOffset` inserts an
+  `80 03` delta of -1 mm before the one native raster block and +1 mm after it;
+  negative offset reverses the pair. This proves the balanced serialized
+  envelope, not physical axis direction or hardware effect.
+- **Negative Z results (c011-c014).** Positive and negative `zPerPass`, and a
+  1 mm material-height change, each produce a byte-identical `.rd` relative to
+  the zero baseline. They are not mapped to `80 03` or another Z command.
+- **Cut-through ambiguity (c027-c032).** Enabling start or end produces the
+  same two through-power records; enabling both is identical to start-only.
+  Changing the source head-1 through power changes both records, while changing
+  head-2 through power changes neither. Endpoint identity and independent
+  head-2 through power are therefore not established, and no compiler profile
+  exposes cut-through.
+
+The generated c045-c052 rotary cases remain blocked. No project containing one
+authoritative `GantryRotaryConfig` was available to preserve its axis and
+unknown fields, and no rotary hardware was available. No `.rd` fixture or
+rotary compiler behavior is inferred.
+
+The conservative job profile excludes planned-path raster and every other
+capability that lacks hardware execution evidence. Planned-path raster,
+two-head power, dynamic mark power, stationary events, RF frequency, fiber
+pulse width, and paired Z offsets each use a separate opt-in research profile.
+Those profiles reproduce their offline goldens exactly and have
+`execution_evidence="not-observed"` for the advanced mode.
+
 ## Registry coverage
 
 The current registries contain:
 
-- 184 broad host/job command hypotheses;
+- 186 broad host/job command hypotheses;
 - 74 provisional request candidates; and
 - 10 hardware-observed, reported, disputed, or simulator-only reply shapes.
 
@@ -386,9 +458,11 @@ These are research tasks, not parser exceptions:
   profiles remain unresolved; unmatched forms remain opaque.
 - Controlled raster, grayscale, and 3D-slice jobs use planned motion plus
   power changes rather than a native pixel payload. Recovering an original
-  source image from an optimized motion stream is not generally reversible;
-  native Z motion, arbitrary scan angles, overscan bounds, and other
+  source image from an optimized motion stream is not generally reversible.
+  Diagonal binary raster is now established as planned path motion, but
+  diagonal grayscale, physical Z behavior, overscan bounds, and other
   controller profiles remain unresolved.
 
-Additional matrices should cover arrays, multiple lasers, rotary and Z axes,
-overscan, real request/reply captures, and complete UDP transactions.
+Additional matrices should cover arrays, diagonal grayscale, rotary,
+cut-through endpoint semantics, overscan, physical execution of the advanced
+research profiles, real request/reply captures, and complete UDP transactions.
