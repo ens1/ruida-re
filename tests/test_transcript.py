@@ -231,6 +231,17 @@ class TranscriptTest(unittest.TestCase):
             [capture_datagram(raw, "inbound", "reply")]
         )
         Draft202012Validator(schema).validate(transcript.to_dict())
+        request = encode_datagram(
+            bytes.fromhex("da000005"),
+            context="request",
+        )
+        hardware = Transcript(
+            [capture_datagram(request, "outbound", "request")]
+        )
+        record = hardware.datagrams[0].program.records[0]
+        self.assertEqual(record.shape_evidence, "hardware-observed")
+        self.assertEqual(record.semantic_evidence, "hardware-observed")
+        Draft202012Validator(schema).validate(hardware.to_dict())
         mismatched = transcript.to_dict()
         mismatched["datagrams"][0]["direction"] = "outbound"
         mismatched["datagrams"][0]["context"] = "job"

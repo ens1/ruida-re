@@ -18,6 +18,7 @@ from ruida_re.catalog import build_catalog, catalog_json
 from ruida_re.codec import swizzle, unswizzle
 from ruida_re.conformance import (
     CONFORMANCE_SCHEMA,
+    EVIDENCE_CLASSIFICATIONS,
     build_conformance,
     conformance_json,
     main,
@@ -39,7 +40,11 @@ from ruida_re.fields import (
     U35Field,
 )
 from ruida_re.program import KnownCommand, decode
-from ruida_re.registry import get_registry
+from ruida_re.links import SerialLink
+from ruida_re.registry import (
+    SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+    get_registry,
+)
 from ruida_re.transport import (
     checksum,
     decode_datagram,
@@ -189,6 +194,92 @@ class ConformanceTest(unittest.TestCase):
         self.assertEqual(request["datagram_hex"], "01efd4898909")
         self.assertEqual(reply["datagram_hex"], "c6")
 
+    def test_serial_vectors_reproduce_hardware_observed_streams(self) -> None:
+        vectors = load_json(VECTOR_PATH)["serial_vectors"]
+        self.assertEqual(len(vectors), 1)
+        vector = vectors[0]
+        self.assertEqual(vector["magic"], 0x88)
+        self.assertEqual(
+            vector["framing"],
+            "checksumless-scrambled-stream",
+        )
+        self.assertFalse(vector["separate_acknowledgement"])
+        self.assertEqual(
+            vector["evidence"]["classification"],
+            "hardware-observed",
+        )
+        self.assertEqual(
+            vector["evidence"]["source_ids"],
+            [SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1],
+        )
+        programs = {}
+        for role in ("request", "reply"):
+            with self.subTest(role=role):
+                message = vector[role]
+                logical = bytes.fromhex(message["logical_hex"])
+                wire = bytes.fromhex(message["wire_hex"])
+                self.assertEqual(len(wire), len(logical))
+                self.assertEqual(
+                    swizzle(logical, vector["magic"]),
+                    wire,
+                )
+                self.assertEqual(
+                    unswizzle(wire, vector["magic"]),
+                    logical,
+                )
+                link = SerialLink(None, magic=vector["magic"])
+                packets = link.packetize(logical, len(logical))
+                self.assertEqual(len(packets), 1)
+                self.assertEqual(packets[0].raw, wire)
+                self.assertFalse(link.acknowledgement_required)
+                program = decode(
+                    logical,
+                    context=message["context"],
+                    container="logical",
+                )
+                programs[role] = program
+                self.assertEqual(len(program.records), 1)
+                self.assertEqual(
+                    program.records[0].shape_evidence,
+                    "hardware-observed",
+                )
+                self.assertEqual(
+                    program.records[0].semantic_evidence,
+                    "hardware-observed",
+                )
+
+        request = vector["request"]
+        reply = vector["reply"]
+        self.assertEqual(request["context"], "request")
+        self.assertEqual(request["direction"], "host-to-controller")
+        self.assertEqual(reply["context"], "reply")
+        self.assertEqual(reply["direction"], "controller-to-host")
+        self.assertEqual(request["logical_hex"], "da000005")
+        self.assertEqual(request["wire_hex"], "d489890d")
+        self.assertEqual(request["wire_origin"], "derived-from-logical")
+        self.assertEqual(reply["logical_hex"], "da0100050000122760")
+        self.assertEqual(reply["wire_hex"], "d409890d89899b2fe9")
+        self.assertEqual(reply["wire_origin"], "hardware-observed")
+        request_record = programs["request"].records[0]
+        reply_record = programs["reply"].records[0]
+        self.assertEqual(request_record.name, "get_setting")
+        self.assertEqual(request_record.values, {"address": 5})
+        self.assertEqual(reply_record.name, "setting_reply")
+        self.assertEqual(
+            reply_record.values,
+            {"address": 5, "value": 300000},
+        )
+        self.assertEqual(
+            request_record.values["address"],
+            reply_record.values["address"],
+        )
+        fixture = vector["evidence"]["fixture"]
+        capture = ROOT / fixture["path"]
+        self.assertEqual(
+            sha256(capture.read_bytes()).hexdigest(),
+            fixture["sha256"],
+        )
+
     def test_fixture_evidence_is_content_addressed_and_present(self) -> None:
         document = load_json(VECTOR_PATH)
         logical_by_fixture = {}
@@ -216,6 +307,7 @@ class ConformanceTest(unittest.TestCase):
             "field_vectors",
             "swizzle_vectors",
             "job_checksum_vectors",
+            "serial_vectors",
             "udp_vectors",
         )
         for group in groups:
@@ -250,6 +342,13 @@ class ConformanceTest(unittest.TestCase):
             codec["id"] for codec in build_catalog()["codecs"]
         }
         self.assertEqual(schema_codecs, catalog_codecs)
+        self.assertIn("serial_vectors", schema["properties"])
+        self.assertNotIn("serial_vectors", schema["required"])
+        self.assertEqual(
+            set(schema["$defs"]["evidence"]["properties"]
+                ["classification"]["enum"]),
+            EVIDENCE_CLASSIFICATIONS,
+        )
         self.assert_local_references_resolve(schema, schema)
 
     def test_artifact_validates_against_draft_2020_12_schema(self) -> None:
@@ -261,6 +360,20 @@ class ConformanceTest(unittest.TestCase):
             key=lambda error: list(error.path),
         )
         self.assertEqual(errors, [])
+
+        without_serial = dict(document)
+        without_serial.pop("serial_vectors")
+        self.assertEqual(
+            list(Draft202012Validator(schema).iter_errors(without_serial)),
+            [],
+        )
+        missing_capture = json.loads(json.dumps(document))
+        evidence = missing_capture["serial_vectors"][0]["evidence"]
+        evidence["source_ids"] = []
+        evidence.pop("fixture")
+        self.assertTrue(
+            list(Draft202012Validator(schema).iter_errors(missing_capture))
+        )
 
     def test_generator_check_and_no_clobber(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

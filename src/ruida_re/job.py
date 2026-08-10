@@ -108,7 +108,11 @@ class RasterMode:
 
 @dataclass(frozen=True)
 class RuidaJobProfile:
-    """Evidence-labelled literals for one observed job envelope."""
+    """Evidence-labelled literals for one observed job envelope.
+
+    Execution evidence is independent of the controlled fixture evidence
+    used to derive the envelope and command semantics.
+    """
 
     identifier: str
     producer: str
@@ -126,6 +130,8 @@ class RuidaJobProfile:
     laser_enable_value: int
     supported_laser_indices: tuple[int, ...]
     element_name: str
+    execution_evidence: str = "not-observed"
+    execution_evidence_source: str | None = None
 
     def mode_for(self, layer: LayerPlan) -> tuple[int, int]:
         """Return the observed metadata and program mode pair."""
@@ -176,6 +182,10 @@ LIGHTBURN_2103_644XS = RuidaJobProfile(
     laser_enable_value=1,
     supported_laser_indices=(1,),
     element_name="554e4e414d454420",
+    execution_evidence="operator-observed",
+    execution_evidence_source=(
+        "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json"
+    ),
 )
 
 

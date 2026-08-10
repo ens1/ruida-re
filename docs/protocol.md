@@ -138,9 +138,10 @@ does send logical `CE` as a request and waits for a response.
 The built-in USB-serial adapter uses the source-reported defaults of 115200
 baud and 8N1. Its outbound bytes are scrambled but do not carry the UDP
 two-byte checksum. The same sources report no per-packet ACK wait for this
-serial path. These serial rules are implementation evidence, not yet a
-checked-in capture from multiple controller models. The exact pinned code
-links are collected under [transport evidence](sources.md#transport-evidence).
+serial path. One macOS USB-serial run with magic `0x88` has now exercised a
+configured Ruida 644XS, but these rules still lack a checked-in capture corpus
+from multiple controller models. The exact pinned code links are collected
+under [transport evidence](sources.md#transport-evidence).
 
 The built-in default profile applies this UDP exchange policy:
 
@@ -182,9 +183,43 @@ claim that every controller dialect has been verified. A profile can swap
 capture supports that model. Reply policies can declare exact chunk or byte
 counts, a completion predicate, or a bounded idle-gap fallback. Declarative
 request contracts constrain accepted reply commands and echoed fields. The
-correct profiles, multi-datagram reply termination, and serial request
+correct profiles, multi-datagram reply termination, and broader serial request
 behavior still need a public hardware capture corpus. No TCP bridge envelope
 is currently implemented.
+
+## First live controller observation
+
+The configured Ruida 644XS profile was exercised from macOS over USB serial at
+115200 baud with scrambling magic `0x88`. The
+[hardware-validation manifest](../fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json)
+records that a read-only `DA 00` request for address 5 returned one fixed
+nine-byte `DA 01` reply for address 5 with value 300000.
+
+The generated conformance artifact represents this as one nested
+`serial_vectors` exchange. Logical request `da000005` deterministically
+scrambles to `d489890d`; logical reply `da0100050000122760` was observed as
+wire bytes `d409890d89899b2fe9`. Both use magic `0x88` in a checksumless serial
+stream, with no separate acknowledgement. The request and reply correlate on
+address 5, and the reply adds value 300000.
+
+`hardware-observed` is assigned on both evidence axes only to the captured
+request-context `DA 00` read and reply-context numeric `DA 01` response.
+Job-context `DA 00` remains `reported` for shape and semantics. The `DA 01`
+setter retains its `fixture-observed` shape and `reported` semantics; an
+observed reply opcode does not validate the setter command.
+
+The transmitted mixed vector/raster job was 689 bytes and decoded before
+transmission as 107 known records with no issues. It covered X 20 through
+30 mm and Y 20 through 26 mm, used 100 mm/s and 20% maximum power, selected
+10%, 15%, and 20% raster modulation, and left air assist off. The identical
+job was transmitted twice after explicit approval. The first attempt produced
+observed activity but the material was misplaced. After repositioning the
+material, the operator reported complete success on the second attempt.
+
+No automatic sensor or output measurement verified physical execution. This
+is evidence for one controller/profile, serial path, and mixed job only. It
+does not establish broader opcode meanings, controller compatibility, or
+machine safety.
 
 ## Controlled LightBurn evidence
 
@@ -301,23 +336,32 @@ The current registries contain:
 
 - 184 broad host/job command hypotheses;
 - 74 provisional request candidates; and
-- 10 reported, disputed, or simulator-only reply shapes.
+- 10 hardware-observed, reported, disputed, or simulator-only reply shapes.
 
 The host/job catalog covers motion, cut motion, power, speed, timing, layer
 metadata, process control, memory access, document metadata, arrays, elements,
-checksum, and file termination. The request view is a reported opcode-family
-subset, not a complete direction classifier. No real controller request/reply
-capture corpus is checked in.
+checksum, and file termination. The request view is a provisional opcode-family
+subset, not a complete direction classifier. The address-5 live observation
+above records one exchange with derived request wire and observed reply wire,
+not a broader capture corpus.
 
 Each registry record exposes:
 
-- `shape_evidence`: whether its byte shape was seen in a fixture, merely
-  reported, conflicts across reports, or remains an uncited hypothesis;
-- `semantic_evidence`: whether values were controlled in fixtures, reported,
-  or disputed;
+- `shape_evidence`: whether its byte shape was seen in a fixture or hardware
+  exchange, merely reported, conflicts across reports, or remains an uncited
+  hypothesis;
+- `semantic_evidence`: whether values were controlled in fixtures, observed
+  on hardware, reported, or disputed;
 - separate shape and semantic sources, plus notes for known disagreements.
 - `controller_effect` and `reply_behavior` interaction classifications; and
-- allowed reply commands and request-to-reply field matches where reported.
+- allowed reply commands and request-to-reply field matches where evidence
+  supports them.
+
+`hardware-observed` is a first-class value on both axes. It means that the
+specific context, shape, and interpreted values have a physical-controller
+observation in the cited source. It does not transfer across job, request, and
+reply registries merely because their opcodes overlap, and it is not a claim
+about every Ruida profile or firmware dialect.
 
 ## Unresolved evidence
 
@@ -335,10 +379,11 @@ These are research tasks, not parser exceptions:
   controller dialects. Far-axis identities are disputed even where a field
   width is reported. The disagreement is labelled rather than selected
   silently.
-- `DA 01` replies can depend on the requested memory address. MeerK40t's
-  emulator synthesizes a CString for `DA 01 05 7F`, while ruida-pa models a
-  fixed numeric reply. Both hypotheses conflict and no hardware capture here
-  resolves them; unmatched forms remain opaque.
+- `DA 01` replies can depend on the requested memory address. The tested
+  Ruida 644XS returned a fixed nine-byte numeric reply with value 300000 for
+  address 5. MeerK40t's emulator synthesizes a CString for `DA 01 05 7F`,
+  while ruida-pa models a fixed numeric reply. Other addresses and controller
+  profiles remain unresolved; unmatched forms remain opaque.
 - Controlled raster, grayscale, and 3D-slice jobs use planned motion plus
   power changes rather than a native pixel payload. Recovering an original
   source image from an optimized motion stream is not generally reversible;

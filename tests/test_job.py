@@ -14,6 +14,7 @@ from ruida_re.job import (
     MarkTo,
     RasterStrategy,
     RuidaJobCompiler,
+    RuidaJobProfile,
     ScanAxis,
     SetModulation,
     TravelTo,
@@ -727,6 +728,21 @@ class RuidaJobCompilerTest(unittest.TestCase):
             "controlled-fixture",
         )
         self.assertEqual(
+            LIGHTBURN_2103_644XS.execution_evidence,
+            "operator-observed",
+        )
+        self.assertEqual(
+            LIGHTBURN_2103_644XS.execution_evidence_source,
+            "fixtures/hardware/ruida-644xs-usb-serial-v1/"
+            "manifest-v1.json",
+        )
+        self.assertTrue(
+            (
+                ROOT
+                / LIGHTBURN_2103_644XS.execution_evidence_source
+            ).is_file()
+        )
+        self.assertEqual(
             tuple(
                 (
                     mode.scan_axis,
@@ -743,6 +759,29 @@ class RuidaJobCompilerTest(unittest.TestCase):
                 ("vertical", "bidirectional", 4, 3),
             ),
         )
+
+    def test_custom_profile_defaults_to_no_execution_observation(self) -> None:
+        profile = RuidaJobProfile(
+            identifier="custom",
+            producer="Example",
+            producer_version="1",
+            controller_profile="Example controller",
+            envelope_evidence="fixture-observed",
+            vector_semantic_evidence="controlled-fixture",
+            raster_semantic_evidence="not-observed",
+            metric_semantic_evidence="controlled-fixture",
+            vector_layer_mode=0,
+            vector_layer_operation=0,
+            raster_modes=(),
+            air_off_operation=0x12,
+            air_on_operation=0x13,
+            laser_enable_value=1,
+            supported_laser_indices=(1,),
+            element_name="",
+        )
+
+        self.assertEqual(profile.execution_evidence, "not-observed")
+        self.assertIsNone(profile.execution_evidence_source)
 
 
 if __name__ == "__main__":

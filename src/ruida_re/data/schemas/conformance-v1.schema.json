@@ -53,6 +53,14 @@
         "$ref": "#/$defs/jobChecksumVector"
       }
     },
+    "serial_vectors": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/serialVector"
+      }
+    },
     "udp_vectors": {
       "type": "array",
       "minItems": 3,
@@ -349,6 +357,135 @@
         }
       }
     },
+    "serialMessage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context",
+        "direction",
+        "logical_hex",
+        "wire_hex",
+        "wire_origin"
+      ],
+      "properties": {
+        "context": {
+          "enum": [
+            "job",
+            "reply",
+            "request"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "controller-to-host",
+            "host-to-controller"
+          ]
+        },
+        "logical_hex": {
+          "$ref": "#/$defs/nonemptyHex"
+        },
+        "wire_hex": {
+          "$ref": "#/$defs/nonemptyHex"
+        },
+        "wire_origin": {
+          "enum": [
+            "derived-from-logical",
+            "hardware-observed"
+          ]
+        }
+      }
+    },
+    "serialVector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "framing",
+        "magic",
+        "request",
+        "reply",
+        "separate_acknowledgement",
+        "assertions",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/vectorId"
+        },
+        "framing": {
+          "const": "checksumless-scrambled-stream"
+        },
+        "magic": {
+          "$ref": "#/$defs/byte"
+        },
+        "request": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/serialMessage"
+            },
+            {
+              "properties": {
+                "context": {
+                  "const": "request"
+                },
+                "direction": {
+                  "const": "host-to-controller"
+                },
+                "wire_origin": {
+                  "const": "derived-from-logical"
+                }
+              }
+            }
+          ]
+        },
+        "reply": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/serialMessage"
+            },
+            {
+              "properties": {
+                "context": {
+                  "const": "reply"
+                },
+                "direction": {
+                  "const": "controller-to-host"
+                },
+                "wire_origin": {
+                  "const": "hardware-observed"
+                }
+              }
+            }
+          ]
+        },
+        "separate_acknowledgement": {
+          "const": false
+        },
+        "assertions": {
+          "const": [
+            "encode-request-stream",
+            "decode-request-stream",
+            "decode-reply-stream",
+            "correlate-reply-address",
+            "no-separate-acknowledgement"
+          ]
+        },
+        "evidence": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/evidence"
+            },
+            {
+              "properties": {
+                "classification": {
+                  "const": "hardware-observed"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "udpVector": {
       "type": "object",
       "additionalProperties": false,
@@ -479,6 +616,7 @@
           "enum": [
             "codec-contract",
             "controlled-fixture",
+            "hardware-observed",
             "pinned-reference",
             "pinned-reference-agreement"
           ]
@@ -494,7 +632,31 @@
         "fixture": {
           "$ref": "#/$defs/fixture"
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "classification": {
+                "const": "hardware-observed"
+              }
+            },
+            "required": [
+              "classification"
+            ]
+          },
+          "then": {
+            "required": [
+              "fixture"
+            ],
+            "properties": {
+              "source_ids": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
     },
     "fixture": {
       "type": "object",

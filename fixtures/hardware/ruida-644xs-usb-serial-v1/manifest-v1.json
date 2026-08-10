@@ -1,0 +1,164 @@
+{
+  "schema": "ruida-re.hardware-validation.v1",
+  "identifier": "hardware-ruida-644xs-usb-serial-v1",
+  "observed_on": "2026-08-09",
+  "scope": {
+    "description": "A supervised, single-controller validation of one read-only request and one generated mixed vector/raster job.",
+    "limitations": [
+      "The controller identity is the configured LightBurn profile and was not independently interrogated.",
+      "The serial transport provided no protocol checksum or acknowledgement for job transmission.",
+      "The successful result is an operator observation, not independent dimensional or power metrology.",
+      "This fixture does not establish compatibility with every Ruida model or firmware revision."
+    ]
+  },
+  "environment": {
+    "host_platform": "macOS",
+    "configured_controller_profile": "Ruida 644XS",
+    "transport": {
+      "kind": "USB serial",
+      "baud": 115200,
+      "magic_hex": "88",
+      "checksum_prefix": false,
+      "job_acknowledgement_available": false
+    }
+  },
+  "read_only_exchange": {
+    "operation": "get_setting",
+    "request": {
+      "logical_hex": "da000005",
+      "wire_hex": "d489890d",
+      "wire_evidence": "Derived deterministically from logical_hex using magic 0x88."
+    },
+    "response": {
+      "wire_hex": "d409890d89899b2fe9",
+      "wire_evidence": "Observed controller reply bytes.",
+      "logical_hex": "da0100050000122760",
+      "decoded": {
+        "command": "setting_reply",
+        "address": 5,
+        "value": 300000
+      }
+    },
+    "observation": "The controller returned the recorded structured reply to the read-only request."
+  },
+  "job": {
+    "file": "safe-mixed-20pct.rd",
+    "sha256": "e819fb250403e04876fed66c512c47bc4abfcf33e19c2eaecddba2bd536aeb6d",
+    "size_bytes": 689,
+    "compiler_profile": "lightburn-2.1.03-ruida-644xs",
+    "decode": {
+      "known_records": 107,
+      "opaque_records": 0,
+      "issues": []
+    },
+    "bounds_mm": {
+      "min_x": 20,
+      "min_y": 20,
+      "max_x": 30,
+      "max_y": 26
+    },
+    "marked_distance_mm": 22,
+    "layers": [
+      {
+        "index": 0,
+        "kind": "vector",
+        "speed_mm_s": 100,
+        "min_power_percent": 20,
+        "max_power_percent": 20,
+        "air_assist": false,
+        "color_rgb": 0,
+        "laser_index": 1,
+        "events": [
+          {
+            "type": "travel_to",
+            "x_mm": 20,
+            "y_mm": 20
+          },
+          {
+            "type": "mark_to",
+            "x_mm": 30,
+            "y_mm": 20
+          }
+        ]
+      },
+      {
+        "index": 1,
+        "kind": "raster",
+        "speed_mm_s": 100,
+        "min_power_percent": 10,
+        "max_power_percent": 20,
+        "air_assist": false,
+        "color_rgb": 0,
+        "laser_index": 1,
+        "scan_axis": "horizontal",
+        "raster_strategy": "unidirectional",
+        "events": [
+          {
+            "type": "travel_to",
+            "x_mm": 20,
+            "y_mm": 24
+          },
+          {
+            "type": "set_modulation",
+            "percent": 10
+          },
+          {
+            "type": "mark_to",
+            "x_mm": 24,
+            "y_mm": 24
+          },
+          {
+            "type": "travel_to",
+            "x_mm": 20,
+            "y_mm": 25
+          },
+          {
+            "type": "set_modulation",
+            "percent": 15
+          },
+          {
+            "type": "mark_to",
+            "x_mm": 24,
+            "y_mm": 25
+          },
+          {
+            "type": "travel_to",
+            "x_mm": 20,
+            "y_mm": 26
+          },
+          {
+            "type": "set_modulation",
+            "percent": 20
+          },
+          {
+            "type": "mark_to",
+            "x_mm": 24,
+            "y_mm": 26
+          }
+        ]
+      }
+    ]
+  },
+  "transmissions": [
+    {
+      "sequence": 1,
+      "job_sha256": "e819fb250403e04876fed66c512c47bc4abfcf33e19c2eaecddba2bd536aeb6d",
+      "packet_count": 1,
+      "payload_bytes": 689,
+      "retries": 0,
+      "observation": "The operator reported apparent success, but material placement prevented a valid burn assessment."
+    },
+    {
+      "sequence": 2,
+      "job_sha256": "e819fb250403e04876fed66c512c47bc4abfcf33e19c2eaecddba2bd536aeb6d",
+      "packet_count": 1,
+      "payload_bytes": 689,
+      "retries": 0,
+      "observation": "After repositioning the material, the operator reported complete success."
+    }
+  ],
+  "result": {
+    "status": "operator-reported-success",
+    "observation": "On the second supervised run, the operator reported that the expected vector line and three raster-power lines completed successfully."
+  }
+}

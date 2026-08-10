@@ -32,6 +32,7 @@ from .fields import (
     U35Field,
 )
 from .registry import (
+    SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN,
     SRC_MEERK40T,
     SRC_RUIDA_PA,
@@ -41,6 +42,15 @@ from .transport import checksum, encode_datagram
 
 
 CONFORMANCE_SCHEMA = "ruida-re.conformance.v1"
+EVIDENCE_CLASSIFICATIONS = frozenset(
+    (
+        "codec-contract",
+        "controlled-fixture",
+        "hardware-observed",
+        "pinned-reference",
+        "pinned-reference-agreement",
+    )
+)
 
 _BASELINE_PATH = (
     "fixtures/lightburn-2.1.03/vector/v001-single-line.rd"
@@ -63,6 +73,13 @@ _RELATIVE_PATH = (
 _RELATIVE_SHA256 = (
     "d8fa69f966d5b748a048dd9156ab7d67"
     "4201ed13c87cf1022eb78dcee383def8"
+)
+_HARDWARE_CAPTURE_PATH = (
+    "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json"
+)
+_HARDWARE_CAPTURE_SHA256 = (
+    "9a9196e6e3cec15548b80890a5ab5980"
+    "829e4b00356bf8a9af174f53848b958c"
 )
 _BASELINE_WITHOUT_CHECKSUM_HEX = (
     "d810e601f0f10200d800e70600000000000000000000e73800e7030000011c20"
@@ -90,6 +107,11 @@ def _evidence(
     fixture_path: str | None = None,
     fixture_sha256: str | None = None,
 ) -> dict[str, Any]:
+    if classification not in EVIDENCE_CLASSIFICATIONS:
+        raise ValueError(
+            f"Unknown conformance evidence classification: "
+            f"{classification!r}"
+        )
     result: dict[str, Any] = {
         "classification": classification,
         "source_ids": sorted(source_ids),
@@ -120,6 +142,12 @@ _RELATIVE_EVIDENCE = _evidence(
     (SRC_LIGHTBURN,),
     _RELATIVE_PATH,
     _RELATIVE_SHA256,
+)
+_HARDWARE_CAPTURE_EVIDENCE = _evidence(
+    "hardware-observed",
+    (SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,),
+    _HARDWARE_CAPTURE_PATH,
+    _HARDWARE_CAPTURE_SHA256,
 )
 
 
@@ -380,6 +408,61 @@ def _udp_vectors() -> list[dict[str, Any]]:
     ]
 
 
+def _serial_message(
+    context: str,
+    direction: str,
+    logical_hex: str,
+    wire_hex: str,
+    wire_origin: str,
+) -> dict[str, Any]:
+    logical = bytes.fromhex(logical_hex)
+    wire = bytes.fromhex(wire_hex)
+    if swizzle(logical) != wire:
+        raise ValueError(
+            f"Serial {context} message is not canonical"
+        )
+    return {
+        "context": context,
+        "direction": direction,
+        "logical_hex": logical.hex(),
+        "wire_hex": wire.hex(),
+        "wire_origin": wire_origin,
+    }
+
+
+def _serial_vectors() -> list[dict[str, Any]]:
+    return [
+        {
+            "id": "serial.exchange.get-setting-address-5",
+            "framing": "checksumless-scrambled-stream",
+            "magic": 0x88,
+            "request": _serial_message(
+                "request",
+                "host-to-controller",
+                "da000005",
+                "d489890d",
+                "derived-from-logical",
+            ),
+            "reply": _serial_message(
+                "reply",
+                "controller-to-host",
+                "da0100050000122760",
+                "d409890d89899b2fe9",
+                "hardware-observed",
+            ),
+            "separate_acknowledgement": False,
+            "assertions": [
+                "encode-request-stream",
+                "decode-request-stream",
+                "decode-reply-stream",
+                "correlate-reply-address",
+                "no-separate-acknowledgement",
+            ],
+            "evidence": deepcopy(_HARDWARE_CAPTURE_EVIDENCE),
+        }
+    ]
+
+
 def build_conformance() -> dict[str, Any]:
     """Return all version-one conformance vectors."""
     catalog = build_catalog()
@@ -402,6 +485,7 @@ def build_conformance() -> dict[str, Any]:
         "field_vectors": fields,
         "swizzle_vectors": _swizzle_vectors(),
         "job_checksum_vectors": _job_checksum_vectors(),
+        "serial_vectors": _serial_vectors(),
         "udp_vectors": _udp_vectors(),
     }
 
@@ -454,6 +538,7 @@ def main() -> None:
 
 __all__ = (
     "CONFORMANCE_SCHEMA",
+    "EVIDENCE_CLASSIFICATIONS",
     "build_conformance",
     "conformance_json",
 )

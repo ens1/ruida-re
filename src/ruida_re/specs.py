@@ -14,6 +14,28 @@ CONTROLLER_EFFECTS = frozenset(
     ("unknown", "read-only", "state-changing", "machine-action")
 )
 REPLY_BEHAVIORS = frozenset(("unknown", "none", "control", "data"))
+SHAPE_EVIDENCE = frozenset(
+    (
+        "conflicting-reports",
+        "external-fixture-observed",
+        "fixture-observed",
+        "hardware-observed",
+        "reported",
+        "simulator-only",
+        "uncited-hypothesis",
+    )
+)
+SEMANTIC_EVIDENCE = frozenset(
+    (
+        "controlled-fixture",
+        "disputed",
+        "hardware-observed",
+        "partially-controlled",
+        "reported",
+        "uncited-hypothesis",
+        "unverified",
+    )
+)
 
 
 @dataclass(frozen=True)
@@ -109,6 +131,16 @@ class CommandRegistry:
             if len(field_names) != len(set(field_names)):
                 raise ValueError(
                     f"Duplicate field name in command {spec.name}"
+                )
+            if spec.shape_evidence not in SHAPE_EVIDENCE:
+                raise ValueError(
+                    f"Invalid shape evidence for {spec.name}: "
+                    f"{spec.shape_evidence!r}"
+                )
+            if spec.semantic_evidence not in SEMANTIC_EVIDENCE:
+                raise ValueError(
+                    f"Invalid semantic evidence for {spec.name}: "
+                    f"{spec.semantic_evidence!r}"
                 )
             if spec.controller_effect not in CONTROLLER_EFFECTS:
                 raise ValueError(

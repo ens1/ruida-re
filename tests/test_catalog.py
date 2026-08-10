@@ -40,7 +40,12 @@ from ruida_re.program import (
     Program,
     RawSpan,
 )
-from ruida_re.registry import CATALOG_SOURCES, REGISTRIES
+from ruida_re.registry import (
+    CATALOG_SOURCES,
+    REGISTRIES,
+    SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+)
+from ruida_re.specs import SEMANTIC_EVIDENCE, SHAPE_EVIDENCE
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -135,8 +140,53 @@ class CatalogTest(unittest.TestCase):
                 }
             ],
         )
-        self.assertEqual(get_setting["shape_evidence"], "reported")
-        self.assertEqual(get_setting["semantic_evidence"], "reported")
+        self.assertEqual(get_setting["contexts"], ["request"])
+        self.assertEqual(
+            get_setting["shape_evidence"],
+            "hardware-observed",
+        )
+        self.assertEqual(
+            get_setting["semantic_evidence"],
+            "hardware-observed",
+        )
+        self.assertIn(
+            SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+            get_setting["shape_sources"],
+        )
+        job_get_setting = next(
+            command
+            for command in catalog["commands"]
+            if command["name"] == "get_setting"
+            and command["contexts"] == ["job"]
+        )
+        self.assertEqual(job_get_setting["shape_evidence"], "reported")
+        self.assertEqual(job_get_setting["semantic_evidence"], "reported")
+        setting_reply = next(
+            command
+            for command in catalog["commands"]
+            if command["name"] == "setting_reply"
+        )
+        self.assertEqual(
+            setting_reply["shape_evidence"],
+            "hardware-observed",
+        )
+        self.assertEqual(
+            setting_reply["semantic_evidence"],
+            "hardware-observed",
+        )
+        set_setting = next(
+            command
+            for command in catalog["commands"]
+            if command["name"] == "set_setting"
+        )
+        self.assertNotEqual(
+            set_setting["shape_evidence"],
+            "hardware-observed",
+        )
+        self.assertNotEqual(
+            set_setting["semantic_evidence"],
+            "hardware-observed",
+        )
 
     def test_codec_semantics_are_complete_and_consistent(self) -> None:
         codecs = {
@@ -384,6 +434,18 @@ class CatalogTest(unittest.TestCase):
             PROGRAM_SCHEMA,
         )
         catalog_definitions = catalog_schema["$defs"]
+        for definitions in (
+            catalog_definitions,
+            program_schema["$defs"],
+        ):
+            self.assertEqual(
+                set(definitions["shapeEvidence"]["enum"]),
+                SHAPE_EVIDENCE,
+            )
+            self.assertEqual(
+                set(definitions["semanticEvidence"]["enum"]),
+                SEMANTIC_EVIDENCE,
+            )
         self.assertEqual(
             set(catalog_definitions["codec"]["properties"]["id"]["enum"]),
             set(catalog_definitions["field"]["properties"]["codec"]["enum"]),

@@ -25,6 +25,9 @@ def _spec(code: str, name: str, *fields) -> CommandSpec:
 
 
 SRC_LIGHTBURN = "local:lightburn-2.1.03-fixtures"
+SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1 = (
+    "local:hardware-ruida-644xs-usb-serial-v1"
+)
 SRC_MEERK40T = (
     "github:meerk40t/meerk40t@"
     "5f68a45bff41d98e4d3fe8b8267857218099afa8"
@@ -42,11 +45,32 @@ SRC_LIBLASERCUT = (
     "ebe72ea3af3b2ab52d797d8100c635f68722100e"
 )
 CATALOG_SOURCES = (
+    SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN,
     SRC_LIBLASERCUT,
     SRC_MEERK40T,
     SRC_RUIDA_LASER,
     SRC_RUIDA_PA,
+)
+HARDWARE_SETTING_SOURCES = (
+    SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+    SRC_RUIDA_PA,
+    SRC_MEERK40T,
+)
+HARDWARE_GET_SETTING_NOTES = (
+    "One supervised USB serial capture from a controller configured as a "
+    "Ruida 644XS observed that a DA00 request for address 5 produced a "
+    "numeric DA01 reply with matching address 5 and value 300000. The "
+    "stream used magic 0x88 without checksum framing or a separate ACK. "
+    "This confirms only that exchange on the captured setup, not every "
+    "address, controller model, or firmware dialect."
+)
+HARDWARE_SETTING_REPLY_NOTES = (
+    "One supervised USB serial capture from a controller configured as a "
+    "Ruida 644XS returned address 5 and numeric value 300000 after DA00 "
+    "address 5. The stream used magic 0x88 without checksum framing or a "
+    "separate ACK. This confirms only that reply shape on the captured "
+    "setup."
 )
 
 
@@ -660,11 +684,14 @@ SEMANTIC_NOTES = {
     "c616": "Timing meaning differs across prior implementations.",
     "da00": (
         "Two pinned implementations report a controller-memory read "
-        "followed by reply data. Hardware capture absent."
+        "followed by reply data. Hardware evidence is scoped to the "
+        "request-context command."
     ),
     "da01": (
         "Two pinned implementations distinguish this controller-memory "
-        "write from DA00. Hardware capture absent."
+        "write from DA00. The executed mixed-job fixture contains the "
+        "address-800 form, but no controlled hardware observation isolates "
+        "its write effect."
     ),
     "ca01": (
         "Controlled leading operations select vector 0, horizontal "
@@ -814,8 +841,25 @@ PROVISIONAL_REQUEST_NAMES = {
     for spec in JOB_SPECS
     if spec.opcode[0] in (0xA5, 0xA7, 0xD8, 0xD9, 0xDA, 0xE5, 0xE8)
 }
+
+
+def _with_request_evidence(spec: CommandSpec) -> CommandSpec:
+    if spec.name != "get_setting":
+        return spec
+    return replace(
+        spec,
+        shape_evidence="hardware-observed",
+        semantic_evidence="hardware-observed",
+        shape_sources=HARDWARE_SETTING_SOURCES,
+        semantic_sources=HARDWARE_SETTING_SOURCES,
+        notes=HARDWARE_GET_SETTING_NOTES,
+    )
+
+
 REQUEST_SPECS = tuple(
-    spec for spec in JOB_SPECS if spec.name in PROVISIONAL_REQUEST_NAMES
+    _with_request_evidence(spec)
+    for spec in JOB_SPECS
+    if spec.name in PROVISIONAL_REQUEST_NAMES
 ) + (
     replace(
         _spec("ce", "keep_alive_request"),
@@ -860,8 +904,11 @@ REPLY_SPECS = (
             U14Field("address"),
             U35Field("value"),
         ),
-        shape_sources=(SRC_RUIDA_PA, SRC_MEERK40T),
-        semantic_sources=(SRC_RUIDA_PA, SRC_MEERK40T),
+        shape_evidence="hardware-observed",
+        semantic_evidence="hardware-observed",
+        shape_sources=HARDWARE_SETTING_SOURCES,
+        semantic_sources=HARDWARE_SETTING_SOURCES,
+        notes=HARDWARE_SETTING_REPLY_NOTES,
     ),
     replace(
         _spec(
@@ -927,7 +974,7 @@ REGISTRIES = {
 REGISTRY_CONTEXT_EVIDENCE = {
     "job": "mixed-catalog",
     "request": "provisional-family-selection",
-    "reply": "reported-and-simulator-hypotheses",
+    "reply": "mixed-catalog",
 }
 
 

@@ -26,10 +26,20 @@ source expression were not translated into this repository.
   Start, Send, or Run action, and none of these fixture jobs was uploaded or
   executed on a controller.
 
+The separate live-validation job described below is not one of these fixture
+exports. Its execution does not change the offline provenance of the fixture
+corpus.
+
 These fixtures decide local shape and value questions. Merely seeing an opcode
 establishes its frame shape for this LightBurn dialect, not its mnemonic. That
 distinction is represented by separate `shape_evidence` and
 `semantic_evidence` fields.
+
+`hardware-observed` is a first-class value on both evidence axes. It identifies
+a context-specific shape or meaning supported by a cited physical-controller
+observation. It is deliberately narrower than an opcode-family claim: evidence
+for a request or reply form does not silently promote a job-context command
+with overlapping bytes.
 
 No RDWorks fixture is currently claimed. Future Windows exports will be kept
 as a separately versioned, producer-labelled corpus and compared against the
@@ -96,11 +106,40 @@ are not a substitute for controller captures. In particular, timeout behavior,
 the meanings of logical `CD` and `CF`, reply termination, and differences
 among controller models remain evidence-labelled research questions.
 
+## First live hardware validation
+
+One configured Ruida 644XS was exercised from macOS over USB serial at 115200
+baud with scrambling magic `0x88`. The
+[hardware-validation manifest](../fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json)
+records that a read-only `DA 00` request for address 5 returned a fixed
+nine-byte `DA 01` reply for address 5 with value 300000.
+
+The generated conformance artifact content-addresses that manifest in one
+nested `serial_vectors` exchange. It records logical request `da000005` and
+derived wire `d489890d`, plus hardware-observed reply wire
+`d409890d89899b2fe9` and logical reply `da0100050000122760`. The vector uses
+magic `0x88`, checksumless stream framing, no separate acknowledgement, and
+address correlation from request address 5 to reply address 5 and value
+300000.
+
+A generated 689-byte mixed vector/raster job decoded as 107 known records with
+no issues before transmission. Its bounds were X 20 through 30 mm and Y 20
+through 26 mm. It used 100 mm/s, 20% maximum power, raster modulation values
+of 10%, 15%, and 20%, and air assist off. The job was transmitted twice after
+explicit approval. The first transmission produced observed activity while
+the material was misplaced. After repositioning the material, the operator
+reported complete success on the second transmission.
+
+The report is based on operator observation; no automatic sensor or output
+measurement verified execution. It covers one controller/profile and one
+generated job. The manifest records the observed reply bytes, but it is not a
+complete serial transcript or a multi-controller compatibility claim.
+
 ## Read-only setting request evidence
 
-The installed CLI exposes `DA 00` only because both pinned implementations
-distinguish it from the state-changing `DA 01` operation and expect reply
-data:
+The installed CLI exposes request-context `DA 00` because the live observation
+and both pinned implementations distinguish it from the state-changing
+`DA 01` operation and expect reply data:
 
 - ruida-pa labels controller memory readable via `DA`, defines `DA 00` as
   `GET_SETTING`/read and `DA 01` as `SET_SETTING`/write, then parses fixed
@@ -112,10 +151,14 @@ data:
   `DA 01` response, while its `DA 01` branch writes values:
   [pinned emulator](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/emulator.py#L661-L696).
 
-This establishes independent implementation evidence, not a hardware capture
-or a guarantee that every address and controller dialect uses the same reply
-shape. The catalog therefore labels both command semantics `reported` and
-keeps their source identifiers explicit.
+The live exchange and independent implementation reports establish different,
+explicitly scoped evidence states. Request-context `get_setting` (`DA 00`) and
+reply-context numeric `setting_reply` (`DA 01`) have `hardware-observed` shape
+and semantic evidence. Job-context `get_setting` remains `reported` on both
+axes. The state-changing `set_setting` (`DA 01`) retains a
+`fixture-observed` shape and `reported` semantics; the numeric reply does not
+validate that write command. These labels do not guarantee the same reply
+shape for every address, controller, or firmware dialect.
 
 ## Other comparison oracles
 

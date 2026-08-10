@@ -342,6 +342,25 @@ class ProgramTest(unittest.TestCase):
         self.assertEqual(program.records[0].name, "get_setting")
         self.assertEqual(program.encode(), packet)
 
+    def test_hardware_evidence_round_trips_in_program_schema(self) -> None:
+        logical = bytes.fromhex("da000005")
+        request = decode(
+            logical,
+            context="request",
+            container="logical",
+        )
+        command = request.records[0]
+        self.assertEqual(command.shape_evidence, "hardware-observed")
+        self.assertEqual(command.semantic_evidence, "hardware-observed")
+        restored = Program.from_json(request.to_json())
+        self.assertEqual(restored.to_dict(), request.to_dict())
+        schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+        Draft202012Validator(schema).validate(request.to_dict())
+
+        job = decode(logical, context="job", container="logical")
+        self.assertEqual(job.records[0].shape_evidence, "reported")
+        self.assertEqual(job.records[0].semantic_evidence, "reported")
+
     def test_logical_container_does_not_scramble(self) -> None:
         logical = bytes.fromhex("d7")
         program = decode(logical, container="logical")
@@ -385,6 +404,14 @@ class ProgramTest(unittest.TestCase):
         self.assertEqual(
             program.records[0].values,
             {"address": 5, "value": 42},
+        )
+        self.assertEqual(
+            program.records[0].shape_evidence,
+            "hardware-observed",
+        )
+        self.assertEqual(
+            program.records[0].semantic_evidence,
+            "hardware-observed",
         )
         self.assertEqual(program.encode(), raw_data)
 

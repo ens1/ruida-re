@@ -131,6 +131,12 @@ class FakeControllerClient:
 
 
 class ControllerCliTest(unittest.TestCase):
+    def test_hardware_observed_read_remains_allowlisted(self) -> None:
+        self.assertEqual(
+            controller_cli.READ_ONLY_REPLY_REQUESTS,
+            frozenset(("get_setting",)),
+        )
+
     def setUp(self) -> None:
         FakeUdpTransport.instances.clear()
         FakeSerialTransport.instances.clear()

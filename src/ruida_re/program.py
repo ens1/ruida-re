@@ -14,31 +14,18 @@ from .jsonio import integer as json_integer
 from .jsonio import loads as load_json
 from .jsonio import number as json_number
 from .registry import get_registry
-from .specs import CommandRegistry, NAME_PATTERN
+from .specs import (
+    NAME_PATTERN,
+    SEMANTIC_EVIDENCE,
+    SHAPE_EVIDENCE,
+    CommandRegistry,
+)
 from .syntax import is_command_start, logical_frames
 from .transport import decode_datagram, encode_datagram
 
 
 SCHEMA = "ruida-re.program.v1"
 CONTAINERS = ("rd", "udp", "logical")
-SHAPE_EVIDENCE = {
-    "conflicting-reports",
-    "external-fixture-observed",
-    "fixture-observed",
-    "reported",
-    "simulator-only",
-    "uncited-hypothesis",
-}
-SEMANTIC_EVIDENCE = {
-    "controlled-fixture",
-    "disputed",
-    "partially-controlled",
-    "reported",
-    "uncited-hypothesis",
-    "unverified",
-}
-
-
 def _hex_bytes(value: Any, label: str) -> bytes:
     if not isinstance(value, str):
         raise ValueError(f"{label} must be a hexadecimal string")

@@ -24,18 +24,23 @@ The project separates two different claims:
 2. **Semantic translation is evidence-labelled.** Shape evidence and mnemonic
    evidence are recorded separately. A frame observed in LightBurn output is
    not automatically presented as having a proven meaning. Controlled fixture
-   results, reported meanings, and disagreements remain distinguishable in
-   both JSON and the command registry.
+   results, hardware observations, reported meanings, and disagreements remain
+   distinguishable in both JSON and the command registry.
+   `hardware-observed` is available on both evidence axes and ties a scoped
+   shape or meaning to a physical-controller observation. It does not promote
+   the same opcode in another context or claim universal controller behavior.
 
 The current registries contain 184 host/job shapes, 74 provisional request
-candidates, and 10 reported or simulated reply shapes. Twenty-five checked-in
-LightBurn exports exercise 72 unique job shapes; all 25 parse without opaque
-frames and reproduce byte-for-byte. A temporary LibLaserCut golden file
-exercises 123 frames with the same result. Those results validate the current
-framing model and exact translation, not every mnemonic, request, reply, or
-controller dialect in the broader catalog. Generated jobs have not been
-validated on a live controller. This is pre-alpha software, not a claim that
-the protocol is complete.
+candidates, and 10 reply shapes spanning hardware observation, reports,
+disputes, and simulation. Twenty-five checked-in LightBurn exports exercise
+72 unique job shapes; all 25 parse without opaque frames and reproduce
+byte-for-byte. A temporary LibLaserCut golden file exercises 123 frames with
+the same result. Those results validate the current framing model and exact
+translation, not every mnemonic, request, reply, or controller dialect in the
+broader catalog. One generated mixed vector/raster job has also completed
+successfully on one operator-observed Ruida 644XS setup. This is still
+pre-alpha software, not a claim that the protocol is complete or that other
+controller profiles have been validated.
 
 Importing the package, constructing a codec, and translating bytes perform no
 device I/O. The controller API is different: opening with its default UDP
@@ -115,6 +120,35 @@ must reject those features instead of dropping them or approximating them.
 Passes remain host-expanded. A controlled four-pass fixture with `zPerPass`
 changed from 0 to 0.5 mm produced a byte-identical `.rd`; that is not evidence
 for Z-axis encoding.
+
+### First live validation
+
+The first live test, recorded in the
+[hardware-validation manifest](fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json),
+used the configured Ruida 644XS profile over macOS USB serial at 115200 baud
+with scrambling magic `0x88`. Before sending a job, a read-only `DA 00`
+request for address 5 returned a fixed nine-byte `DA 01` reply for address 5
+with value 300000.
+
+That exchange gives request-context `DA 00` and reply-context numeric `DA 01`
+both `hardware-observed` shape and semantic evidence. It does not promote
+job-context `DA 00`, whose shape and semantics remain `reported`, or the
+state-changing `DA 01` setter, whose shape is `fixture-observed` and semantics
+remain `reported`.
+
+The generated mixed vector/raster job was 689 bytes and decoded as 107 known
+records with no issues. Its bounds were X 20 through 30 mm and Y 20 through
+26 mm. It used 100 mm/s, 20% maximum power, raster modulation at 10%, 15%, and
+20%, and air assist off. After explicit approval, the same job was transmitted
+twice. The operator saw activity on the first attempt but reported that the
+material was misplaced; after repositioning the material, the operator
+reported complete success on the second attempt.
+
+That result is an operator observation, not automatic sensor or output
+verification. It covers one physical controller/profile and one job. It does
+not validate every command, transport, controller model, or safety behavior.
+The host remains responsible for job review, authorization, supervision, and
+machine safety.
 
 ## Embed the codec
 
@@ -280,9 +314,11 @@ checksum prefix, while reply datagrams contain only scrambled reply bytes.
 it when deliberately translating between layers; an `RDWORKV` header must be
 cleared before changing a wrapped file to `udp` or `logical`.
 
-The host/job catalog is deliberately broad. The request view is still a
-reported opcode-family subset, not a complete direction classifier, and no
-real request/reply capture corpus is checked in yet.
+The host/job catalog is deliberately broad. The request view remains a
+provisional opcode-family subset, not a complete direction classifier. Only
+request-context `DA 00` and reply-context numeric `DA 01` have
+`hardware-observed` shape and semantic evidence; one exchange is not a broad
+request/reply capture corpus.
 
 Inspect the evidence-labelled registry:
 
@@ -313,6 +349,11 @@ from ruida_re import CATALOG_V1, CONFORMANCE_V1, read_artifact_json
 catalog = read_artifact_json(CATALOG_V1)
 vectors = read_artifact_json(CONFORMANCE_V1)
 ```
+
+The conformance artifact also includes a nested `serial_vectors` exchange for
+the captured address-5 request and reply. The v1 schema makes that group
+optional so older v1 documents remain valid; the current generator always
+includes it and the current tests require and exercise it.
 
 See the [conformance guide](docs/conformance.md) for the language-neutral test
 contract.

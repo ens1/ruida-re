@@ -18,10 +18,10 @@ This distinction is intentional:
   rasterization, path planning, controller discovery, or a TCP bridge.
 
 The API is pre-alpha. Lossless translation is extensively tested against the
-checked-in corpus, but semantic and live-controller coverage remain incomplete.
-The planned-job compiler has exact controlled-fixture coverage, not live
-controller validation. Pin a package version and preserve unknown records when
-integrating it.
+checked-in corpus, but semantic and live-controller coverage remain
+incomplete. The planned-job compiler has exact controlled-fixture coverage
+and one successful operator-observed validation on a configured Ruida 644XS.
+Pin a package version and preserve unknown records when integrating it.
 
 ## Planned-job compiler
 
@@ -104,6 +104,36 @@ represented by repeated planned motion. A controlled LightBurn four-pass
 3D-slice fixture was byte-identical when `zPerPass` changed from 0 to 0.5 mm,
 so that setting is not treated as evidence for a Ruida Z command. A source
 plan that requires actual Z movement must be rejected by this profile.
+
+### Live validation scope
+
+One generated mixed vector/raster job, recorded in the
+[hardware-validation manifest](../fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json),
+was tested on the configured Ruida 644XS profile over macOS USB serial at
+115200 baud with scrambling magic `0x88`. A preceding read-only `DA 00`
+request for address 5 returned a fixed nine-byte `DA 01` reply for address 5
+with value 300000.
+
+The catalog assigns `hardware-observed` shape and semantic evidence only to
+the request-context `get_setting` form of `DA 00` and the reply-context numeric
+`setting_reply` form of `DA 01`. Job-context `DA 00` remains `reported` for
+both axes. The state-changing `DA 01` setter retains a `fixture-observed`
+shape and `reported` semantics; the reply observation is not evidence for
+that setter.
+
+The job contained 689 bytes, decoded as 107 known records with no issues, and
+covered X 20 through 30 mm and Y 20 through 26 mm. Its process settings were
+100 mm/s, 20% maximum power, raster modulation at 10%, 15%, and 20%, and air
+assist off. It was transmitted twice, each time after explicit operator
+approval. The first transmission produced observed machine activity, but the
+material was misplaced. After repositioning it, the operator reported complete
+success from the second transmission.
+
+There was no automatic sensor or output verification. This establishes a
+successful operator-observed path for one controller/profile and one mixed
+job, not a compatibility or safety claim for other Ruida controllers. It does
+not change the host/library boundary below: image processing, path planning,
+authorization, and supervision remain application responsibilities.
 
 ### Rayforge boundary
 
@@ -419,8 +449,9 @@ acknowledgement wait. Replies are still direction-aware Ruida data. Device
 naming and access permissions remain operating-system concerns; for example,
 Windows normally uses a name such as `COM3`.
 
-The nine-byte setting reply is reported independently by the pinned ruida-pa
-and MeerK40t implementations. It is not a guarantee that every address or
+The address-5 request and nine-byte numeric reply are hardware-observed on the
+captured setup and are also reported independently by the pinned ruida-pa and
+MeerK40t implementations. This does not guarantee that every address or
 controller dialect returns that shape; use a different evidence-backed
 completion predicate when required.
 
@@ -560,11 +591,16 @@ schema and can validate a complete transcript without an external resolver.
 The catalog publishes every primitive field codec with declarative JSON
 domains, base-128 layout, signed padding, units, scaling, packing, and rounding
 behavior. Its source records include pinned provenance and licenses. Command
-evidence fields distinguish observed shape, reported semantics, conflict, and
-uncited hypothesis. `controller_effect` and `reply_behavior` provide a
-declarative interaction policy. `reply_commands` and `reply_field_matches`
-define typed response validation and correlation where evidence supports it;
-unknown values remain ineligible for safe high-level interfaces.
+evidence fields distinguish fixture observation, physical-controller
+observation, reports, conflict, and uncited hypothesis. `hardware-observed` is
+a first-class value on both the shape and semantic axes, but it applies only
+to the context-specific command that the capture supports. Here that means
+request `get_setting` (`DA 00`) and reply `setting_reply` (numeric `DA 01`),
+not job-context `DA 00` or the `DA 01` setter. `controller_effect` and
+`reply_behavior` provide a declarative interaction policy. `reply_commands`
+and `reply_field_matches` define typed response validation and correlation
+where evidence supports it; unknown values remain ineligible for safe
+high-level interfaces.
 
 The Program schema deliberately validates the versioned envelope rather than
 duplicating hundreds of catalog-dependent command alternatives. Normative
@@ -609,8 +645,20 @@ catalog = read_artifact_json(CATALOG_V1)
 `spec/conformance-v1.json` is the executable companion to the catalog. It
 content-addresses the exact catalog and supplies canonical encode/decode cases
 for every field codec, the full byte-scrambling domain, a fixture-derived job
-checksum, and checksum-bearing request versus checksumless reply datagrams.
-See [conformance vectors](conformance.md) for the downstream test procedure.
+checksum, checksum-bearing request versus checksumless reply datagrams, and a
+nested hardware-backed USB-serial exchange. The serial vector derives request
+wire `d489890d` from logical `da000005`, records hardware-observed reply wire
+`d409890d89899b2fe9` for logical `da0100050000122760`, uses magic `0x88` and
+checksumless stream framing, expects no separate acknowledgement, and
+correlates address 5 to reply address 5 and value 300000.
+
+`serial_vectors` is an optional, additive v1 schema property. Current generated
+artifacts always include it and the test suite validates it, while v1 documents
+created before the extension remain valid without it. No previously required
+structure or semantic changed, so the structural-versioning promise remains
+intact. Consumers pinned to an older schema snapshot must still update that
+snapshot before accepting a newer artifact with the additional property. See
+[conformance vectors](conformance.md) for the downstream test procedure.
 
 `Transcript` preserves UDP datagram boundaries, direction, raw bytes, optional
 endpoints and timestamps, decoded Program IR, and checksum/decode issues:
@@ -653,8 +701,9 @@ particular:
   host-expanded 3D-slice motion are fixture-backed for one profile; source
   image reconstruction, arbitrary-angle raster metadata, and native Z motion
   remain outside that evidence; and
-- live UDP and serial behavior has injectable test coverage, but not a public
-  multi-controller compatibility matrix.
+- live behavior has injectable UDP and serial test coverage plus one
+  operator-observed Ruida 644XS USB-serial success, but no automatic physical
+  verification or public multi-controller compatibility matrix.
 
 See [protocol notes](protocol.md) for layer-level facts and unresolved
 questions, and [sources and provenance](sources.md) for the evidence policy.

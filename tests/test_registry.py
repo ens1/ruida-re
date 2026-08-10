@@ -6,12 +6,14 @@ from collections import Counter
 from pathlib import Path
 import unittest
 
+from ruida_re.codec import swizzle, unswizzle
 from ruida_re.fields import ByteField
 from ruida_re.program import KnownCommand, decode
 from ruida_re.registry import (
     DEFAULT_REGISTRY,
     LIGHTBURN_OBSERVED,
     REGISTRIES,
+    SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     get_registry,
 )
 from ruida_re.specs import CommandRegistry, CommandSpec
@@ -38,6 +40,24 @@ class RegistryTest(unittest.TestCase):
     def test_registry_rejects_an_invalid_command_name(self) -> None:
         with self.assertRaises(ValueError):
             CommandRegistry([CommandSpec(b"\x80", "BadName")])
+
+    def test_registry_rejects_unknown_evidence_classifications(self) -> None:
+        invalid = (
+            CommandSpec(
+                b"\x80",
+                "example",
+                shape_evidence="future-shape",
+            ),
+            CommandSpec(
+                b"\x80",
+                "example",
+                semantic_evidence="future-semantics",
+            ),
+        )
+        for spec in invalid:
+            with self.subTest(spec=spec):
+                with self.assertRaises(ValueError):
+                    CommandRegistry([spec])
 
     def test_registry_validates_declarative_reply_contracts(self) -> None:
         invalid = (
@@ -113,8 +133,8 @@ class RegistryTest(unittest.TestCase):
         self.assertIsNotNone(request.name("keep_alive_request"))
         read = request.name("get_setting")
         self.assertIsNotNone(read)
-        self.assertEqual(read.shape_evidence, "reported")
-        self.assertEqual(read.semantic_evidence, "reported")
+        self.assertEqual(read.shape_evidence, "hardware-observed")
+        self.assertEqual(read.semantic_evidence, "hardware-observed")
         self.assertEqual(read.controller_effect, "read-only")
         self.assertEqual(read.reply_behavior, "data")
         self.assertEqual(read.reply_commands, ("setting_reply",))
@@ -122,17 +142,52 @@ class RegistryTest(unittest.TestCase):
             read.reply_field_matches,
             (("address", "address"),),
         )
-        self.assertEqual(len(read.shape_sources), 2)
-        self.assertEqual(len(read.semantic_sources), 2)
+        self.assertEqual(len(read.shape_sources), 3)
+        self.assertEqual(len(read.semantic_sources), 3)
+        self.assertIn(
+            SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+            read.semantic_sources,
+        )
+        job_read = get_registry("job").name("get_setting")
+        self.assertEqual(job_read.shape_evidence, "reported")
+        self.assertEqual(job_read.semantic_evidence, "reported")
+        self.assertNotIn(
+            SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+            job_read.shape_sources,
+        )
         write = request.name("set_setting")
         self.assertEqual(write.controller_effect, "state-changing")
         self.assertEqual(write.reply_behavior, "none")
         self.assertEqual(write.reply_commands, ())
         self.assertEqual(write.reply_field_matches, ())
+        self.assertNotEqual(write.shape_evidence, "hardware-observed")
+        self.assertNotEqual(write.semantic_evidence, "hardware-observed")
         self.assertIsNone(reply.name("document_name_reply"))
         hypothesis = reply.name("mainboard_version_reply_hypothesis")
         self.assertIsNotNone(hypothesis)
         self.assertEqual(hypothesis.semantic_evidence, "disputed")
+
+    def test_hardware_setting_capture_matches_registry(self) -> None:
+        request = get_registry("request").name("get_setting")
+        reply = get_registry("reply").name("setting_reply")
+        self.assertIsNotNone(request)
+        self.assertIsNotNone(reply)
+        request_logical = bytes.fromhex("da000005")
+        request_wire = bytes.fromhex("d489890d")
+        reply_logical = bytes.fromhex("da0100050000122760")
+        reply_wire = bytes.fromhex("d409890d89899b2fe9")
+        self.assertEqual(request.encode({"address": 5}), request_logical)
+        self.assertEqual(swizzle(request_logical, 0x88), request_wire)
+        self.assertEqual(unswizzle(reply_wire, 0x88), reply_logical)
+        values, end = reply.decode(reply_logical, 0)
+        self.assertEqual(end, len(reply_logical))
+        self.assertEqual(values, {"address": 5, "value": 300000})
+        self.assertEqual(reply.shape_evidence, "hardware-observed")
+        self.assertEqual(reply.semantic_evidence, "hardware-observed")
+        self.assertIn(
+            SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
+            reply.shape_sources,
+        )
 
     def test_non_hypothesis_evidence_has_specific_sources(self) -> None:
         for context, registry in REGISTRIES.items():

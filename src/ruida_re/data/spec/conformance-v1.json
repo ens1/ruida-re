@@ -1,7 +1,7 @@
 {
   "catalog": {
     "schema": "ruida-re.catalog.v1",
-    "sha256": "dc42e63f25353ff347747f285537ac2c20459abf511850b21c67aa55cf14aeb8"
+    "sha256": "95e72e09888cde9f62bbc3024db1fc444247917a1825d9c309c1f84db4ffda6e"
   },
   "field_vectors": [
     {
@@ -321,6 +321,45 @@
     }
   ],
   "schema": "ruida-re.conformance.v1",
+  "serial_vectors": [
+    {
+      "assertions": [
+        "encode-request-stream",
+        "decode-request-stream",
+        "decode-reply-stream",
+        "correlate-reply-address",
+        "no-separate-acknowledgement"
+      ],
+      "evidence": {
+        "classification": "hardware-observed",
+        "fixture": {
+          "path": "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json",
+          "sha256": "9a9196e6e3cec15548b80890a5ab5980829e4b00356bf8a9af174f53848b958c"
+        },
+        "source_ids": [
+          "local:hardware-ruida-644xs-usb-serial-v1"
+        ]
+      },
+      "framing": "checksumless-scrambled-stream",
+      "id": "serial.exchange.get-setting-address-5",
+      "magic": 136,
+      "reply": {
+        "context": "reply",
+        "direction": "controller-to-host",
+        "logical_hex": "da0100050000122760",
+        "wire_hex": "d409890d89899b2fe9",
+        "wire_origin": "hardware-observed"
+      },
+      "request": {
+        "context": "request",
+        "direction": "host-to-controller",
+        "logical_hex": "da000005",
+        "wire_hex": "d489890d",
+        "wire_origin": "derived-from-logical"
+      },
+      "separate_acknowledgement": false
+    }
+  ],
   "sources": [
     {
       "id": "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
@@ -349,6 +388,14 @@
       "license": "LGPL-3.0-or-later",
       "revision": "ebe72ea3af3b2ab52d797d8100c635f68722100e",
       "url": "https://github.com/t-oster/LibLaserCut/tree/ebe72ea3af3b2ab52d797d8100c635f68722100e"
+    },
+    {
+      "id": "local:hardware-ruida-644xs-usb-serial-v1",
+      "kind": "local-fixture",
+      "license": null,
+      "local_path": "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json",
+      "revision": "v1",
+      "url": null
     },
     {
       "id": "local:lightburn-2.1.03-fixtures",

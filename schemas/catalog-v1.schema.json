@@ -1078,6 +1078,7 @@
         "conflicting-reports",
         "external-fixture-observed",
         "fixture-observed",
+        "hardware-observed",
         "reported",
         "simulator-only",
         "uncited-hypothesis"
@@ -1087,6 +1088,7 @@
       "enum": [
         "controlled-fixture",
         "disputed",
+        "hardware-observed",
         "partially-controlled",
         "reported",
         "uncited-hypothesis",

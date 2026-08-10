@@ -35,7 +35,7 @@ from .transports import (
 
 ENTRY_POINT = "ruida-controller = ruida_re.controller_cli:main"
 _SAFE_INTERACTION_EVIDENCE = frozenset(
-    ("reported", "controlled-fixture")
+    ("reported", "controlled-fixture", "hardware-observed")
 )
 READ_ONLY_REPLY_REQUESTS = frozenset(
     spec.name

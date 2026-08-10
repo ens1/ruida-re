@@ -4,6 +4,7 @@
     "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
     "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
     "github:t-oster/LibLaserCut@ebe72ea3af3b2ab52d797d8100c635f68722100e",
+    "local:hardware-ruida-644xs-usb-serial-v1",
     "local:lightburn-2.1.03-fixtures"
   ],
   "codecs": [
@@ -3649,8 +3650,7 @@
     },
     {
       "contexts": [
-        "job",
-        "request"
+        "job"
       ],
       "controller_effect": "read-only",
       "fields": [
@@ -3661,7 +3661,7 @@
         }
       ],
       "name": "get_setting",
-      "notes": "Two pinned implementations report a controller-memory read followed by reply data. Hardware capture absent.",
+      "notes": "Two pinned implementations report a controller-memory read followed by reply data. Hardware evidence is scoped to the request-context command.",
       "opcode": "da00",
       "reply_behavior": "data",
       "reply_commands": [
@@ -3682,6 +3682,44 @@
       "shape_sources": [
         "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
         "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "request"
+      ],
+      "controller_effect": "read-only",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "address",
+          "parameters": {}
+        }
+      ],
+      "name": "get_setting",
+      "notes": "One supervised USB serial capture from a controller configured as a Ruida 644XS observed that a DA00 request for address 5 produced a numeric DA01 reply with matching address 5 and value 300000. The stream used magic 0x88 without checksum framing or a separate ACK. This confirms only that exchange on the captured setup, not every address, controller model, or firmware dialect.",
+      "opcode": "da00",
+      "reply_behavior": "data",
+      "reply_commands": [
+        "setting_reply"
+      ],
+      "reply_field_matches": [
+        {
+          "reply_field": "address",
+          "request_field": "address"
+        }
+      ],
+      "semantic_evidence": "hardware-observed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+        "local:hardware-ruida-644xs-usb-serial-v1"
+      ],
+      "shape_evidence": "hardware-observed",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+        "local:hardware-ruida-644xs-usb-serial-v1"
       ]
     },
     {
@@ -3708,7 +3746,7 @@
         }
       ],
       "name": "set_setting",
-      "notes": "Two pinned implementations distinguish this controller-memory write from DA00. Hardware capture absent.",
+      "notes": "Two pinned implementations distinguish this controller-memory write from DA00. The executed mixed-job fixture contains the address-800 form, but no controlled hardware observation isolates its write effect.",
       "opcode": "da01",
       "reply_behavior": "none",
       "reply_commands": [],
@@ -3741,20 +3779,22 @@
         }
       ],
       "name": "setting_reply",
-      "notes": "",
+      "notes": "One supervised USB serial capture from a controller configured as a Ruida 644XS returned address 5 and numeric value 300000 after DA00 address 5. The stream used magic 0x88 without checksum framing or a separate ACK. This confirms only that reply shape on the captured setup.",
       "opcode": "da01",
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "reported",
+      "semantic_evidence": "hardware-observed",
       "semantic_sources": [
         "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
-        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+        "local:hardware-ruida-644xs-usb-serial-v1"
       ],
-      "shape_evidence": "reported",
+      "shape_evidence": "hardware-observed",
       "shape_sources": [
         "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
-        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+        "local:hardware-ruida-644xs-usb-serial-v1"
       ]
     },
     {
@@ -5503,7 +5543,7 @@
       "name": "request"
     },
     {
-      "membership_evidence": "reported-and-simulator-hypotheses",
+      "membership_evidence": "mixed-catalog",
       "name": "reply"
     }
   ],
@@ -5537,6 +5577,14 @@
       "license": "LGPL-3.0-or-later",
       "revision": "ebe72ea3af3b2ab52d797d8100c635f68722100e",
       "url": "https://github.com/t-oster/LibLaserCut/tree/ebe72ea3af3b2ab52d797d8100c635f68722100e"
+    },
+    {
+      "id": "local:hardware-ruida-644xs-usb-serial-v1",
+      "kind": "local-fixture",
+      "license": null,
+      "local_path": "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json",
+      "revision": "v1",
+      "url": null
     },
     {
       "id": "local:lightburn-2.1.03-fixtures",
