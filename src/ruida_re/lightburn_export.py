@@ -70,7 +70,7 @@ tell application "System Events"
         delay 0.75
         keystroke "a" using {{command down}}
         keystroke "{filename}"
-        key code 36
+        click button "Save" of splitter group 1 of window "Save RD file"
     end tell
 end tell
 '''

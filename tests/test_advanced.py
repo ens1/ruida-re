@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import redirect_stdout
+from dataclasses import replace
 import hashlib
 import io
 import json
@@ -11,7 +12,8 @@ import unittest
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from ruida_re.advanced import BUILDERS, generate
+from ruida_re.advanced import BUILDERS, build_mixed_project, generate
+from ruida_re.raster_fixture import CASES as RASTER_CASES
 from ruida_re.program import KnownCommand, decode
 
 
@@ -58,6 +60,7 @@ class AdvancedFixtureTest(unittest.TestCase):
                 "a001-multilayer": "captured",
                 "a002-relative-polyline": "captured",
                 "a003-negative-coordinate": "blocked",
+                "a004-mixed-vector-raster": "captured",
             },
         )
         for item in manifest["cases"]:
@@ -99,6 +102,17 @@ class AdvancedFixtureTest(unittest.TestCase):
         )
         self.assertEqual(layer_count, 1)
 
+        mixed = decode(
+            (directory / "a004-mixed-vector-raster.rd").read_bytes()
+        )
+        mixed_modes = [
+            record.values["value"]
+            for record in mixed.records
+            if isinstance(record, KnownCommand)
+            and record.name == "layer_mode_or_attributes"
+        ]
+        self.assertEqual(mixed_modes, [0, 1])
+
         relative = decode(
             (directory / "a002-relative-polyline.rd").read_bytes()
         )
@@ -126,6 +140,80 @@ class AdvancedFixtureTest(unittest.TestCase):
         self.assertEqual(len(shapes), 2)
         self.assertEqual(shapes[0].get("CutIndex"), "0")
         self.assertEqual(shapes[1].get("CutIndex"), "1")
+
+    def test_mixed_case_is_deterministic_and_has_two_layers(self) -> None:
+        first = build_mixed_project()
+        second = build_mixed_project()
+        self.assertEqual(ET.tostring(first), ET.tostring(second))
+        self.assertEqual(
+            [element.tag for element in first if "CutSetting" in element.tag],
+            ["CutSetting", "CutSetting_Img"],
+        )
+        shapes = first.findall("Shape")
+        self.assertEqual(len(shapes), 2)
+        self.assertEqual(
+            [(shape.get("Type"), shape.get("CutIndex")) for shape in shapes],
+            [("Path", "0"), ("Bitmap", "1")],
+        )
+        self.assertEqual(shapes[0].findtext("XForm"), "1 0 0 1 20 20")
+        self.assertEqual(shapes[0].findtext("VertList"), "V 0 0 V 10 0")
+        self.assertEqual(shapes[1].findtext("XForm"), "1 0 0 1 22 25")
+        self.assertEqual((shapes[1].get("W"), shapes[1].get("H")), ("4", "2"))
+        image_setting = first.find("CutSetting_Img")
+        self.assertIsNotNone(image_setting)
+        self.assertEqual(
+            image_setting.find("ditherMode").get("Value"),
+            "threshold",
+        )
+        self.assertEqual(image_setting.find("bidir").get("Value"), "0")
+        self.assertEqual(image_setting.find("angle").get("Value"), "0")
+
+    def test_mixed_case_uses_controlled_raster_case_values(self) -> None:
+        baseline = next(
+            case
+            for case in RASTER_CASES
+            if case.identifier
+            == "r001-threshold-horizontal-unidirectional"
+        )
+        controlled = replace(
+            baseline,
+            speed_mm_s=73,
+            min_power_percent=31,
+            max_power_percent=62,
+        )
+        project = build_mixed_project(controlled)
+        setting = project.find("CutSetting_Img")
+        self.assertIsNotNone(setting)
+        self.assertEqual(setting.find("speed").get("Value"), "73")
+        self.assertEqual(setting.find("minPower").get("Value"), "31")
+        self.assertEqual(setting.find("maxPower").get("Value"), "62")
+
+    def test_existing_generated_projects_remain_byte_identical(self) -> None:
+        expected = {
+            "a001-multilayer.lbrn2": (
+                "f43aae70b2f92d14ecb1392da6252505036fe6fd198d33814547a11358"
+                "f4a812"
+            ),
+            "a002-relative-polyline.lbrn2": (
+                "19b5567379fc54abffd9c7b9b8680eefbcebbfd80f488880f9ff393511"
+                "197e8d"
+            ),
+            "a003-negative-coordinate.lbrn2": (
+                "a8c359b4e7c6d93c09e08fcdaf09f8eb806e5bd9200250c3f6ee9ae2"
+                "5c139496"
+            ),
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            directory = Path(temporary)
+            with redirect_stdout(io.StringIO()):
+                generate(directory)
+            observed = {
+                name: hashlib.sha256(
+                    (directory / name).read_bytes()
+                ).hexdigest()
+                for name in expected
+            }
+        self.assertEqual(observed, expected)
 
     def test_generation_is_no_clobber_without_force(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

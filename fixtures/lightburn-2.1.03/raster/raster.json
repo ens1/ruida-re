@@ -1,0 +1,704 @@
+{
+  "cases": [
+    {
+      "bitmap": {
+        "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+        "height_mm": 2,
+        "height_pixels": 4,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r001-threshold-horizontal-unidirectional.rd",
+      "export_status": "captured",
+      "files": {
+        "r001-threshold-horizontal-unidirectional.lbrn2": {
+          "sha256": "0c4d5763f858e12c231b214b353a1f6858af1f33fea5b6022e90f0f741238556",
+          "size": 1557,
+          "stage": "generated-input"
+        },
+        "r001-threshold-horizontal-unidirectional.rd": {
+          "sha256": "cfb3c71078be1430206cbfc4eac23f429023942f2b3c4a2100e2c11ae65ff0ea",
+          "size": 526,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r001-threshold-horizontal-unidirectional",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "threshold",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r001-threshold-horizontal-unidirectional.lbrn2",
+      "purpose": "binary scanline runs in one horizontal direction"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+        "height_mm": 2,
+        "height_pixels": 4,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r002-threshold-horizontal-bidirectional.rd",
+      "export_status": "captured",
+      "files": {
+        "r002-threshold-horizontal-bidirectional.lbrn2": {
+          "sha256": "4471da7947de3dd0dd4434d5e04bb3469f2cb02a3569b918d0f6d4f9156eae8e",
+          "size": 1556,
+          "stage": "generated-input"
+        },
+        "r002-threshold-horizontal-bidirectional.rd": {
+          "sha256": "e53ab814ff056025db7870dd70105bb9c6f31e4f3bfe45dea33d43ef3ed3b0db",
+          "size": 526,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r002-threshold-horizontal-bidirectional",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": true,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "threshold",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r002-threshold-horizontal-bidirectional.lbrn2",
+      "purpose": "alternating horizontal scan direction"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+        "height_mm": 2,
+        "height_pixels": 4,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r003-threshold-vertical-unidirectional.rd",
+      "export_status": "captured",
+      "files": {
+        "r003-threshold-vertical-unidirectional.lbrn2": {
+          "sha256": "285aa792491aa1b1b0cded78691dc19a854579b25d6fb5c27f78a85880f7718b",
+          "size": 1556,
+          "stage": "generated-input"
+        },
+        "r003-threshold-vertical-unidirectional.rd": {
+          "sha256": "965db3972e960022f2ad365701f41a4b8597c9aaea00e98c31b608b616ae970b",
+          "size": 516,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r003-threshold-vertical-unidirectional",
+      "layer": {
+        "angle_degrees": 90,
+        "bidirectional": false,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "threshold",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r003-threshold-vertical-unidirectional.lbrn2",
+      "purpose": "vertical scan axis and layer mode"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+        "height_mm": 2,
+        "height_pixels": 4,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r004-threshold-interval-025.rd",
+      "export_status": "captured",
+      "files": {
+        "r004-threshold-interval-025.lbrn2": {
+          "sha256": "5ab51cb9eae1736b766be28e29b0d3a9cefdb872887732a091b60125e2434b80",
+          "size": 1546,
+          "stage": "generated-input"
+        },
+        "r004-threshold-interval-025.rd": {
+          "sha256": "a14e4c8c15796ca51d93d928196d4f5fbd19dd7f760ca2d8c1213120607d9222",
+          "size": 582,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r004-threshold-interval-025",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "dpi": 101.6,
+        "interval_mm": 0.25,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "threshold",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r004-threshold-interval-025.lbrn2",
+      "purpose": "scan interval and resampled motion spacing"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+        "height_mm": 1,
+        "height_pixels": 2,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r005-grayscale-range-10-90.rd",
+      "export_status": "captured",
+      "files": {
+        "r005-grayscale-range-10-90.lbrn2": {
+          "sha256": "33094a88ee6491b825f64b7894fcfbbb37c3dafd84fe274e0ba3672fce51b605",
+          "size": 1545,
+          "stage": "generated-input"
+        },
+        "r005-grayscale-range-10-90.rd": {
+          "sha256": "cd5c90f59c6c375e9eb914515b8855d19f128bf304baf7c83f5b8dbf21a5d996",
+          "size": 538,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r005-grayscale-range-10-90",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 90,
+        "min_power_percent": 10,
+        "mode": "grayscale",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r005-grayscale-range-10-90.lbrn2",
+      "purpose": "grayscale sample-to-power mapping"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+        "height_mm": 1,
+        "height_pixels": 2,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r006-grayscale-range-30-90.rd",
+      "export_status": "captured",
+      "files": {
+        "r006-grayscale-range-30-90.lbrn2": {
+          "sha256": "75ee528eb98ca012bc478e63432edd81345dec7d55bbe52d42adaa525f556ee1",
+          "size": 1545,
+          "stage": "generated-input"
+        },
+        "r006-grayscale-range-30-90.rd": {
+          "sha256": "dbfbf94f7725be34bbb84c4e5e53f8c26a538258186df83c364055ca079a3828",
+          "size": 538,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r006-grayscale-range-30-90",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 90,
+        "min_power_percent": 30,
+        "mode": "grayscale",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r006-grayscale-range-30-90.lbrn2",
+      "purpose": "grayscale minimum-power transfer"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+        "height_mm": 1,
+        "height_pixels": 2,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r007-3d-slice-four-pass.rd",
+      "export_status": "captured",
+      "files": {
+        "r007-3d-slice-four-pass.lbrn2": {
+          "sha256": "f8ef70ce2b4b093b7dadac88bf5c196f0f892550889985d226e2fcc320ef77b8",
+          "size": 1540,
+          "stage": "generated-input"
+        },
+        "r007-3d-slice-four-pass.rd": {
+          "sha256": "cbd27c339e1bc9b5c9ada6d48d2c91b6d06810a7cf6420530ce7eae5fc6439d0",
+          "size": 524,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r007-3d-slice-four-pass",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "3dslice",
+        "num_passes": 4,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r007-3d-slice-four-pass.lbrn2",
+      "purpose": "four-pass depth slicing over the grayscale ramp"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "734cab13ab361690293be5d494d248e63c801443e8565036900ac107943c470e",
+        "height_mm": 2,
+        "height_pixels": 4,
+        "pixels": [
+          [
+            255,
+            0,
+            0,
+            255,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            255,
+            0,
+            0,
+            0,
+            255,
+            0,
+            255
+          ],
+          [
+            0,
+            255,
+            255,
+            0,
+            0,
+            255,
+            255,
+            255
+          ],
+          [
+            255,
+            0,
+            255,
+            255,
+            0,
+            0,
+            0,
+            255
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r008-threshold-vertical-bidirectional.rd",
+      "export_status": "captured",
+      "files": {
+        "r008-threshold-vertical-bidirectional.lbrn2": {
+          "sha256": "99a3d10e671be4a82f4f460fe4cfe5687023cd96611ac9a2987042927921ab53",
+          "size": 1555,
+          "stage": "generated-input"
+        },
+        "r008-threshold-vertical-bidirectional.rd": {
+          "sha256": "58860578c21d1e1f03e0416bf7ec509a1f6d1a8fc1c9bb63b9f351c94d34958e",
+          "size": 514,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r008-threshold-vertical-bidirectional",
+      "layer": {
+        "angle_degrees": 90,
+        "bidirectional": true,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "threshold",
+        "num_passes": 1,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0
+      },
+      "project": "r008-threshold-vertical-bidirectional.lbrn2",
+      "purpose": "alternating vertical scan direction"
+    },
+    {
+      "bitmap": {
+        "embedded_png_sha256": "316ea6a7ab45ece75edd59e7d71d48c5fc243d0418c3e5126a0eeb27f7f03f37",
+        "height_mm": 1,
+        "height_pixels": 2,
+        "pixels": [
+          [
+            255,
+            224,
+            192,
+            160,
+            128,
+            96,
+            64,
+            0
+          ],
+          [
+            128,
+            0,
+            224,
+            64,
+            255,
+            160,
+            96,
+            192
+          ]
+        ],
+        "top_left_mm": [
+          20,
+          20
+        ],
+        "width_mm": 4,
+        "width_pixels": 8
+      },
+      "expected_rd": "r009-3d-slice-four-pass-z-step-05.rd",
+      "export_status": "captured",
+      "files": {
+        "r009-3d-slice-four-pass-z-step-05.lbrn2": {
+          "sha256": "07c528c66da906ffbe56b32df9b5d218e47ba50a00412ae86607738ed6ca1a8e",
+          "size": 1552,
+          "stage": "generated-input"
+        },
+        "r009-3d-slice-four-pass-z-step-05.rd": {
+          "sha256": "cbd27c339e1bc9b5c9ada6d48d2c91b6d06810a7cf6420530ce7eae5fc6439d0",
+          "size": 524,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "r009-3d-slice-four-pass-z-step-05",
+      "layer": {
+        "angle_degrees": 0,
+        "bidirectional": false,
+        "dpi": 50.8,
+        "interval_mm": 0.5,
+        "max_power_percent": 50,
+        "min_power_percent": 50,
+        "mode": "3dslice",
+        "num_passes": 4,
+        "overscan": false,
+        "speed_mm_s": 100,
+        "z_per_pass_mm": 0.5
+      },
+      "project": "r009-3d-slice-four-pass-z-step-05.lbrn2",
+      "purpose": "four-pass depth slicing with 0.5 mm Z steps"
+    }
+  ],
+  "device_profile": {
+    "bed_height_mm": 599.947998046875,
+    "bed_width_mm": 991.1080322265625,
+    "connection": "Serial",
+    "controller": "Ruida",
+    "display_name": "Ruida 644XS",
+    "mirror_x": true,
+    "mirror_y": true
+  },
+  "reference_software": {
+    "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+    "name": "LightBurn",
+    "platform": "macOS",
+    "version": "2.1.03"
+  }
+}

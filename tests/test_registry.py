@@ -103,9 +103,9 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(
             Counter(spec.shape_evidence for spec in job),
             {
-                "uncited-hypothesis": 106,
+                "uncited-hypothesis": 101,
                 "reported": 4,
-                "fixture-observed": 67,
+                "fixture-observed": 72,
                 "external-fixture-observed": 1,
                 "conflicting-reports": 6,
             },

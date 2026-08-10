@@ -671,10 +671,14 @@
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "uncited-hypothesis",
-      "semantic_sources": [],
-      "shape_evidence": "uncited-hypothesis",
-      "shape_sources": []
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
     },
     {
       "contexts": [
@@ -694,10 +698,14 @@
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "uncited-hypothesis",
-      "semantic_sources": [],
-      "shape_evidence": "uncited-hypothesis",
-      "shape_sources": []
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
     },
     {
       "contexts": [
@@ -717,10 +725,14 @@
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "uncited-hypothesis",
-      "semantic_sources": [],
-      "shape_evidence": "uncited-hypothesis",
-      "shape_sources": []
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
     },
     {
       "contexts": [
@@ -1082,15 +1094,19 @@
         }
       ],
       "name": "immediate_power_3",
-      "notes": "",
+      "notes": "Controlled grayscale fixtures emit this immediately after C7 with the same normalized modulation value. Prior implementations call it laser 3, but the physical channel identity is unverified.",
       "opcode": "c2",
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "uncited-hypothesis",
-      "semantic_sources": [],
-      "shape_evidence": "uncited-hypothesis",
-      "shape_sources": []
+      "semantic_evidence": "partially-controlled",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
     },
     {
       "contexts": [
@@ -1926,15 +1942,19 @@
         }
       ],
       "name": "immediate_power_1",
-      "notes": "",
+      "notes": "Controlled grayscale fixtures emit this immediately before C2 with a normalized modulation value independent of layer minimum power.",
       "opcode": "c7",
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "uncited-hypothesis",
-      "semantic_sources": [],
-      "shape_evidence": "uncited-hypothesis",
-      "shape_sources": []
+      "semantic_evidence": "partially-controlled",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
     },
     {
       "contexts": [
@@ -2110,7 +2130,7 @@
         }
       ],
       "name": "layer_control",
-      "notes": "Only air operations 0x12 and 0x13 were varied directly.",
+      "notes": "Controlled leading operations select vector 0, horizontal bidirectional 1, horizontal unidirectional 2, vertical bidirectional 3, and vertical unidirectional 4. Air operations 0x12 and 0x13 were also varied; 0x10 and 0x30 remain unnamed.",
       "opcode": "ca01",
       "reply_behavior": "unknown",
       "reply_commands": [],
@@ -2368,13 +2388,15 @@
         }
       ],
       "name": "layer_mode_or_attributes",
-      "notes": "",
+      "notes": "For the controlled LightBurn 2.1.03 Ruida 644XS profile, values 0 through 4 select vector, horizontal unidirectional, horizontal bidirectional, vertical unidirectional, and vertical bidirectional processing respectively.",
       "opcode": "ca41",
       "reply_behavior": "unknown",
       "reply_commands": [],
       "reply_field_matches": [],
-      "semantic_evidence": "uncited-hypothesis",
-      "semantic_sources": [],
+      "semantic_evidence": "partially-controlled",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
       "shape_evidence": "fixture-observed",
       "shape_sources": [
         "local:lightburn-2.1.03-fixtures"

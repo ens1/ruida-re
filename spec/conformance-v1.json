@@ -1,7 +1,7 @@
 {
   "catalog": {
     "schema": "ruida-re.catalog.v1",
-    "sha256": "34d88246d61fceab463b9ca19afc2769b7c35d4fc9512adf97ce6e16453ca670"
+    "sha256": "dc42e63f25353ff347747f285537ac2c20459abf511850b21c67aa55cf14aeb8"
   },
   "field_vectors": [
     {

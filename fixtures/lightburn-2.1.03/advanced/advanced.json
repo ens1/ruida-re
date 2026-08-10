@@ -52,6 +52,25 @@
       "identifier": "a003-negative-coordinate",
       "project": "a003-negative-coordinate.lbrn2",
       "purpose": "line crossing X zero to establish signed coordinate spelling"
+    },
+    {
+      "expected_rd": "a004-mixed-vector-raster.rd",
+      "export_status": "captured",
+      "files": {
+        "a004-mixed-vector-raster.lbrn2": {
+          "sha256": "472360504693a2d1a3eb6b976ca9ccce3c11ad713faa76f19c9979843d5f7b59",
+          "size": 2212,
+          "stage": "generated-input"
+        },
+        "a004-mixed-vector-raster.rd": {
+          "sha256": "df5db99c8e15e54d9eada30280f6584ab079178c97070cbb1db6d4b2ae76b583",
+          "size": 703,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "a004-mixed-vector-raster",
+      "project": "a004-mixed-vector-raster.lbrn2",
+      "purpose": "one vector layer and one horizontal threshold raster layer"
     }
   ],
   "device_profile": {

@@ -95,6 +95,10 @@ class ResourcesTest(unittest.TestCase):
             project["project"]["scripts"]["ruida-controller"],
             "ruida_re.controller_cli:main",
         )
+        self.assertEqual(
+            project["project"]["scripts"]["ruida-raster-fixture"],
+            "ruida_re.raster_fixture:main",
+        )
         optional = project["project"]["optional-dependencies"]
         self.assertIn("pyserial>=3.5", optional["serial"])
         self.assertIn("jsonschema>=4.23", optional["test"])

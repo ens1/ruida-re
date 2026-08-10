@@ -42,6 +42,7 @@ ruida-spec = "ruida_re.spec_cli:main"
 ruida-verify = "ruida_re.verify:main"
 ruida-lightburn-export = "ruida_re.lightburn_export:main"
 ruida-matrix = "ruida_re.matrix:main"
+ruida-raster-fixture = "ruida_re.raster_fixture:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

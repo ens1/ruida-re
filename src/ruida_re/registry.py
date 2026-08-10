@@ -488,9 +488,13 @@ SPECS = (
 
 LIGHTBURN_OBSERVED = {
     "88",
+    "89",
+    "8a",
+    "8b",
     "a8",
     "aa",
     "ab",
+    "c2",
     "c601",
     "c602",
     "c612",
@@ -503,6 +507,7 @@ LIGHTBURN_OBSERVED = {
     "c642",
     "c650",
     "c651",
+    "c7",
     "c902",
     "c904",
     "ca01",
@@ -579,6 +584,9 @@ PROVISIONAL_NOTES = {
 
 CONTROLLED_SEMANTICS = {
     "88",
+    "89",
+    "8a",
+    "8b",
     "a8",
     "aa",
     "ab",
@@ -609,7 +617,12 @@ CONTROLLED_SEMANTICS = {
 }
 
 
-PARTIALLY_CONTROLLED_SEMANTICS = {"ca01"}
+PARTIALLY_CONTROLLED_SEMANTICS = {
+    "c2",
+    "c7",
+    "ca01",
+    "ca41",
+}
 
 
 DISPUTED_SEMANTICS = {
@@ -633,6 +646,16 @@ SEMANTIC_NOTES = {
     "a000": "Axis identity differs across prior implementations.",
     "c3": "Tentative and encoder tables disagree on the laser index.",
     "c4": "Tentative and encoder tables disagree on the laser index.",
+    "c2": (
+        "Controlled grayscale fixtures emit this immediately after C7 "
+        "with the same normalized modulation value. Prior implementations "
+        "call it laser 3, but the physical channel identity is unverified."
+    ),
+    "c7": (
+        "Controlled grayscale fixtures emit this immediately before C2 "
+        "with a normalized modulation value independent of layer minimum "
+        "power."
+    ),
     "c615": "Timing meaning differs across prior implementations.",
     "c616": "Timing meaning differs across prior implementations.",
     "da00": (
@@ -643,7 +666,18 @@ SEMANTIC_NOTES = {
         "Two pinned implementations distinguish this controller-memory "
         "write from DA00. Hardware capture absent."
     ),
-    "ca01": "Only air operations 0x12 and 0x13 were varied directly.",
+    "ca01": (
+        "Controlled leading operations select vector 0, horizontal "
+        "bidirectional 1, horizontal unidirectional 2, vertical "
+        "bidirectional 3, and vertical unidirectional 4. Air operations "
+        "0x12 and 0x13 were also varied; 0x10 and 0x30 remain unnamed."
+    ),
+    "ca41": (
+        "For the controlled LightBurn 2.1.03 Ruida 644XS profile, values "
+        "0 through 4 select vector, horizontal unidirectional, horizontal "
+        "bidirectional, vertical unidirectional, and vertical "
+        "bidirectional processing respectively."
+    ),
     "e704": "Field interpretation differs across prior implementations.",
     "e708": "Field interpretation differs across prior implementations.",
     "f205": "Field interpretation differs across prior implementations.",

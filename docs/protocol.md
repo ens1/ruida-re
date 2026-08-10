@@ -119,7 +119,7 @@ configured payload limit without inspecting command semantics, and the
 streaming decoder produces the same logical result for every read split. A
 command may cross a packet boundary in either direction.
 
-The LightBurn `E5 05` job checksum is separate. Across all 15 checked-in
+The LightBurn `E5 05` job checksum is separate. Across all 25 checked-in
 exports it equals the sum of every logical job byte except the seven-byte
 `E5 05` frame itself, including the final `D7`. Checksum policy is explicit:
 `preserve` retains the represented value, while `recompute` always derives a
@@ -224,7 +224,7 @@ interpretations remain disputed.
 
 ## Advanced LightBurn evidence
 
-Two additional controlled exports extend the matrix without changing the
+Three additional controlled exports extend the matrix without changing the
 lexical model:
 
 - A two-layer job uses actual RD layers 0 and 1 throughout speed, power,
@@ -235,11 +235,65 @@ lexical model:
   +3 mm horizontal moves. This confirms the signed relative field behavior
   while also demonstrating that an RD stream cannot generally reconstruct
   the unoptimized source segmentation.
+- A mixed vector/raster job emits a complete vector layer followed by a
+  complete horizontal-unidirectional raster layer. The raster layer retains
+  its distinct runtime setup and closes with `E7 00` immediately before the
+  shared `EB` array end.
 
-Both files decode with zero opaque frames, reproduce exactly, and bring the
+All three files decode with zero opaque frames, reproduce exactly, and bring the
 checked LightBurn shape set to 67. The generated absolute-negative project is
 retained, but LightBurn reports that no shape is in bounds and produces no
 machine file; there is no synthetic negative-coordinate fixture.
+
+## Controlled raster evidence
+
+Nine LightBurn 2.1.03 exports use embedded synthetic bitmaps to isolate scan
+strategy, interval, grayscale modulation, and 3D-slice behavior. Every export
+decodes entirely into known frames, has no issues, and reproduces exactly.
+Together they bring the checked LightBurn shape set to 72.
+
+The image layer has one coherent processing-mode mapping for the recorded
+Ruida 644XS profile:
+
+| Planned scan strategy | `CA 41` value | leading `CA 01` operation |
+| --- | ---: | ---: |
+| horizontal, unidirectional | 1 | 2 |
+| horizontal, bidirectional | 2 | 1 |
+| vertical, unidirectional | 3 | 4 |
+| vertical, bidirectional | 4 | 3 |
+
+Vector layers use zero for both fields. Threshold, grayscale, and 3D-slice
+jobs with the same horizontal unidirectional plan all use the same `1`/`2`
+pair. The host therefore owns scan planning; the Ruida layer envelope records
+the resulting axis and direction strategy rather than a source-image mode.
+
+Raster runtime setup differs systematically from the vector setup. It omits
+the two through-power records, places active min/max power before on/off delay,
+and closes raster motion with `E7 00` before the global `EB` array end and
+final `E7 00` block end.
+
+Grayscale motion uses paired `C7` then `C2` records with identical normalized
+power values before each marked span. Changing only layer minimum power from
+10% to 30% leaves all paired modulation bytes unchanged while changing the
+four layer/runtime minimum-power records. The modulation is therefore kept
+separate from layer min/max transfer. The historical physical channel label
+for `C2` remains unverified.
+
+LightBurn selects compact signed relative motion after the first absolute
+position: `8A`/`8B` for blank axial spans, `89` for two-axis travel, and
+`AA`/`AB` for marked axial spans. The 0.25 mm interval fixture changes planned
+spacing and span count; it does not emit `C6 10` or a native pixel payload.
+
+Declared job/layer bounds are derived from emitted motion endpoints and
+rounded half-up to hundredths of a millimetre, while motion retains
+thousandth-millimetre precision. At setting address 800, both values equal the
+nonnegative integer truncation of total marked distance in millimetres: the
+controlled 3.5, 5.5, and 13.5 mm cases emit 3, 5, and 13.
+
+LightBurn expands pass count into ordinary planned motion. For this profile,
+changing a four-pass 3D-slice project's `zPerPass` from 0 to 0.5 mm produces a
+byte-identical `.rd` file. That is evidence that this setting does not encode
+Z motion here, not evidence for any reported Z-axis opcode.
 
 ## Registry coverage
 
@@ -285,10 +339,11 @@ These are research tasks, not parser exceptions:
   emulator synthesizes a CString for `DA 01 05 7F`, while ruida-pa models a
   fixed numeric reply. Both hypotheses conflict and no hardware capture here
   resolves them; unmatched forms remain opaque.
-- Raster, grayscale, and depth-map jobs reported so far use motion plus power
-  changes rather than a proven native pixel payload. Recovering an original
-  source image from an optimized motion stream is not generally reversible.
+- Controlled raster, grayscale, and 3D-slice jobs use planned motion plus
+  power changes rather than a native pixel payload. Recovering an original
+  source image from an optimized motion stream is not generally reversible;
+  native Z motion, arbitrary scan angles, overscan bounds, and other
+  controller profiles remain unresolved.
 
-Additional matrices should cover arrays, multiple lasers, rotary axes, raster
-modes, grayscale, depth maps, real request/reply captures, and complete UDP
-transactions.
+Additional matrices should cover arrays, multiple lasers, rotary and Z axes,
+overscan, real request/reply captures, and complete UDP transactions.

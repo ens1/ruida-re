@@ -9,17 +9,151 @@ This distinction is intentional:
 
 - The host owns geometry editing, path optimization, raster generation, user
   confirmation, scheduling, and application safety policy.
-- `ruida-re` owns command field encoding, semantic registries, unknown-byte
-  preservation, `.rd` wrappers and checksums, scrambling, byte-stream
-  packetization, UDP and USB-serial link strategies, profile-driven UDP
-  handshakes, bounded retries and replies, request/reply decoding, and UDP
-  capture interpretation.
-- The project does not currently provide a generic geometry-to-job compiler,
-  controller discovery, or a TCP bridge.
+- `ruida-re` owns profile-validated planned-job lowering, command field
+  encoding, semantic registries, unknown-byte preservation, `.rd` wrappers and
+  checksums, scrambling, byte-stream packetization, UDP and USB-serial link
+  strategies, profile-driven UDP handshakes, bounded retries and replies,
+  request/reply decoding, and UDP capture interpretation.
+- The project does not provide geometry editing, image processing,
+  rasterization, path planning, controller discovery, or a TCP bridge.
 
 The API is pre-alpha. Lossless translation is extensively tested against the
 checked-in corpus, but semantic and live-controller coverage remain incomplete.
-Pin a package version and preserve unknown records when integrating it.
+The planned-job compiler has exact controlled-fixture coverage, not live
+controller validation. Pin a package version and preserve unknown records when
+integrating it.
+
+## Planned-job compiler
+
+`RuidaJobCompiler` accepts a small, immutable plan that is already ready for
+emission. It produces a complete job `Program`; `CompileResult.encode_rd()`
+then returns the scrambled `.rd` bytes with the profile envelope, derived
+bounds, layer metadata, motion, one recomputed job checksum, and termination
+records. Constructing a plan, compiling it, and encoding its result perform no
+device I/O.
+
+The public plan types are:
+
+- `JobPlan`, an ordered tuple of layers;
+- `LayerPlan`, one vector or raster layer and its final ordered events;
+- `TravelTo`, an absolute non-marking XY move;
+- `MarkTo`, an absolute marking XY move; and
+- `SetModulation`, a normalized raster modulation change before later marked
+  motion.
+
+Canonical plan units are absolute machine-space millimetres for X and Y,
+millimetres per second for speed, and percentages from 0 through 100 for layer
+minimum power, layer maximum power, and raster modulation. Layer indices are
+contiguous from zero. `SetModulation` is distinct from the layer power limits;
+the host owns the mapping from source pixels or depth values to modulation.
+
+A raster `LayerPlan` must state both `scan_axis` and `raster_strategy`. The
+controlled profile accepts the four evidenced combinations:
+
+- horizontal and unidirectional;
+- horizontal and bidirectional;
+- vertical and unidirectional; and
+- vertical and bidirectional.
+
+Every nonzero raster `MarkTo` must lie on the declared axis. Within a
+unidirectional layer, all marked spans must also share one direction; travel
+between rows remains unrestricted. Contradictory plans are rejected before
+encoding.
+
+```python
+from ruida_re import (
+    JobPlan,
+    LayerPlan,
+    MarkTo,
+    RuidaJobCompiler,
+    SetModulation,
+    TravelTo,
+)
+
+layer = LayerPlan(
+    index=0,
+    kind="raster",
+    speed_mm_s=100.0,
+    min_power_percent=10.0,
+    max_power_percent=90.0,
+    scan_axis="horizontal",
+    raster_strategy="unidirectional",
+    air_assist=True,
+    events=(
+        TravelTo(23.5, 20.25),
+        SetModulation(25.0),
+        MarkTo(23.0, 20.25),
+        TravelTo(22.5, 20.25),
+        SetModulation(75.0),
+        MarkTo(22.0, 20.25),
+    ),
+)
+result = RuidaJobCompiler().compile(JobPlan(layers=(layer,)))
+machine_file = result.encode_rd()
+```
+
+The currently controlled LightBurn 2.1.03 Ruida 644XS profile supports planar
+XY vector and raster motion, one laser index, the four scan modes above, and
+air assist. It does not support Z or rotary motion, additional laser heads,
+frequency, pulse width, dwell, or arbitrary-angle raster metadata. An adapter
+must reject any such source operation instead of silently discarding it,
+mapping it to a nearby field, or emitting a partially faithful job.
+
+Pass expansion also belongs to the host. Repeated planar passes can be
+represented by repeated planned motion. A controlled LightBurn four-pass
+3D-slice fixture was byte-identical when `zPerPass` changed from 0 to 0.5 mm,
+so that setting is not treated as evidence for a Ruida Z command. A source
+plan that requires actual Z movement must be rejected by this profile.
+
+### Rayforge boundary
+
+For a Rayforge integration, the adapter belongs after Rayforge has rendered
+and dithered or depth-processed an image, generated scanlines, chosen
+overscan and scan direction, optimized and expanded paths and passes, and
+applied placement and machine transforms. The boundary is:
+
+```text
+Rayforge document/image processing
+    -> ordered machine-space operations
+    -> thin Rayforge-to-JobPlan adapter
+    -> RuidaJobCompiler
+    -> complete .rd bytes
+```
+
+The adapter translates final non-marking motion to `TravelTo`, final marking
+motion to `MarkTo`, and normalized per-span raster power to `SetModulation`.
+It also transfers supported layer speed, power limits, air state, and raster
+axis and strategy. A bitmap, depth map, optimizer setting, or application
+model should not cross this boundary. That keeps generic laser planning in
+Rayforge and controller-specific envelope and byte work in `ruida-re`.
+
+The adapter must be stateful and section-aware. One Rayforge document layer
+can contain several steps with different speed, power, head, air, or process
+kind, so it is not necessarily one `LayerPlan`. Split the ordered stream into
+contiguous Ruida layers whenever one of those controlled regimes changes.
+Convert Rayforge feed rates from millimetres per minute to millimetres per
+second. Map each configured machine head explicitly to the one-based Ruida
+laser index; do not derive an index from display order.
+
+For constant-power scanlines, positive spans become `MarkTo` and exact-zero
+spans become `TravelTo`; use the resolved static output as both layer power
+limits and emit no modulation records. For variable-power scanlines, each
+positive eight-bit sample is already the absolute resolved output: emit
+`SetModulation(100 * sample / 255)` followed by `MarkTo`, and translate zero
+to `TravelTo`. Do not multiply those samples by an earlier step-power value a
+second time. Planar depth passes are ordinary repeated motion; any remaining
+nonzero Z coordinate is unsupported.
+
+This mapping requires explicit resolved step metadata: vector or raster kind,
+speed, static and minimum/maximum power, air state, head, scan axis, scan
+strategy, and layer color. A single scanline cannot always reveal its intended
+strategy, and absolute variable-power samples cannot reconstruct the source
+minimum/maximum settings. If Rayforge's final operation stream has discarded
+one of those values, preserve it upstream in step/section markers or a sidecar
+before calling `ruida-re`. Guessing a default in the adapter is not a supported
+fallback. Mid-path vector power changes, arbitrary-angle raster, frequency,
+pulse width, dwell, extra heads, and actual Z motion must likewise be rejected
+until the selected Ruida profile supports them.
 
 ## Offline codec
 
@@ -70,10 +204,10 @@ fragment = codec.program([move, end], container="logical")
 logical_bytes = codec.encode(fragment)
 ```
 
-That fragment illustrates the record API; it is not presented as a complete,
-safe laser job. A host must supply a valid ordered job program for the target
-controller and operation. Unknown or dialect-specific frames can be retained
-verbatim with `codec.opaque(raw_bytes)`.
+That fragment illustrates the low-level record API; it is not presented as a
+complete, safe laser job. Use the planned-job compiler for supported whole
+jobs. Unknown or dialect-specific frames can be retained verbatim with
+`codec.opaque(raw_bytes)`.
 
 Structured edits should normally use an explicit job-checksum policy:
 
@@ -515,8 +649,10 @@ particular:
 - controller-specific command variants and magic values need more captures;
 - absolute negative five-group spelling and several disputed field layouts
   remain open; signed relative X/Y motion is fixture-backed;
-- raster, grayscale, and depth-map behavior is not yet fully characterized;
-  and
+- controlled horizontal and vertical raster motion, grayscale modulation, and
+  host-expanded 3D-slice motion are fixture-backed for one profile; source
+  image reconstruction, arbitrary-angle raster metadata, and native Z motion
+  remain outside that evidence; and
 - live UDP and serial behavior has injectable test coverage, but not a public
   multi-controller compatibility matrix.
 

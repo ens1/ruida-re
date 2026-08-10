@@ -9,16 +9,22 @@ source expression were not translated into this repository.
 
 - LightBurn 2.1.03 on macOS.
 - User-configured `Ruida 644XS` profile.
-- One baseline, 12 one-variable exports, and two advanced exports checked into
-  `fixtures/lightburn-2.1.03`.
-- The advanced corpus includes a real two-layer file and signed relative X/Y
-  motion. A third generated project crosses negative machine X; LightBurn
-  rejects it as out of bounds, so no `.rd` is claimed for that case.
+- One baseline, 12 one-variable exports, three advanced exports, and nine raster
+  exports checked into `fixtures/lightburn-2.1.03`.
+- The advanced corpus includes a real two-layer file, signed relative X/Y
+  motion, and a mixed vector/raster job. A generated project crosses negative
+  machine X; LightBurn rejects it as out of bounds, so no `.rd` is claimed for
+  that case.
 - Project and machine-file SHA-256 values recorded in adjacent JSON manifests.
 - LightBurn application SHA-256, complete profile dimensions/mirroring, and
   per-file generation stage recorded in those manifests. The baseline project
   is the generated input; matrix projects are the post-LightBurn normalized
   form saved after export.
+- Raster projects embed deterministic synthetic PNGs and vary one scan,
+  power, interval, or pass setting at a time. Their machine files were created
+  with LightBurn's offline **Save RD file** action. The automation invokes no
+  Start, Send, or Run action, and none of these fixture jobs was uploaded or
+  executed on a controller.
 
 These fixtures decide local shape and value questions. Merely seeing an opcode
 establishes its frame shape for this LightBurn dialect, not its mnemonic. That

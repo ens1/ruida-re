@@ -6,11 +6,11 @@ laser application.
 
 The host application owns geometry construction, path planning, rasterization,
 the user interface, and the decision to operate a machine. `ruida-re` owns the
-Ruida-specific boundary: validated command records, lossless `.rd` translation,
-scrambling, packetization, direct UDP and USB-serial adapters, UDP
-acknowledgement handling, request/reply decoding, evidence-labelled catalogs,
-and boundary-preserving UDP capture records. It does not provide a generic
-geometry-to-job compiler or a TCP bridge.
+Ruida-specific boundary: planned-motion compilation, validated command records,
+lossless `.rd` translation, scrambling, packetization, direct UDP and
+USB-serial adapters, UDP acknowledgement handling, request/reply decoding,
+evidence-labelled catalogs, and boundary-preserving UDP capture records. It
+does not provide a geometry engine, rasterizer, path planner, or TCP bridge.
 
 The project separates two different claims:
 
@@ -28,13 +28,14 @@ The project separates two different claims:
    both JSON and the command registry.
 
 The current registries contain 184 host/job shapes, 74 provisional request
-candidates, and 10 reported or simulated reply shapes. Fifteen checked-in
-LightBurn exports exercise 67 unique job shapes; all 15 parse without opaque
+candidates, and 10 reported or simulated reply shapes. Twenty-five checked-in
+LightBurn exports exercise 72 unique job shapes; all 25 parse without opaque
 frames and reproduce byte-for-byte. A temporary LibLaserCut golden file
 exercises 123 frames with the same result. Those results validate the current
 framing model and exact translation, not every mnemonic, request, reply, or
-controller dialect in the broader catalog. This is pre-alpha software, not a
-claim that the protocol is complete.
+controller dialect in the broader catalog. Generated jobs have not been
+validated on a live controller. This is pre-alpha software, not a claim that
+the protocol is complete.
 
 Importing the package, constructing a codec, and translating bytes perform no
 device I/O. The controller API is different: opening with its default UDP
@@ -55,6 +56,65 @@ only the Python standard library. USB serial support is an optional install:
 ```sh
 python3 -m pip install -e '.[serial]'
 ```
+
+## Compile a planned job
+
+`RuidaJobCompiler` lowers an emission-ready, machine-space plan into a complete
+`.rd` file. Compilation is offline: it derives the envelope, bounds, layer
+metadata, motion records, job checksum, and termination records without
+opening or contacting a device.
+
+```python
+from ruida_re import (
+    JobPlan,
+    LayerPlan,
+    MarkTo,
+    RuidaJobCompiler,
+    SetModulation,
+    TravelTo,
+)
+
+plan = JobPlan(
+    layers=(
+        LayerPlan(
+            index=0,
+            kind="raster",
+            speed_mm_s=100.0,
+            min_power_percent=10.0,
+            max_power_percent=90.0,
+            scan_axis="horizontal",
+            raster_strategy="bidirectional",
+            air_assist=True,
+            events=(
+                TravelTo(20.0, 20.0),
+                SetModulation(50.0),
+                MarkTo(30.0, 20.0),
+            ),
+        ),
+    )
+)
+machine_file = RuidaJobCompiler().compile(plan).encode_rd()
+```
+
+Coordinates are absolute machine-space millimetres, speed is millimetres per
+second, and layer power and modulation are percentages from 0 through 100.
+The host must already have rendered images, generated scanlines, selected
+blank and marked spans, optimized paths, applied machine transforms, and
+expanded passes. `TravelTo`, `MarkTo`, and `SetModulation` describe that final
+ordered result; they are not image or geometry primitives. The adapter must
+preserve explicit step regimes such as process kind, speed, power limits, air,
+head, scan axis, and scan strategy. It must split layers when a regime changes
+and reject missing or ambiguous metadata rather than infer controller state.
+
+The controlled LightBurn 2.1.03 Ruida 644XS profile supports planar XY vector
+motion, one laser index, air assist, and raster plans using horizontal or
+vertical axes with unidirectional or bidirectional scanning. Z or rotary
+motion, additional laser heads, frequency, pulse width, dwell, and
+arbitrary-angle raster metadata are not supported. An integration adapter
+must reject those features instead of dropping them or approximating them.
+Passes remain host-expanded. A controlled four-pass fixture with `zPerPass`
+changed from 0 to 0.5 mm produced a byte-identical `.rd`; that is not evidence
+for Z-axis encoding.
 
 ## Embed the codec
 
@@ -311,6 +371,7 @@ Generate fresh baseline and discovery projects under `work/`:
 ruida-fixture generate
 ruida-matrix generate
 ruida-advanced generate
+ruida-raster-fixture generate
 ```
 
 LightBurn 2.1.03 does not expose a supported headless machine-file export. On
@@ -329,13 +390,21 @@ It does not click Start, Send, or Run. Record hashes after export:
 ruida-fixture record
 ruida-matrix record
 ruida-advanced record
+ruida-raster-fixture record
 ```
+
+Raster discovery projects embed tiny synthetic grayscale PNGs and remain
+`pending` until every project has a corresponding LightBurn `.rd` export.
+They cover protocol-facing scan direction, scan axis, interval, variable
+power, and four-pass 3D slicing. They do not implement image processing or
+send data to a controller.
 
 Advanced recording is incremental: it records every available export and
 labels unavailable discovery cases. LightBurn exported the
-multilayer and relative-motion cases. It rejected the negative machine-space
-case because no shape remained inside the configured work area, so that case
-is retained as `blocked` without inventing an `.rd` result.
+multilayer, relative-motion, and mixed vector/raster cases. It rejected the
+negative machine-space case because no shape remained inside the configured
+work area, so that case is retained as `blocked` without inventing an `.rd`
+result.
 
 Generators refuse to overwrite an existing project or manifest unless
 `--force` is explicit. They also accept `--directory`, so an installed command

@@ -16,6 +16,11 @@ from .fixture import (
     build_project,
     project_stage,
 )
+from .raster_fixture import (
+    CASES as RASTER_CASES,
+    RasterCase,
+    build_project as build_raster_project,
+)
 
 
 ADVANCED_DIR = DEFAULT_FIXTURE_ROOT / "advanced"
@@ -98,6 +103,55 @@ def build_negative_project() -> ET.Element:
     return build_project(start_mm=(-1, 20), end_mm=(1, 20))
 
 
+def _default_mixed_raster_case() -> RasterCase:
+    identifier = "r001-threshold-horizontal-unidirectional"
+    return next(
+        case for case in RASTER_CASES if case.identifier == identifier
+    )
+
+
+def build_mixed_project(
+    raster_case: RasterCase | None = None,
+) -> ET.Element:
+    case = raster_case or _default_mixed_raster_case()
+    if (
+        case.dither_mode != "threshold"
+        or case.bidirectional
+        or case.angle_degrees != 0
+    ):
+        raise ValueError(
+            "Mixed fixture raster must be horizontal, unidirectional, "
+            "and thresholded"
+        )
+
+    project = build_project(start_mm=(20, 20), end_mm=(30, 20))
+    raster_project = build_raster_project(case)
+    raster_setting = raster_project.find("CutSetting_Img")
+    raster_shape = raster_project.find("Shape")
+    if raster_setting is None or raster_shape is None:
+        raise ValueError("Raster project structure is incomplete")
+
+    raster_setting = copy.deepcopy(raster_setting)
+    raster_shape = copy.deepcopy(raster_shape)
+    _set_value(raster_setting, "index", 1)
+    _set_value(raster_setting, "name", "C01")
+    raster_shape.set("CutIndex", "1")
+    xform = raster_shape.find("XForm")
+    if xform is None:
+        raise ValueError("Raster shape has no transform")
+    center_x = 20 + case.width_mm / 2
+    center_y = 24 + case.height_mm / 2
+    xform.text = f"1 0 0 1 {center_x:g} {center_y:g}"
+
+    project.insert(1, raster_setting)
+    notes = project.find("Notes")
+    if notes is None:
+        raise ValueError("Baseline project has no notes marker")
+    notes_index = list(project).index(notes)
+    project.insert(notes_index, raster_shape)
+    return project
+
+
 BUILDERS = {
     "a001-multilayer": (
         "two layers with distinct speed, power, color, and air",
@@ -110,6 +164,10 @@ BUILDERS = {
     "a003-negative-coordinate": (
         "line crossing X zero to establish signed coordinate spelling",
         build_negative_project,
+    ),
+    "a004-mixed-vector-raster": (
+        "one vector layer and one horizontal threshold raster layer",
+        build_mixed_project,
     ),
 }
 

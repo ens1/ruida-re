@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LightBurnProject AppVersion="2.1.03" FormatVersion="1" MaterialHeight="0" MirrorX="False" MirrorY="False">
+    <CutSetting_Img type="Image">
+        <index Value="0" />
+        <name Value="C00" />
+        <minPower Value="50" />
+        <maxPower Value="50" />
+        <minPower2 Value="50" />
+        <maxPower2 Value="50" />
+        <speed Value="100" />
+        <enableLaser1 Value="1" />
+        <enableLaser2 Value="0" />
+        <priority Value="0" />
+        <doOutput Value="1" />
+        <runBlower Value="0" />
+        <autoBlower Value="0" />
+        <numPasses Value="4" />
+        <zPerPass Value="0" />
+        <scanOpt Value="individual" />
+        <bidir Value="0" />
+        <crossHatch Value="0" />
+        <overscan Value="0" />
+        <overscanPercent Value="0" />
+        <interval Value="0.5" />
+        <angle Value="0" />
+        <negative Value="0" />
+        <passThrough Value="0" />
+        <ditherMode Value="3dslice" />
+        <cleanupPass Value="0" />
+        <dpi Value="50.8" />
+        <linkDPItoInterval Value="1" />
+    </CutSetting_Img>
+    <Shape Type="Bitmap" CutIndex="0" W="4" H="1" Gamma="1" Contrast="0" Brightness="0" EnhanceAmount="0" EnhanceRadius="0" EnhanceDenoise="0" File="r007-3d-slice-four-pass.png" SourceHash="0" Data="iVBORw0KGgoAAAANSUhEUgAAAAgAAAACCAAAAABA/8IxAAAAG0lEQVR42mP4/+DAgoYEBwaGBoYHDv8XJBwAAFKdCL9EL4asAAAAAElFTkSuQmCC">
+        <XForm>1 0 0 1 22 20.5</XForm>
+    </Shape>
+    <Notes ShowOnLoad="0" Notes="" />
+</LightBurnProject>
