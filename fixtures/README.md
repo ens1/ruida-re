@@ -1,9 +1,11 @@
 # Fixture notice
 
 The projects in this directory were created specifically for protocol research
-and contain only synthetic geometry. The corresponding `.rd` files were
-generated from those projects with the LightBurn version and Ruida profile
-recorded in each JSON manifest.
+and contain only synthetic geometry. Where present, the corresponding `.rd`
+files were generated from those projects with the LightBurn version and Ruida
+profile recorded in each JSON manifest. A manifest can retain a pending or
+blocked project without an `.rd`; no output is synthesized when LightBurn
+refuses an export.
 
 No LightBurn executable, library, template, or third-party project is included.
 LightBurn is a trademark of LightBurn Software LLC and is not affiliated with

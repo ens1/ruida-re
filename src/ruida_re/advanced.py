@@ -114,6 +114,14 @@ BUILDERS = {
 }
 
 
+BLOCKED_EXPORTS = {
+    "a003-negative-coordinate": (
+        "LightBurn 2.1.03 with the recorded Ruida 644XS profile reports "
+        "that no shape is inside the machine work area."
+    ),
+}
+
+
 def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -121,13 +129,25 @@ def _sha256(path: Path) -> str:
 def _manifest(directory: Path) -> dict[str, object]:
     cases = []
     for identifier, (purpose, _) in BUILDERS.items():
+        rd_path = directory / f"{identifier}.rd"
         item: dict[str, object] = {
             "identifier": identifier,
             "purpose": purpose,
             "project": f"{identifier}.lbrn2",
             "expected_rd": f"{identifier}.rd",
+            "export_status": (
+                "captured"
+                if rd_path.is_file()
+                else (
+                    "blocked"
+                    if identifier in BLOCKED_EXPORTS
+                    else "pending"
+                )
+            ),
             "files": {},
         }
+        if identifier in BLOCKED_EXPORTS and not rd_path.is_file():
+            item["export_note"] = BLOCKED_EXPORTS[identifier]
         files = item["files"]
         if not isinstance(files, dict):
             raise AssertionError(files)
@@ -201,10 +221,9 @@ def generate(directory: Path = ADVANCED_DIR, force: bool = False) -> None:
 
 def record(directory: Path = ADVANCED_DIR) -> None:
     for identifier in BUILDERS:
-        for suffix in ("lbrn2", "rd"):
-            path = directory / f"{identifier}.{suffix}"
-            if not path.is_file():
-                raise FileNotFoundError(path)
+        path = directory / f"{identifier}.lbrn2"
+        if not path.is_file():
+            raise FileNotFoundError(path)
     print(_write_manifest(directory, force=True))
 
 

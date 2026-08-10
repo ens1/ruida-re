@@ -2,15 +2,42 @@
 
 from __future__ import annotations
 
+import math
+
 
 MICROMETERS_PER_MM = 1000.0
 POWER_FULL_SCALE = 0x3FFF
 
 
+def _is_integer(value: object) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _require_byte(value: object, label: str) -> int:
+    if not _is_integer(value):
+        raise ValueError(f"{label} must be between 0 and 255")
+    result = int(value)
+    if not 0 <= result <= 0xFF:
+        raise ValueError(f"{label} must be between 0 and 255")
+    return result
+
+
+def _require_finite(value: object, label: str) -> float:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        raise ValueError(f"{label} must be a finite number")
+    try:
+        finite = math.isfinite(value)
+    except OverflowError:
+        finite = False
+    if not finite:
+        raise ValueError(f"{label} must be a finite number")
+    return float(value)
+
+
 def swizzle_byte(value: int, magic: int = 0x88) -> int:
     """Encode one Ruida byte using the controller's byte transform."""
-    if not 0 <= value <= 0xFF or not 0 <= magic <= 0xFF:
-        raise ValueError("Byte values and magic must be between 0 and 255")
+    value = _require_byte(value, "Byte value")
+    magic = _require_byte(magic, "Magic value")
     value ^= (value >> 7) & 0xFF
     value ^= (value << 7) & 0xFF
     value ^= (value >> 7) & 0xFF
@@ -20,8 +47,8 @@ def swizzle_byte(value: int, magic: int = 0x88) -> int:
 
 def unswizzle_byte(value: int, magic: int = 0x88) -> int:
     """Decode one scrambled Ruida byte."""
-    if not 0 <= value <= 0xFF or not 0 <= magic <= 0xFF:
-        raise ValueError("Byte values and magic must be between 0 and 255")
+    value = _require_byte(value, "Byte value")
+    magic = _require_byte(magic, "Magic value")
     value = (value - 1) & 0xFF
     value ^= magic
     value ^= (value >> 7) & 0xFF
@@ -32,17 +59,19 @@ def unswizzle_byte(value: int, magic: int = 0x88) -> int:
 
 def swizzle(data: bytes, magic: int = 0x88) -> bytes:
     """Encode a complete Ruida command stream."""
+    _require_byte(magic, "Magic value")
     return bytes(swizzle_byte(value, magic) for value in data)
 
 
 def unswizzle(data: bytes, magic: int = 0x88) -> bytes:
     """Decode a complete Ruida command stream."""
+    _require_byte(magic, "Magic value")
     return bytes(unswizzle_byte(value, magic) for value in data)
 
 
 def _encode_base128(value: int, width: int) -> bytes:
     limit = 1 << (width * 7)
-    if not 0 <= value < limit:
+    if not _is_integer(value) or not 0 <= value < limit:
         raise ValueError(f"Value must be between 0 and {limit - 1}")
     return bytes(
         (value >> shift) & 0x7F
@@ -70,7 +99,7 @@ def encode_u14(value: int) -> bytes:
 
 def encode_s14(value: int) -> bytes:
     """Encode a signed integer as two seven-bit bytes."""
-    if not -(1 << 13) <= value < (1 << 13):
+    if not _is_integer(value) or not -(1 << 13) <= value < (1 << 13):
         raise ValueError("Value must fit in a signed 14-bit integer")
     return encode_u14(value & 0x3FFF)
 
@@ -95,7 +124,7 @@ def encode_u35(value: int) -> bytes:
 
 def encode_s35(value: int) -> bytes:
     """Encode a signed integer as five seven-bit bytes."""
-    if not -(1 << 34) <= value < (1 << 34):
+    if not _is_integer(value) or not -(1 << 34) <= value < (1 << 34):
         raise ValueError("Value must fit in a signed 35-bit integer")
     return encode_u35(value & ((1 << 35) - 1))
 
@@ -115,7 +144,7 @@ def decode_s35(data: bytes) -> int:
 
 def encode_s32(value: int) -> bytes:
     """Encode a signed 32-bit value in five seven-bit groups."""
-    if not -(1 << 31) <= value < (1 << 31):
+    if not _is_integer(value) or not -(1 << 31) <= value < (1 << 31):
         raise ValueError("Value must fit in a signed 32-bit integer")
     return encode_u35(value & 0xFFFFFFFF)
 
@@ -136,6 +165,7 @@ def decode_s32(data: bytes) -> int:
 
 def encode_power(percent: float) -> bytes:
     """Encode a percentage using the scale emitted by LightBurn."""
+    percent = _require_finite(percent, "Power")
     if not 0.0 <= percent <= 100.0:
         raise ValueError("Power must be between 0 and 100 percent")
     scaled = percent * POWER_FULL_SCALE / 100.0
@@ -150,6 +180,7 @@ def decode_power(data: bytes) -> float:
 
 def encode_mm(value: float) -> bytes:
     """Encode millimeters as a signed 32-bit value in five groups."""
+    value = _require_finite(value, "Millimeter value")
     return encode_s32(round(value * MICROMETERS_PER_MM))
 
 

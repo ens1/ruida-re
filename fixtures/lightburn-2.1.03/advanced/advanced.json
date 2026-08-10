@@ -1,0 +1,72 @@
+{
+  "cases": [
+    {
+      "expected_rd": "a001-multilayer.rd",
+      "export_status": "captured",
+      "files": {
+        "a001-multilayer.lbrn2": {
+          "sha256": "f43aae70b2f92d14ecb1392da6252505036fe6fd198d33814547a11358f4a812",
+          "size": 1514,
+          "stage": "generated-input"
+        },
+        "a001-multilayer.rd": {
+          "sha256": "82bc7da4c4ff63afba7ec9c8246c7a54ba4e17d1edce3904cf07d26a4966229e",
+          "size": 669,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "a001-multilayer",
+      "project": "a001-multilayer.lbrn2",
+      "purpose": "two layers with distinct speed, power, color, and air"
+    },
+    {
+      "expected_rd": "a002-relative-polyline.rd",
+      "export_status": "captured",
+      "files": {
+        "a002-relative-polyline.lbrn2": {
+          "sha256": "47194b610901c1e5b9d44b05211afae1f261fc76d99a6bf2fb9ab30c003289ec",
+          "size": 3154,
+          "stage": "post-lightburn-normalized"
+        },
+        "a002-relative-polyline.rd": {
+          "sha256": "d8fa69f966d5b748a048dd9156ab7d674201ed13c87cf1022eb78dcee383def8",
+          "size": 493,
+          "stage": "lightburn-machine-export"
+        }
+      },
+      "identifier": "a002-relative-polyline",
+      "project": "a002-relative-polyline.lbrn2",
+      "purpose": "short horizontal and vertical segments in every direction"
+    },
+    {
+      "expected_rd": "a003-negative-coordinate.rd",
+      "export_note": "LightBurn 2.1.03 with the recorded Ruida 644XS profile reports that no shape is inside the machine work area.",
+      "export_status": "blocked",
+      "files": {
+        "a003-negative-coordinate.lbrn2": {
+          "sha256": "a8c359b4e7c6d93c09e08fcdaf09f8eb806e5bd9200250c3f6ee9ae25c139496",
+          "size": 858,
+          "stage": "generated-input"
+        }
+      },
+      "identifier": "a003-negative-coordinate",
+      "project": "a003-negative-coordinate.lbrn2",
+      "purpose": "line crossing X zero to establish signed coordinate spelling"
+    }
+  ],
+  "device_profile": {
+    "bed_height_mm": 599.947998046875,
+    "bed_width_mm": 991.1080322265625,
+    "connection": "Serial",
+    "controller": "Ruida",
+    "display_name": "Ruida 644XS",
+    "mirror_x": true,
+    "mirror_y": true
+  },
+  "reference_software": {
+    "app_sha256": "909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a",
+    "name": "LightBurn",
+    "platform": "macOS",
+    "version": "2.1.03"
+  }
+}

@@ -1,0 +1,5528 @@
+{
+  "catalog_sources": [
+    "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+    "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+    "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+    "github:t-oster/LibLaserCut@ebe72ea3af3b2ab52d797d8100c635f68722100e",
+    "local:lightburn-2.1.03-fixtures"
+  ],
+  "codecs": [
+    {
+      "description": "Signed 32-bit micrometers in five base-128 groups, exposed as mm.",
+      "id": "absolute-mm-s32",
+      "json_type": "number",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "wire-divided-by-scale",
+          "encode_operation": "round-json-times-scale",
+          "encoder_range_check": "after-rounding",
+          "kind": "scaled-integer",
+          "rounding": "nearest-ties-to-even",
+          "scale": {
+            "kind": "constant",
+            "meaning": "wire-units-per-json-unit",
+            "value": 1000
+          },
+          "wire_integer_maximum": 2147483647,
+          "wire_integer_minimum": -2147483648
+        },
+        "json": {
+          "arithmetic": "ieee-754-binary64",
+          "canonical_form": "finite-json-number",
+          "finite": true,
+          "kind": "finite-number",
+          "maximum": 2147483.647,
+          "minimum": -2147483.648,
+          "unit": "mm"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "zero-or-negative-sign-extension",
+          "encoder_padding": "zero",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "twos-complement",
+          "value_bits": 32
+        }
+      },
+      "wire_groups": 5
+    },
+    {
+      "description": "Fixed-size seven-bit bytes exposed as lowercase hexadecimal.",
+      "id": "bytes-7bit",
+      "json_type": "string",
+      "parameters": [
+        "size"
+      ],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "lowercase-hex-encode",
+          "encode_operation": "hex-decode",
+          "encoder_range_check": "before-conversion",
+          "kind": "identity-bytes",
+          "rounding": "exact"
+        },
+        "json": {
+          "byte_length": {
+            "kind": "field-parameter",
+            "parameter": "size"
+          },
+          "byte_maximum": 127,
+          "byte_minimum": 0,
+          "canonical_form": "lowercase-even-length-hex",
+          "kind": "lowercase-hex-bytes",
+          "pattern": "^(?:[0-9a-f]{2})*$",
+          "unit": "bytes"
+        },
+        "wire": {
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_count": {
+            "kind": "field-parameter",
+            "parameter": "size"
+          },
+          "group_high_bit": "zero",
+          "group_order": "source-order",
+          "kind": "seven-bit-byte-string"
+        }
+      },
+      "wire_groups": null
+    },
+    {
+      "description": "A 24-bit RGB integer stored as BGR in five base-128 groups.",
+      "id": "color-bgr-u35",
+      "json_type": "integer",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "channel_bits": 8,
+          "decode_operation": "bgr-to-rgb",
+          "encode_operation": "rgb-to-bgr",
+          "encoder_range_check": "before-conversion",
+          "json_channel_order": "RGB",
+          "kind": "channel-reorder",
+          "rounding": "exact",
+          "wire_integer_maximum": 16777215,
+          "wire_integer_minimum": 0,
+          "wire_value_channel_order": "BGR"
+        },
+        "json": {
+          "canonical_form": "json-integer",
+          "kind": "integer",
+          "maximum": 16777215,
+          "minimum": 0,
+          "unit": "rgb-0xrrggbb"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "ignored",
+          "encoder_padding": "zero",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "unsigned",
+          "value_bits": 24
+        }
+      },
+      "wire_groups": 5
+    },
+    {
+      "description": "Null-terminated seven-bit bytes exposed as lowercase hexadecimal.",
+      "id": "cstring-7bit",
+      "json_type": "string",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "read-to-first-zero-then-lowercase-hex-encode",
+          "encode_operation": "hex-decode-then-append-zero",
+          "encoder_range_check": "before-conversion",
+          "kind": "terminated-bytes",
+          "rounding": "exact"
+        },
+        "json": {
+          "byte_length": {
+            "kind": "unbounded"
+          },
+          "byte_maximum": 127,
+          "byte_minimum": 1,
+          "canonical_form": "lowercase-even-length-hex",
+          "kind": "lowercase-hex-bytes",
+          "pattern": "^(?:[0-9a-f]{2})*$",
+          "unit": "bytes"
+        },
+        "wire": {
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_count": {
+            "kind": "payload-bytes-plus-terminator",
+            "terminator_groups": 1
+          },
+          "group_high_bit": "zero",
+          "group_order": "source-order",
+          "kind": "zero-terminated-seven-bit-byte-string",
+          "terminator_hex": "00",
+          "terminator_included_in_json": false
+        }
+      },
+      "wire_groups": null
+    },
+    {
+      "description": "Eight bytes packed into two five-group unsigned integers.",
+      "id": "packed-bytes8-u35",
+      "json_type": "string",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "u32-words-to-lowercase-hex",
+          "encode_operation": "hex-decode-to-big-endian-u32-words",
+          "encoder_range_check": "before-conversion",
+          "kind": "packed-byte-words",
+          "rounding": "exact"
+        },
+        "json": {
+          "byte_length": {
+            "kind": "fixed",
+            "value": 8
+          },
+          "byte_maximum": 255,
+          "byte_minimum": 0,
+          "canonical_form": "lowercase-even-length-hex",
+          "kind": "lowercase-hex-bytes",
+          "pattern": "^(?:[0-9a-f]{2})*$",
+          "unit": "bytes"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "zero-only",
+          "encoder_padding": "zero",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "groups_per_word": 5,
+          "kind": "packed-base128-integers",
+          "representation": "unsigned",
+          "source_byte_order": "big-endian",
+          "source_bytes_per_word": 4,
+          "value_bits": 32,
+          "word_count": 2,
+          "word_order": "source-order"
+        }
+      },
+      "wire_groups": 10
+    },
+    {
+      "description": "A percentage from 0 through 100 scaled over unsigned 14 bits.",
+      "id": "power-u14",
+      "json_type": "number",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "wire-times-json-full-scale-over-wire-full-scale",
+          "encode_operation": "round-json-times-wire-full-scale-over-json-full-scale",
+          "encoder_range_check": "before-conversion",
+          "json_full_scale": 100,
+          "kind": "proportional-integer",
+          "rounding": "nearest-ties-toward-positive-infinity",
+          "wire_full_scale": 16383,
+          "wire_integer_maximum": 16383,
+          "wire_integer_minimum": 0
+        },
+        "json": {
+          "arithmetic": "ieee-754-binary64",
+          "canonical_form": "finite-json-number",
+          "finite": true,
+          "kind": "finite-number",
+          "maximum": 100.0,
+          "minimum": 0.0,
+          "unit": "percent"
+        },
+        "wire": {
+          "carrier_bits": 14,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "unsigned",
+          "value_bits": 14
+        }
+      },
+      "wire_groups": 2
+    },
+    {
+      "description": "Signed 14-bit micrometers in two base-128 groups, exposed as mm.",
+      "id": "relative-mm-s14",
+      "json_type": "number",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "wire-divided-by-scale",
+          "encode_operation": "round-json-times-scale",
+          "encoder_range_check": "after-rounding",
+          "kind": "scaled-integer",
+          "rounding": "nearest-ties-to-even",
+          "scale": {
+            "kind": "constant",
+            "meaning": "wire-units-per-json-unit",
+            "value": 1000
+          },
+          "wire_integer_maximum": 8191,
+          "wire_integer_minimum": -8192
+        },
+        "json": {
+          "arithmetic": "ieee-754-binary64",
+          "canonical_form": "finite-json-number",
+          "finite": true,
+          "kind": "finite-number",
+          "maximum": 8.191,
+          "minimum": -8.192,
+          "unit": "mm"
+        },
+        "wire": {
+          "carrier_bits": 14,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "twos-complement",
+          "value_bits": 14
+        }
+      },
+      "wire_groups": 2
+    },
+    {
+      "description": "A signed 35-bit integer in five base-128 groups.",
+      "id": "s35",
+      "json_type": "integer",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "identity",
+          "encode_operation": "identity",
+          "encoder_range_check": "before-conversion",
+          "kind": "identity-integer",
+          "rounding": "exact",
+          "wire_integer_maximum": 17179869183,
+          "wire_integer_minimum": -17179869184
+        },
+        "json": {
+          "canonical_form": "json-integer",
+          "kind": "integer",
+          "maximum": 17179869183,
+          "minimum": -17179869184,
+          "unit": "unitless"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "twos-complement",
+          "value_bits": 35
+        }
+      },
+      "wire_groups": 5
+    },
+    {
+      "description": "A signed 7-bit integer in one base-128 group.",
+      "id": "s7",
+      "json_type": "integer",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "identity",
+          "encode_operation": "identity",
+          "encoder_range_check": "before-conversion",
+          "kind": "identity-integer",
+          "rounding": "exact",
+          "wire_integer_maximum": 63,
+          "wire_integer_minimum": -64
+        },
+        "json": {
+          "canonical_form": "json-integer",
+          "kind": "integer",
+          "maximum": 63,
+          "minimum": -64,
+          "unit": "unitless"
+        },
+        "wire": {
+          "carrier_bits": 7,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "twos-complement",
+          "value_bits": 7
+        }
+      },
+      "wire_groups": 1
+    },
+    {
+      "description": "A signed 32-bit integer divided by the declared scale.",
+      "id": "scaled-s32",
+      "json_type": "number",
+      "parameters": [
+        "scale"
+      ],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "wire-divided-by-scale",
+          "encode_operation": "round-json-times-scale",
+          "encoder_range_check": "after-rounding",
+          "kind": "scaled-integer",
+          "rounding": "nearest-ties-to-even",
+          "scale": {
+            "kind": "field-parameter",
+            "meaning": "wire-units-per-json-unit",
+            "parameter": "scale"
+          },
+          "wire_integer_maximum": 2147483647,
+          "wire_integer_minimum": -2147483648
+        },
+        "json": {
+          "arithmetic": "ieee-754-binary64",
+          "canonical_form": "finite-json-number",
+          "finite": true,
+          "kind": "finite-number",
+          "unit": "field-defined"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "zero-or-negative-sign-extension",
+          "encoder_padding": "zero",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "twos-complement",
+          "value_bits": 32
+        }
+      },
+      "wire_groups": 5
+    },
+    {
+      "description": "An unsigned 35-bit integer divided by the declared scale.",
+      "id": "scaled-u35",
+      "json_type": "number",
+      "parameters": [
+        "scale"
+      ],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "wire-divided-by-scale",
+          "encode_operation": "round-json-times-scale",
+          "encoder_range_check": "after-rounding",
+          "kind": "scaled-integer",
+          "rounding": "nearest-ties-to-even",
+          "scale": {
+            "kind": "field-parameter",
+            "meaning": "wire-units-per-json-unit",
+            "parameter": "scale"
+          },
+          "wire_integer_maximum": 34359738367,
+          "wire_integer_minimum": 0
+        },
+        "json": {
+          "arithmetic": "ieee-754-binary64",
+          "canonical_form": "finite-json-number",
+          "finite": true,
+          "kind": "finite-number",
+          "unit": "field-defined"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "unsigned",
+          "value_bits": 35
+        }
+      },
+      "wire_groups": 5
+    },
+    {
+      "description": "An unsigned 14-bit integer in two base-128 groups.",
+      "id": "u14",
+      "json_type": "integer",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "identity",
+          "encode_operation": "identity",
+          "encoder_range_check": "before-conversion",
+          "kind": "identity-integer",
+          "rounding": "exact",
+          "wire_integer_maximum": 16383,
+          "wire_integer_minimum": 0
+        },
+        "json": {
+          "canonical_form": "json-integer",
+          "kind": "integer",
+          "maximum": 16383,
+          "minimum": 0,
+          "unit": "unitless"
+        },
+        "wire": {
+          "carrier_bits": 14,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "unsigned",
+          "value_bits": 14
+        }
+      },
+      "wire_groups": 2
+    },
+    {
+      "description": "An unsigned 35-bit integer in five base-128 groups.",
+      "id": "u35",
+      "json_type": "integer",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "identity",
+          "encode_operation": "identity",
+          "encoder_range_check": "before-conversion",
+          "kind": "identity-integer",
+          "rounding": "exact",
+          "wire_integer_maximum": 34359738367,
+          "wire_integer_minimum": 0
+        },
+        "json": {
+          "canonical_form": "json-integer",
+          "kind": "integer",
+          "maximum": 34359738367,
+          "minimum": 0,
+          "unit": "unitless"
+        },
+        "wire": {
+          "carrier_bits": 35,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "unsigned",
+          "value_bits": 35
+        }
+      },
+      "wire_groups": 5
+    },
+    {
+      "description": "An unsigned 7-bit integer in one base-128 group.",
+      "id": "u7",
+      "json_type": "integer",
+      "parameters": [],
+      "semantics": {
+        "conversion": {
+          "decode_operation": "identity",
+          "encode_operation": "identity",
+          "encoder_range_check": "before-conversion",
+          "kind": "identity-integer",
+          "rounding": "exact",
+          "wire_integer_maximum": 127,
+          "wire_integer_minimum": 0
+        },
+        "json": {
+          "canonical_form": "json-integer",
+          "kind": "integer",
+          "maximum": 127,
+          "minimum": 0,
+          "unit": "unitless"
+        },
+        "wire": {
+          "carrier_bits": 7,
+          "decoder_padding": "not-applicable",
+          "encoder_padding": "not-applicable",
+          "group_bits": 7,
+          "group_high_bit": "zero",
+          "group_order": "most-significant-first",
+          "kind": "base128-integer",
+          "representation": "unsigned",
+          "value_bits": 7
+        }
+      },
+      "wire_groups": 1
+    }
+  ],
+  "commands": [
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "position_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_far_x",
+      "notes": "",
+      "opcode": "8000",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "position_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_far_z_reported",
+      "notes": "Axis identity differs across prior implementations.",
+      "opcode": "8008",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_absolute",
+      "notes": "",
+      "opcode": "88",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "relative-mm-s14",
+          "name": "dx_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "relative-mm-s14",
+          "name": "dy_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_relative",
+      "notes": "",
+      "opcode": "89",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "relative-mm-s14",
+          "name": "dx_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_horizontal",
+      "notes": "",
+      "opcode": "8a",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "relative-mm-s14",
+          "name": "dy_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_vertical",
+      "notes": "",
+      "opcode": "8b",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "position_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_far_y_reported",
+      "notes": "Axis identity differs across prior implementations.",
+      "opcode": "a000",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "position_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "move_far_u_alt",
+      "notes": "",
+      "opcode": "a008",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "key",
+          "parameters": {}
+        }
+      ],
+      "name": "interface_key_down",
+      "notes": "",
+      "opcode": "a550",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "key",
+          "parameters": {}
+        }
+      ],
+      "name": "interface_key_up",
+      "notes": "",
+      "opcode": "a551",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "interface_frame",
+      "notes": "",
+      "opcode": "a553",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "key",
+          "parameters": {}
+        }
+      ],
+      "name": "keypress",
+      "notes": "",
+      "opcode": "a750",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "key",
+          "parameters": {}
+        }
+      ],
+      "name": "keyrelease",
+      "notes": "",
+      "opcode": "a751",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keypress_interface_frame",
+      "notes": "",
+      "opcode": "a75300",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "cut_absolute",
+      "notes": "",
+      "opcode": "a8",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "relative-mm-s14",
+          "name": "dx_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "relative-mm-s14",
+          "name": "dy_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "cut_relative",
+      "notes": "",
+      "opcode": "a9",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "relative-mm-s14",
+          "name": "dx_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "cut_horizontal",
+      "notes": "",
+      "opcode": "aa",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "relative-mm-s14",
+          "name": "dy_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "cut_vertical",
+      "notes": "",
+      "opcode": "ab",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "immediate_power_2",
+      "notes": "",
+      "opcode": "c0",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "end_power_2",
+      "notes": "",
+      "opcode": "c1",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "immediate_power_3",
+      "notes": "",
+      "opcode": "c2",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "immediate_power_4",
+      "notes": "Tentative and encoder tables disagree on the laser index.",
+      "opcode": "c3",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "end_power_3",
+      "notes": "Tentative and encoder tables disagree on the laser index.",
+      "opcode": "c4",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "end_power_4",
+      "notes": "",
+      "opcode": "c5",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_1_min_power",
+      "notes": "",
+      "opcode": "c601",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_1_max_power",
+      "notes": "",
+      "opcode": "c602",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_3_min_power",
+      "notes": "",
+      "opcode": "c605",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_3_max_power",
+      "notes": "",
+      "opcode": "c606",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_4_min_power",
+      "notes": "",
+      "opcode": "c607",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_4_max_power",
+      "notes": "",
+      "opcode": "c608",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "time_ms",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "laser_interval",
+      "notes": "",
+      "opcode": "c610",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "time_ms",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "additional_delay",
+      "notes": "",
+      "opcode": "c611",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "time_ms",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "laser_on_delay",
+      "notes": "",
+      "opcode": "c612",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "time_ms",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "laser_off_delay",
+      "notes": "",
+      "opcode": "c613",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "time_ms",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "delay_set_2_on",
+      "notes": "Timing meaning differs across prior implementations.",
+      "opcode": "c615",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "time_ms",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "delay_set_2_off",
+      "notes": "Timing meaning differs across prior implementations.",
+      "opcode": "c616",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_2_min_power",
+      "notes": "",
+      "opcode": "c621",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "laser_2_max_power",
+      "notes": "",
+      "opcode": "c622",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_1_min_power",
+      "notes": "",
+      "opcode": "c631",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_1_max_power",
+      "notes": "",
+      "opcode": "c632",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_3_min_power",
+      "notes": "",
+      "opcode": "c635",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_3_max_power",
+      "notes": "",
+      "opcode": "c636",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_4_min_power",
+      "notes": "",
+      "opcode": "c637",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_4_max_power",
+      "notes": "",
+      "opcode": "c638",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_2_min_power",
+      "notes": "",
+      "opcode": "c641",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_laser_2_max_power",
+      "notes": "",
+      "opcode": "c642",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "through_power_1",
+      "notes": "",
+      "opcode": "c650",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "through_power_2",
+      "notes": "",
+      "opcode": "c651",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "through_power_3",
+      "notes": "",
+      "opcode": "c655",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "through_power_4",
+      "notes": "",
+      "opcode": "c656",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "laser",
+          "parameters": {}
+        },
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "scaled-u35",
+          "name": "frequency_khz",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "layer_frequency",
+      "notes": "The shape occurs in the pinned LibLaserCut golden; laser/layer ordering and frequency units remain disputed.",
+      "opcode": "c660",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "external-fixture-observed",
+      "shape_sources": [
+        "github:t-oster/LibLaserCut@ebe72ea3af3b2ab52d797d8100c635f68722100e"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "immediate_power_1",
+      "notes": "",
+      "opcode": "c7",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "power-u14",
+          "name": "power_percent",
+          "parameters": {}
+        }
+      ],
+      "name": "end_power_1",
+      "notes": "",
+      "opcode": "c8",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "speed_mm_s",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "active_speed",
+      "notes": "",
+      "opcode": "c902",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "speed_mm_s",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "axis_speed",
+      "notes": "",
+      "opcode": "c903",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "scaled-u35",
+          "name": "speed_mm_s",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "layer_speed",
+      "notes": "",
+      "opcode": "c904",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "speed_mm_s",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "forced_engrave_speed",
+      "notes": "",
+      "opcode": "c905",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "scaled-u35",
+          "name": "speed_mm_s",
+          "parameters": {
+            "scale": 1000.0
+          }
+        }
+      ],
+      "name": "axis_move_speed",
+      "notes": "",
+      "opcode": "c906",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "operation",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_control",
+      "notes": "Only air operations 0x12 and 0x13 were varied directly.",
+      "opcode": "ca01",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "partially-controlled",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        }
+      ],
+      "name": "select_layer",
+      "notes": "",
+      "opcode": "ca02",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "enabled",
+          "parameters": {}
+        }
+      ],
+      "name": "enable_laser_tube_start",
+      "notes": "",
+      "opcode": "ca03",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "x_sign_map",
+      "notes": "",
+      "opcode": "ca04",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "color-bgr-u35",
+          "name": "color_rgb",
+          "parameters": {}
+        }
+      ],
+      "name": "default_color",
+      "notes": "",
+      "opcode": "ca05",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "color-bgr-u35",
+          "name": "color_rgb",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_color",
+      "notes": "",
+      "opcode": "ca06",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "external_io",
+      "notes": "",
+      "opcode": "ca10",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "count_minus_one",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_count",
+      "notes": "",
+      "opcode": "ca22",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "identifier",
+          "parameters": {}
+        }
+      ],
+      "name": "u_file_id",
+      "notes": "",
+      "opcode": "ca30",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "zu_map",
+      "notes": "",
+      "opcode": "ca40",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_mode_or_attributes",
+      "notes": "",
+      "opcode": "ca41",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "acknowledge",
+      "notes": "",
+      "opcode": "cc",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "error",
+      "notes": "",
+      "opcode": "cd",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keep_alive",
+      "notes": "",
+      "opcode": "ce",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "request"
+      ],
+      "controller_effect": "read-only",
+      "fields": [],
+      "name": "keep_alive_request",
+      "notes": "Reported as an outbound controller keepalive.",
+      "opcode": "ce",
+      "reply_behavior": "control",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "negative_acknowledge",
+      "notes": "Checksum rejection differs from the CD report.",
+      "opcode": "cf",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "end_of_file",
+      "notes": "",
+      "opcode": "d7",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "process_start",
+      "notes": "",
+      "opcode": "d800",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "process_stop",
+      "notes": "",
+      "opcode": "d801",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "process_pause",
+      "notes": "",
+      "opcode": "d802",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "process_resume",
+      "notes": "",
+      "opcode": "d803",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "reference_absolute",
+      "notes": "",
+      "opcode": "d810",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "reference_anchor",
+      "notes": "",
+      "opcode": "d811",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "reference_current",
+      "notes": "",
+      "opcode": "d812",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_x_left",
+      "notes": "",
+      "opcode": "d820",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_x_right",
+      "notes": "",
+      "opcode": "d821",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_y_top",
+      "notes": "",
+      "opcode": "d822",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_y_bottom",
+      "notes": "",
+      "opcode": "d823",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_z_up",
+      "notes": "",
+      "opcode": "d824",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_z_down",
+      "notes": "",
+      "opcode": "d825",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_u_forward",
+      "notes": "",
+      "opcode": "d826",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_u_backwards",
+      "notes": "",
+      "opcode": "d827",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_xy",
+      "notes": "",
+      "opcode": "d82a",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_z",
+      "notes": "",
+      "opcode": "d82c",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_u",
+      "notes": "",
+      "opcode": "d82d",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "focus_z",
+      "notes": "",
+      "opcode": "d82e",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_x_left",
+      "notes": "",
+      "opcode": "d830",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_x_right",
+      "notes": "",
+      "opcode": "d831",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_y_top",
+      "notes": "",
+      "opcode": "d832",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_y_bottom",
+      "notes": "",
+      "opcode": "d833",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_z_up",
+      "notes": "",
+      "opcode": "d834",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_z_down",
+      "notes": "",
+      "opcode": "d835",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_u_forward",
+      "notes": "",
+      "opcode": "d836",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_u_backwards",
+      "notes": "",
+      "opcode": "d837",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_20",
+      "notes": "",
+      "opcode": "d838",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_a",
+      "notes": "",
+      "opcode": "d839",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_b",
+      "notes": "",
+      "opcode": "d83a",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_c",
+      "notes": "",
+      "opcode": "d83b",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "home_d",
+      "notes": "",
+      "opcode": "d83c",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_18",
+      "notes": "",
+      "opcode": "d840",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_19",
+      "notes": "",
+      "opcode": "d841",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_1a",
+      "notes": "",
+      "opcode": "d842",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_1b",
+      "notes": "",
+      "opcode": "d843",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_1c",
+      "notes": "",
+      "opcode": "d844",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_1d",
+      "notes": "",
+      "opcode": "d845",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_1e",
+      "notes": "",
+      "opcode": "d846",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keydown_unknown_1f",
+      "notes": "",
+      "opcode": "d847",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_08",
+      "notes": "",
+      "opcode": "d848",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_09",
+      "notes": "",
+      "opcode": "d849",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_0a",
+      "notes": "",
+      "opcode": "d84a",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_0b",
+      "notes": "",
+      "opcode": "d84b",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_0c",
+      "notes": "",
+      "opcode": "d84c",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_0d",
+      "notes": "",
+      "opcode": "d84d",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_0e",
+      "notes": "",
+      "opcode": "d84e",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "keyup_unknown_0f",
+      "notes": "",
+      "opcode": "d84f",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "inhale_toggle",
+      "notes": "",
+      "opcode": "d851",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "mode",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "distance_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "direct_move_x",
+      "notes": "",
+      "opcode": "d900",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "mode",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "distance_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "direct_move_y",
+      "notes": "",
+      "opcode": "d901",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "mode",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "distance_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "direct_move_z",
+      "notes": "",
+      "opcode": "d902",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "relation",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "distance_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "direct_move_u",
+      "notes": "",
+      "opcode": "d903",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "relation",
+          "parameters": {}
+        }
+      ],
+      "name": "jog_feed_axis",
+      "notes": "Reported payload length differs across implementations.",
+      "opcode": "d90f",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "relation",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "direct_move_xy",
+      "notes": "",
+      "opcode": "d910",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "relation",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "u_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "direct_move_xyu",
+      "notes": "",
+      "opcode": "d930",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "read-only",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "address",
+          "parameters": {}
+        }
+      ],
+      "name": "get_setting",
+      "notes": "Two pinned implementations report a controller-memory read followed by reply data. Hardware capture absent.",
+      "opcode": "da00",
+      "reply_behavior": "data",
+      "reply_commands": [
+        "setting_reply"
+      ],
+      "reply_field_matches": [
+        {
+          "reply_field": "address",
+          "request_field": "address"
+        }
+      ],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "state-changing",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "address",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "first_value",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "second_value",
+          "parameters": {}
+        }
+      ],
+      "name": "set_setting",
+      "notes": "Two pinned implementations distinguish this controller-memory write from DA00. Hardware capture absent.",
+      "opcode": "da01",
+      "reply_behavior": "none",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "address",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "setting_reply",
+      "notes": "",
+      "opcode": "da01",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "cstring-7bit",
+          "name": "version",
+          "parameters": {}
+        }
+      ],
+      "name": "mainboard_version_reply_hypothesis",
+      "notes": "CString exists only in a simulator; another report expects a fixed numeric reply. Hardware capture absent.",
+      "opcode": "da01057f",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "address",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "first_value",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "second_value",
+          "parameters": {}
+        }
+      ],
+      "name": "setting_pair_reply",
+      "notes": "",
+      "opcode": "da02",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "index",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "get_indexed_value",
+      "notes": "Request and reply layouts differ across implementations.",
+      "opcode": "da05",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "bytes-7bit",
+          "name": "data",
+          "parameters": {
+            "size": 20
+          }
+        }
+      ],
+      "name": "indexed_data_reply",
+      "notes": "Simulator behavior; hardware capture absent.",
+      "opcode": "da05",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "unverified",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "simulator-only",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "bytes-7bit",
+          "name": "data",
+          "parameters": {
+            "size": 20
+          }
+        }
+      ],
+      "name": "card_data_reply",
+      "notes": "Explicitly unverified simulator response.",
+      "opcode": "da30",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "unverified",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "simulator-only",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "reply"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "bytes-7bit",
+          "name": "data",
+          "parameters": {
+            "size": 20
+          }
+        }
+      ],
+      "name": "card_data_reply_alt",
+      "notes": "Explicitly unverified simulator response.",
+      "opcode": "da31",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "unverified",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "simulator-only",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "file_number",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "first_value",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "second_value",
+          "parameters": {}
+        }
+      ],
+      "name": "document_file_upload",
+      "notes": "",
+      "opcode": "e500",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "document_file_end",
+      "notes": "",
+      "opcode": "e502",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u35",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "file_checksum",
+      "notes": "",
+      "opcode": "e505",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "set_absolute",
+      "notes": "",
+      "opcode": "e601",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "block_end",
+      "notes": "",
+      "opcode": "e700",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "cstring-7bit",
+          "name": "filename",
+          "parameters": {}
+        }
+      ],
+      "name": "set_filename",
+      "notes": "",
+      "opcode": "e701",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "job_min_point",
+      "notes": "",
+      "opcode": "e703",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "columns",
+          "parameters": {}
+        },
+        {
+          "codec": "u14",
+          "name": "rows",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_step_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_step_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "job_copies",
+      "notes": "Field interpretation differs across prior implementations.",
+      "opcode": "e704",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "direction",
+          "parameters": {}
+        }
+      ],
+      "name": "array_direction",
+      "notes": "",
+      "opcode": "e705",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u35",
+          "name": "first_value",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "second_value",
+          "parameters": {}
+        }
+      ],
+      "name": "feed_repeat",
+      "notes": "",
+      "opcode": "e706",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "job_max_point",
+      "notes": "",
+      "opcode": "e707",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "columns",
+          "parameters": {}
+        },
+        {
+          "codec": "u14",
+          "name": "rows",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_step_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_step_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "array_copies",
+      "notes": "Field interpretation differs across prior implementations.",
+      "opcode": "e708",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u35",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "feed_length",
+      "notes": "",
+      "opcode": "e709",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u35",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "feed_info",
+      "notes": "",
+      "opcode": "e70a",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "enabled",
+          "parameters": {}
+        }
+      ],
+      "name": "array_mirror_cut",
+      "notes": "",
+      "opcode": "e70b",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "array_min_point",
+      "notes": "",
+      "opcode": "e713",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "array_max_point",
+      "notes": "",
+      "opcode": "e717",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "array_add",
+      "notes": "",
+      "opcode": "e723",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "array_mirror",
+      "notes": "",
+      "opcode": "e724",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u35",
+          "name": "first_value",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "second_value",
+          "parameters": {}
+        }
+      ],
+      "name": "rdworks_extension",
+      "notes": "One or two five-group values are reported.",
+      "opcode": "e732",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "block_size",
+      "notes": "",
+      "opcode": "e735",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "set_file_empty",
+      "notes": "",
+      "opcode": "e736",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "array_even_distance",
+      "notes": "",
+      "opcode": "e737",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "enabled",
+          "parameters": {}
+        }
+      ],
+      "name": "feed_auto_pause",
+      "notes": "",
+      "opcode": "e738",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "union_block_property",
+      "notes": "",
+      "opcode": "e73a",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "document_min_point",
+      "notes": "",
+      "opcode": "e750",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "document_max_point",
+      "notes": "",
+      "opcode": "e751",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_min_point",
+      "notes": "",
+      "opcode": "e752",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_max_point",
+      "notes": "",
+      "opcode": "e753",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "axis",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "offset_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "pen_offset_axis",
+      "notes": "",
+      "opcode": "e754",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "axis",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "offset_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_offset_axis",
+      "notes": "",
+      "opcode": "e755",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "index",
+          "parameters": {}
+        }
+      ],
+      "name": "current_element_index",
+      "notes": "",
+      "opcode": "e760",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_extended_min_point",
+      "notes": "",
+      "opcode": "e761",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "layer",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "layer_extended_max_point",
+      "notes": "",
+      "opcode": "e762",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u35",
+          "name": "first_value",
+          "parameters": {}
+        },
+        {
+          "codec": "u35",
+          "name": "second_value",
+          "parameters": {}
+        }
+      ],
+      "name": "delete_document",
+      "notes": "Five-group and two-group file identifiers are reported.",
+      "opcode": "e800",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "number",
+          "parameters": {}
+        }
+      ],
+      "name": "document_number",
+      "notes": "",
+      "opcode": "e801",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "file_transfer",
+      "notes": "",
+      "opcode": "e802",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "number",
+          "parameters": {}
+        }
+      ],
+      "name": "select_document",
+      "notes": "One-byte and two-byte file identifiers are reported.",
+      "opcode": "e803",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job",
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "calculate_document_time",
+      "notes": "Both empty and two-byte payloads are reported.",
+      "opcode": "e804",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "conflicting-reports",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "array_start",
+      "notes": "",
+      "opcode": "ea",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "array_end",
+      "notes": "",
+      "opcode": "eb",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "reference_point_set",
+      "notes": "",
+      "opcode": "f0",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "index",
+          "parameters": {}
+        }
+      ],
+      "name": "element_max_index",
+      "notes": "",
+      "opcode": "f100",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "index",
+          "parameters": {}
+        }
+      ],
+      "name": "element_name_max_index",
+      "notes": "",
+      "opcode": "f101",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "enabled",
+          "parameters": {}
+        }
+      ],
+      "name": "enable_block_cutting",
+      "notes": "",
+      "opcode": "f102",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "display_offset",
+      "notes": "",
+      "opcode": "f103",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "enabled",
+          "parameters": {}
+        }
+      ],
+      "name": "feed_auto_calculate",
+      "notes": "",
+      "opcode": "f104",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "uncited-hypothesis",
+      "shape_sources": []
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "index",
+          "parameters": {}
+        }
+      ],
+      "name": "element_index",
+      "notes": "",
+      "opcode": "f200",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "index",
+          "parameters": {}
+        }
+      ],
+      "name": "element_name_index",
+      "notes": "",
+      "opcode": "f201",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "packed-bytes8-u35",
+          "name": "name_bytes",
+          "parameters": {}
+        }
+      ],
+      "name": "element_name",
+      "notes": "",
+      "opcode": "f202",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "element_array_min_point",
+      "notes": "",
+      "opcode": "f203",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "element_array_max_point",
+      "notes": "",
+      "opcode": "f204",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "controlled-fixture",
+      "semantic_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u14",
+          "name": "columns",
+          "parameters": {}
+        },
+        {
+          "codec": "u14",
+          "name": "rows",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_step_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_step_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "element_copies",
+      "notes": "Field interpretation differs across prior implementations.",
+      "opcode": "f205",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "disputed",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "absolute-mm-s32",
+          "name": "x_mm",
+          "parameters": {}
+        },
+        {
+          "codec": "absolute-mm-s32",
+          "name": "y_mm",
+          "parameters": {}
+        }
+      ],
+      "name": "element_array_add",
+      "notes": "",
+      "opcode": "f206",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    },
+    {
+      "contexts": [
+        "job"
+      ],
+      "controller_effect": "unknown",
+      "fields": [
+        {
+          "codec": "u7",
+          "name": "value",
+          "parameters": {}
+        }
+      ],
+      "name": "element_array_mirror",
+      "notes": "",
+      "opcode": "f207",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "uncited-hypothesis",
+      "semantic_sources": [],
+      "shape_evidence": "fixture-observed",
+      "shape_sources": [
+        "local:lightburn-2.1.03-fixtures"
+      ]
+    }
+  ],
+  "contexts": [
+    {
+      "membership_evidence": "mixed-catalog",
+      "name": "job"
+    },
+    {
+      "membership_evidence": "provisional-family-selection",
+      "name": "request"
+    },
+    {
+      "membership_evidence": "reported-and-simulator-hypotheses",
+      "name": "reply"
+    }
+  ],
+  "program_schema": "ruida-re.program.v1",
+  "schema": "ruida-re.catalog.v1",
+  "sources": [
+    {
+      "id": "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+      "kind": "permissive-reference",
+      "license": "MIT",
+      "revision": "92efde98004d9948474eb712ef6f5b164f468c4f",
+      "url": "https://github.com/StevenIsaacs/ruida-pa/tree/92efde98004d9948474eb712ef6f5b164f468c4f"
+    },
+    {
+      "id": "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+      "kind": "comparison-oracle",
+      "license": "GPL-2.0-only",
+      "revision": "a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+      "url": "https://github.com/jnweiger/ruida-laser/tree/a1e7b9b93b10d5cac79c875bc3efec46f7397a11"
+    },
+    {
+      "id": "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+      "kind": "permissive-reference",
+      "license": "MIT",
+      "revision": "5f68a45bff41d98e4d3fe8b8267857218099afa8",
+      "url": "https://github.com/meerk40t/meerk40t/tree/5f68a45bff41d98e4d3fe8b8267857218099afa8"
+    },
+    {
+      "id": "github:t-oster/LibLaserCut@ebe72ea3af3b2ab52d797d8100c635f68722100e",
+      "kind": "comparison-oracle",
+      "license": "LGPL-3.0-or-later",
+      "revision": "ebe72ea3af3b2ab52d797d8100c635f68722100e",
+      "url": "https://github.com/t-oster/LibLaserCut/tree/ebe72ea3af3b2ab52d797d8100c635f68722100e"
+    },
+    {
+      "id": "local:lightburn-2.1.03-fixtures",
+      "kind": "local-fixture",
+      "license": null,
+      "local_path": "fixtures/lightburn-2.1.03",
+      "revision": "2.1.03",
+      "url": null
+    }
+  ]
+}

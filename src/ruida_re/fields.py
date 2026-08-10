@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+import math
+from typing import Any, ClassVar
 
 from .codec import (
     decode_mm,
@@ -13,7 +14,6 @@ from .codec import (
     decode_s35,
     decode_u14,
     decode_u35,
-    encode_mm,
     encode_power,
     encode_s14,
     encode_s32,
@@ -21,10 +21,38 @@ from .codec import (
     encode_u14,
     encode_u35,
 )
+from .jsonio import integer as json_integer
+from .jsonio import number as json_number
 
 
 class FieldError(ValueError):
     """Raised when a command field cannot be decoded or encoded."""
+
+
+def _scaled(value: Any, scale: float, name: str) -> int:
+    try:
+        normalized = json_number(value, name)
+    except ValueError as error:
+        raise FieldError(str(error)) from error
+    product = float(normalized) * scale
+    if not math.isfinite(product):
+        raise FieldError(f"{name} is outside the numeric range")
+    return round(product)
+
+
+def _hex_bytes(value: Any, name: str) -> bytes:
+    if not isinstance(value, str):
+        raise FieldError(f"{name} must be a hexadecimal string")
+    if (
+        len(value) % 2
+        or value != value.lower()
+        or any(character not in "0123456789abcdef" for character in value)
+    ):
+        raise FieldError(f"{name} must use canonical lowercase hexadecimal")
+    try:
+        return bytes.fromhex(value)
+    except ValueError as error:
+        raise FieldError(f"Invalid hexadecimal {name}") from error
 
 
 @dataclass(frozen=True)
@@ -32,6 +60,16 @@ class Field:
     """Base class for one named command field."""
 
     name: str
+    json_kind: ClassVar[str] = "string"
+
+    def normalize_json(self, value: Any) -> Any:
+        if self.json_kind == "integer":
+            return json_integer(value, self.name)
+        if self.json_kind == "number":
+            return json_number(value, self.name)
+        if self.json_kind == "string" and isinstance(value, str):
+            return value
+        raise FieldError(f"{self.name} must be a string")
 
     def decode(self, data: bytes, offset: int) -> tuple[Any, int]:
         raise NotImplementedError
@@ -63,12 +101,18 @@ class Field:
 class ByteField(Field):
     """One unsigned seven-bit protocol byte."""
 
+    json_kind: ClassVar[str] = "integer"
+
     def decode(self, data: bytes, offset: int) -> tuple[int, int]:
         raw = self.take_groups(data, offset, 1)
         return raw[0], offset + 1
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, int) or not 0 <= value <= 0x7F:
+        try:
+            value = json_integer(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
+        if not 0 <= value <= 0x7F:
             raise FieldError(f"{self.name} must be an integer from 0 to 127")
         return bytes((value,))
 
@@ -77,6 +121,8 @@ class ByteField(Field):
 class S7Field(Field):
     """Signed integer stored in one seven-bit group."""
 
+    json_kind: ClassVar[str] = "integer"
+
     def decode(self, data: bytes, offset: int) -> tuple[int, int]:
         raw = self.take_groups(data, offset, 1)[0]
         if raw >= 1 << 6:
@@ -84,7 +130,11 @@ class S7Field(Field):
         return raw, offset + 1
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, int) or not -(1 << 6) <= value < (1 << 6):
+        try:
+            value = json_integer(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
+        if not -(1 << 6) <= value < (1 << 6):
             raise FieldError(f"{self.name} must fit a signed 7-bit integer")
         return bytes((value & 0x7F,))
 
@@ -93,13 +143,17 @@ class S7Field(Field):
 class U14Field(Field):
     """Unsigned integer stored in two seven-bit groups."""
 
+    json_kind: ClassVar[str] = "integer"
+
     def decode(self, data: bytes, offset: int) -> tuple[int, int]:
         raw = self.take_groups(data, offset, 2)
         return decode_u14(raw), offset + 2
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, int):
-            raise FieldError(f"{self.name} must be an integer")
+        try:
+            value = json_integer(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
         return encode_u14(value)
 
 
@@ -107,19 +161,25 @@ class U14Field(Field):
 class U35Field(Field):
     """Unsigned integer stored in five seven-bit groups."""
 
+    json_kind: ClassVar[str] = "integer"
+
     def decode(self, data: bytes, offset: int) -> tuple[int, int]:
         raw = self.take_groups(data, offset, 5)
         return decode_u35(raw), offset + 5
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, int):
-            raise FieldError(f"{self.name} must be an integer")
+        try:
+            value = json_integer(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
         return encode_u35(value)
 
 
 @dataclass(frozen=True)
 class AbsoluteMmField(Field):
     """Millimeter value stored as signed 32-bit micrometers."""
+
+    json_kind: ClassVar[str] = "number"
 
     def decode(self, data: bytes, offset: int) -> tuple[float, int]:
         raw = self.take_groups(data, offset, 5)
@@ -129,14 +189,18 @@ class AbsoluteMmField(Field):
             raise FieldError(str(error)) from error
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, (int, float)):
-            raise FieldError(f"{self.name} must be numeric")
-        return encode_mm(float(value))
+        micrometers = _scaled(value, 1000.0, self.name)
+        try:
+            return encode_s32(micrometers)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
 
 
 @dataclass(frozen=True)
 class RelativeMmField(Field):
     """Relative millimeter value stored as signed U14 micrometers."""
+
+    json_kind: ClassVar[str] = "number"
 
     def decode(self, data: bytes, offset: int) -> tuple[float, int]:
         raw = self.take_groups(data, offset, 2)
@@ -144,9 +208,7 @@ class RelativeMmField(Field):
         return value / 1000.0, offset + 2
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, (int, float)):
-            raise FieldError(f"{self.name} must be numeric")
-        micrometers = round(float(value) * 1000.0)
+        micrometers = _scaled(value, 1000.0, self.name)
         try:
             return encode_s14(micrometers)
         except ValueError as error:
@@ -157,13 +219,17 @@ class RelativeMmField(Field):
 class S35Field(Field):
     """Signed integer stored in five seven-bit groups."""
 
+    json_kind: ClassVar[str] = "integer"
+
     def decode(self, data: bytes, offset: int) -> tuple[int, int]:
         raw = self.take_groups(data, offset, 5)
         return decode_s35(raw), offset + 5
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, int):
-            raise FieldError(f"{self.name} must be an integer")
+        try:
+            value = json_integer(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
         return encode_s35(value)
 
 
@@ -171,20 +237,25 @@ class S35Field(Field):
 class PowerField(Field):
     """Power percentage stored as a scaled U14 value."""
 
+    json_kind: ClassVar[str] = "number"
+
     def decode(self, data: bytes, offset: int) -> tuple[float, int]:
         raw = self.take_groups(data, offset, 2)
         return decode_power(raw), offset + 2
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, (int, float)):
-            raise FieldError(f"{self.name} must be numeric")
-        return encode_power(float(value))
+        try:
+            normalized = json_number(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
+        return encode_power(float(normalized))
 
 
 @dataclass(frozen=True)
 class ScaledS32Field(Field):
     """Signed 32-bit value in five groups with a numeric scale."""
 
+    json_kind: ClassVar[str] = "number"
     scale: float = 1000.0
 
     def decode(self, data: bytes, offset: int) -> tuple[float, int]:
@@ -195,15 +266,14 @@ class ScaledS32Field(Field):
             raise FieldError(str(error)) from error
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, (int, float)):
-            raise FieldError(f"{self.name} must be numeric")
-        return encode_s32(round(float(value) * self.scale))
+        return encode_s32(_scaled(value, self.scale, self.name))
 
 
 @dataclass(frozen=True)
 class ScaledU35Field(Field):
     """Unsigned five-group value exposed with a numeric scale."""
 
+    json_kind: ClassVar[str] = "number"
     scale: float = 1000.0
 
     def decode(self, data: bytes, offset: int) -> tuple[float, int]:
@@ -211,9 +281,7 @@ class ScaledU35Field(Field):
         return decode_u35(raw) / self.scale, offset + 5
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, (int, float)):
-            raise FieldError(f"{self.name} must be numeric")
-        scaled = round(float(value) * self.scale)
+        scaled = _scaled(value, self.scale, self.name)
         if scaled < 0:
             raise FieldError(f"{self.name} cannot be negative")
         return encode_u35(scaled)
@@ -223,6 +291,8 @@ class ScaledU35Field(Field):
 class ColorField(Field):
     """RGB color stored as a five-group BGR integer."""
 
+    json_kind: ClassVar[str] = "integer"
+
     def decode(self, data: bytes, offset: int) -> tuple[int, int]:
         raw = decode_u35(self.take_groups(data, offset, 5))
         value = ((raw & 0xFF) << 16) | (raw & 0xFF00)
@@ -230,7 +300,11 @@ class ColorField(Field):
         return value, offset + 5
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, int) or not 0 <= value <= 0xFFFFFF:
+        try:
+            value = json_integer(value, self.name)
+        except ValueError as error:
+            raise FieldError(str(error)) from error
+        if not 0 <= value <= 0xFFFFFF:
             raise FieldError(f"{self.name} must be a 24-bit RGB integer")
         bgr = ((value & 0xFF) << 16) | (value & 0xFF00)
         bgr |= (value >> 16) & 0xFF
@@ -248,12 +322,7 @@ class BytesField(Field):
         return raw.hex(), offset + self.size
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, str):
-            raise FieldError(f"{self.name} must be a hexadecimal string")
-        try:
-            raw = bytes.fromhex(value)
-        except ValueError as error:
-            raise FieldError(f"Invalid hexadecimal {self.name}") from error
+        raw = _hex_bytes(value, self.name)
         if len(raw) != self.size:
             raise FieldError(
                 f"{self.name} must contain exactly {self.size} bytes"
@@ -275,12 +344,7 @@ class CStringField(Field):
         return raw.hex(), end + 1
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, str):
-            raise FieldError(f"{self.name} must be a hexadecimal string")
-        try:
-            raw = bytes.fromhex(value)
-        except ValueError as error:
-            raise FieldError(f"Invalid hexadecimal {self.name}") from error
+        raw = _hex_bytes(value, self.name)
         if b"\x00" in raw:
             raise FieldError(f"{self.name} cannot contain a null byte")
         if any(value & 0x80 for value in raw):
@@ -303,12 +367,7 @@ class PackedBytes8Field(Field):
         return (first + second).hex(), offset + 10
 
     def encode(self, value: Any) -> bytes:
-        if not isinstance(value, str):
-            raise FieldError(f"{self.name} must be a hexadecimal string")
-        try:
-            raw = bytes.fromhex(value)
-        except ValueError as error:
-            raise FieldError(f"Invalid hexadecimal {self.name}") from error
+        raw = _hex_bytes(value, self.name)
         if len(raw) != 8:
             raise FieldError(f"{self.name} must contain exactly eight bytes")
         first = int.from_bytes(raw[:4], "big")

@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from collections import Counter
-import unittest
 from pathlib import Path
+import unittest
 
+from ruida_re.fields import ByteField
 from ruida_re.program import KnownCommand, decode
 from ruida_re.registry import (
     DEFAULT_REGISTRY,
@@ -13,6 +14,7 @@ from ruida_re.registry import (
     REGISTRIES,
     get_registry,
 )
+from ruida_re.specs import CommandRegistry, CommandSpec
 
 from sample_values import sample_value
 
@@ -22,6 +24,47 @@ FIXTURE_ROOT = ROOT / "fixtures/lightburn-2.1.03"
 
 
 class RegistryTest(unittest.TestCase):
+    def test_registry_rejects_invalid_or_duplicate_field_names(self) -> None:
+        for fields in (
+            (ByteField("BadName"),),
+            (ByteField("value"), ByteField("value")),
+        ):
+            with self.subTest(fields=fields):
+                with self.assertRaises(ValueError):
+                    CommandRegistry(
+                        [CommandSpec(b"\x80", "example", fields)]
+                    )
+
+    def test_registry_rejects_an_invalid_command_name(self) -> None:
+        with self.assertRaises(ValueError):
+            CommandRegistry([CommandSpec(b"\x80", "BadName")])
+
+    def test_registry_validates_declarative_reply_contracts(self) -> None:
+        invalid = (
+            CommandSpec(
+                b"\x80",
+                "example",
+                reply_behavior="none",
+                reply_commands=("setting_reply",),
+            ),
+            CommandSpec(
+                b"\x80",
+                "example",
+                reply_behavior="data",
+                reply_commands=("BadName",),
+            ),
+            CommandSpec(
+                b"\x80",
+                "example",
+                reply_behavior="data",
+                reply_field_matches=(("bad-field", "address"),),
+            ),
+        )
+        for spec in invalid:
+            with self.subTest(spec=spec):
+                with self.assertRaises(ValueError):
+                    CommandRegistry([spec])
+
     def test_every_command_spec_is_symmetric(self) -> None:
         for context, registry in REGISTRIES.items():
             for spec in registry:
@@ -60,14 +103,32 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(
             Counter(spec.shape_evidence for spec in job),
             {
-                "uncited-hypothesis": 109,
-                "reported": 3,
-                "fixture-observed": 65,
+                "uncited-hypothesis": 106,
+                "reported": 4,
+                "fixture-observed": 67,
                 "external-fixture-observed": 1,
                 "conflicting-reports": 6,
             },
         )
         self.assertIsNotNone(request.name("keep_alive_request"))
+        read = request.name("get_setting")
+        self.assertIsNotNone(read)
+        self.assertEqual(read.shape_evidence, "reported")
+        self.assertEqual(read.semantic_evidence, "reported")
+        self.assertEqual(read.controller_effect, "read-only")
+        self.assertEqual(read.reply_behavior, "data")
+        self.assertEqual(read.reply_commands, ("setting_reply",))
+        self.assertEqual(
+            read.reply_field_matches,
+            (("address", "address"),),
+        )
+        self.assertEqual(len(read.shape_sources), 2)
+        self.assertEqual(len(read.semantic_sources), 2)
+        write = request.name("set_setting")
+        self.assertEqual(write.controller_effect, "state-changing")
+        self.assertEqual(write.reply_behavior, "none")
+        self.assertEqual(write.reply_commands, ())
+        self.assertEqual(write.reply_field_matches, ())
         self.assertIsNone(reply.name("document_name_reply"))
         hypothesis = reply.name("mainboard_version_reply_hypothesis")
         self.assertIsNotNone(hypothesis)

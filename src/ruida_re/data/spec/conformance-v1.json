@@ -1,0 +1,448 @@
+{
+  "catalog": {
+    "schema": "ruida-re.catalog.v1",
+    "sha256": "34d88246d61fceab463b9ca19afc2769b7c35d4fc9512adf97ce6e16453ca670"
+  },
+  "field_vectors": [
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "absolute-mm-s32",
+      "decode_json_value": 20.0,
+      "encode_json_value": 20.0,
+      "evidence": {
+        "classification": "controlled-fixture",
+        "fixture": {
+          "path": "fixtures/lightburn-2.1.03/vector/v001-single-line.rd",
+          "sha256": "32117307511f5017b70e3039099d665b8758c7d24850284de5f0039e826b3819"
+        },
+        "source_ids": [
+          "local:lightburn-2.1.03-fixtures"
+        ]
+      },
+      "id": "field.absolute-mm-s32.fixture-20mm",
+      "parameters": {},
+      "wire_hex": "0000011c20"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "absolute-mm-s32",
+      "decode_json_value": -1.0,
+      "encode_json_value": -1.0,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.absolute-mm-s32.negative-1mm",
+      "parameters": {},
+      "wire_hex": "0f7f7f7818"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "bytes-7bit",
+      "decode_json_value": "00017f",
+      "encode_json_value": "00017f",
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.bytes-7bit.boundaries",
+      "parameters": {
+        "size": 3
+      },
+      "wire_hex": "00017f"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "color-bgr-u35",
+      "decode_json_value": 1193046,
+      "encode_json_value": 1193046,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.color-bgr-u35.channel-order",
+      "parameters": {},
+      "wire_hex": "0002586812"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "cstring-7bit",
+      "decode_json_value": "5275696461",
+      "encode_json_value": "5275696461",
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.cstring-7bit.ruida",
+      "parameters": {},
+      "wire_hex": "527569646100"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "packed-bytes8-u35",
+      "decode_json_value": "554e4e414d454420",
+      "encode_json_value": "554e4e414d454420",
+      "evidence": {
+        "classification": "controlled-fixture",
+        "fixture": {
+          "path": "fixtures/lightburn-2.1.03/vector/v001-single-line.rd",
+          "sha256": "32117307511f5017b70e3039099d665b8758c7d24850284de5f0039e826b3819"
+        },
+        "source_ids": [
+          "local:lightburn-2.1.03-fixtures"
+        ]
+      },
+      "id": "field.packed-bytes8-u35.fixture-element-name",
+      "parameters": {},
+      "wire_hex": "052a391c41046a150820"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "power-u14",
+      "decode_json_value": 50.003051944088384,
+      "encode_json_value": 50.0,
+      "evidence": {
+        "classification": "controlled-fixture",
+        "fixture": {
+          "path": "fixtures/lightburn-2.1.03/matrix/m003-power-050.rd",
+          "sha256": "8252279673ec3997537ef113e8ff8569c76414298be99623170be29f5bdab723"
+        },
+        "source_ids": [
+          "local:lightburn-2.1.03-fixtures"
+        ]
+      },
+      "id": "field.power-u14.fixture-50-percent",
+      "parameters": {},
+      "wire_hex": "4000"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "relative-mm-s14",
+      "decode_json_value": -3.0,
+      "encode_json_value": -3.0,
+      "evidence": {
+        "classification": "controlled-fixture",
+        "fixture": {
+          "path": "fixtures/lightburn-2.1.03/advanced/a002-relative-polyline.rd",
+          "sha256": "d8fa69f966d5b748a048dd9156ab7d674201ed13c87cf1022eb78dcee383def8"
+        },
+        "source_ids": [
+          "local:lightburn-2.1.03-fixtures"
+        ]
+      },
+      "id": "field.relative-mm-s14.fixture-negative-3mm",
+      "parameters": {},
+      "wire_hex": "6848"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "s35",
+      "decode_json_value": -1,
+      "encode_json_value": -1,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.s35.negative-one",
+      "parameters": {},
+      "wire_hex": "7f7f7f7f7f"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "s7",
+      "decode_json_value": -1,
+      "encode_json_value": -1,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.s7.negative-one",
+      "parameters": {},
+      "wire_hex": "7f"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "scaled-s32",
+      "decode_json_value": -12.34,
+      "encode_json_value": -12.34,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.scaled-s32.negative",
+      "parameters": {
+        "scale": 100.0
+      },
+      "wire_hex": "0f7f7f762e"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "scaled-u35",
+      "decode_json_value": 10.0,
+      "encode_json_value": 10.0,
+      "evidence": {
+        "classification": "controlled-fixture",
+        "fixture": {
+          "path": "fixtures/lightburn-2.1.03/vector/v001-single-line.rd",
+          "sha256": "32117307511f5017b70e3039099d665b8758c7d24850284de5f0039e826b3819"
+        },
+        "source_ids": [
+          "local:lightburn-2.1.03-fixtures"
+        ]
+      },
+      "id": "field.scaled-u35.fixture-speed",
+      "parameters": {
+        "scale": 1000.0
+      },
+      "wire_hex": "0000004e10"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "u14",
+      "decode_json_value": 16383,
+      "encode_json_value": 16383,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.u14.maximum",
+      "parameters": {},
+      "wire_hex": "7f7f"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "u35",
+      "decode_json_value": 34359738367,
+      "encode_json_value": 34359738367,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.u35.maximum",
+      "parameters": {},
+      "wire_hex": "7f7f7f7f7f"
+    },
+    {
+      "assertions": [
+        "encode",
+        "decode"
+      ],
+      "canonical": true,
+      "codec": "u7",
+      "decode_json_value": 127,
+      "encode_json_value": 127,
+      "evidence": {
+        "classification": "codec-contract",
+        "source_ids": []
+      },
+      "id": "field.u7.maximum",
+      "parameters": {},
+      "wire_hex": "7f"
+    }
+  ],
+  "job_checksum_vectors": [
+    {
+      "algorithm": "sum-logical-bytes-without-e505-frame",
+      "assertions": [
+        "calculate-checksum",
+        "encode-command"
+      ],
+      "checksum_integer": 21493,
+      "encoded_checksum_command_hex": "e5050000012775",
+      "evidence": {
+        "classification": "controlled-fixture",
+        "fixture": {
+          "path": "fixtures/lightburn-2.1.03/vector/v001-single-line.rd",
+          "sha256": "32117307511f5017b70e3039099d665b8758c7d24850284de5f0039e826b3819"
+        },
+        "source_ids": [
+          "local:lightburn-2.1.03-fixtures"
+        ]
+      },
+      "id": "job-checksum.lightburn-single-line",
+      "logical_without_checksum_hex": "d810e601f0f10200d800e70600000000000000000000e73800e7030000011c200000011c20e7070000016a300000011c20e7500000011c200000011c20e7510000016a300000011c20e7040001000100000000000000000000e70500c904000000004e10c631000c66c63200194dc641000c66c64200194dca06000000000000ca410000e752000000011c200000011c20e753000000016a300000011c20e761000000011c200000011c20e762000000016a300000011c20ca2200e754000000000000e754010000000000e755000000000000e755010000000000f10300000000000000000000f10000f10100f20000f20100f202052a391c41046a150820f2030000011c200000011c20f2040000016a300000011c20f205000100010000004e100000000000f20600000000000000000000f20700ea00e76000e7130000011c200000011c20e7170000016a300000011c20e7230000011c200000011c20e72400e7370000016a300000011c20e708000100010000004e100000000000ca0100ca0200ca0130ca0110ca0112c9020000004e10c6120000000000c6130000000000c6500001c6510001c6010c66c602194dc6210c66c622194dca0301880000011c200000011c20a80000016a300000011c20ebe700da010620000000000a000000000ad7",
+      "logical_without_checksum_sha256": "b7471715ab9e210482e37d1c33c4def7ce375027224f20d32239bba4fd881dfb"
+    }
+  ],
+  "schema": "ruida-re.conformance.v1",
+  "sources": [
+    {
+      "id": "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+      "kind": "permissive-reference",
+      "license": "MIT",
+      "revision": "92efde98004d9948474eb712ef6f5b164f468c4f",
+      "url": "https://github.com/StevenIsaacs/ruida-pa/tree/92efde98004d9948474eb712ef6f5b164f468c4f"
+    },
+    {
+      "id": "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+      "kind": "comparison-oracle",
+      "license": "GPL-2.0-only",
+      "revision": "a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
+      "url": "https://github.com/jnweiger/ruida-laser/tree/a1e7b9b93b10d5cac79c875bc3efec46f7397a11"
+    },
+    {
+      "id": "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+      "kind": "permissive-reference",
+      "license": "MIT",
+      "revision": "5f68a45bff41d98e4d3fe8b8267857218099afa8",
+      "url": "https://github.com/meerk40t/meerk40t/tree/5f68a45bff41d98e4d3fe8b8267857218099afa8"
+    },
+    {
+      "id": "github:t-oster/LibLaserCut@ebe72ea3af3b2ab52d797d8100c635f68722100e",
+      "kind": "comparison-oracle",
+      "license": "LGPL-3.0-or-later",
+      "revision": "ebe72ea3af3b2ab52d797d8100c635f68722100e",
+      "url": "https://github.com/t-oster/LibLaserCut/tree/ebe72ea3af3b2ab52d797d8100c635f68722100e"
+    },
+    {
+      "id": "local:lightburn-2.1.03-fixtures",
+      "kind": "local-fixture",
+      "license": null,
+      "local_path": "fixtures/lightburn-2.1.03",
+      "revision": "2.1.03",
+      "url": null
+    }
+  ],
+  "swizzle_vectors": [
+    {
+      "assertions": [
+        "swizzle",
+        "unswizzle"
+      ],
+      "evidence": {
+        "classification": "pinned-reference-agreement",
+        "source_ids": [
+          "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+          "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+        ]
+      },
+      "id": "swizzle.default-magic.all-byte-values",
+      "logical_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
+      "magic": 136,
+      "scrambled_hex": "89098b0b8d0d8f0f810183038505870799199b1b9d1d9f1f9111931395159717a929ab2bad2daf2fa121a323a525a727b939bb3bbd3dbf3fb131b333b535b737c949cb4bcd4dcf4fc141c343c545c747d959db5bdd5ddf5fd151d353d555d757e969eb6bed6def6fe161e363e565e767f979fb7bfd7dff7ff171f373f575f7778a0a8c0c8e0e901082028404860688089a1a9c1c9e1ea0209212941496169818aa2aac2cae2eb030a222a424a626a828ba3abc3cbe3ec040b232b434b636b838ca4acc4cce4ed050c242c444c646c848da5adc5cde5ee060d252d454d656d858ea6aec6cee6ef070e262e464e666e868fa7afc7cfe7e0080f272f474f676f878"
+    }
+  ],
+  "udp_vectors": [
+    {
+      "assertions": [
+        "encode-datagram",
+        "decode-datagram"
+      ],
+      "checksum_hex": "0060",
+      "context": "job",
+      "datagram_hex": "006060",
+      "direction": "host-to-controller",
+      "evidence": {
+        "classification": "pinned-reference-agreement",
+        "source_ids": [
+          "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+          "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+        ]
+      },
+      "framing": "big-endian-u16-checksum-prefix",
+      "id": "udp.job.end-of-file",
+      "logical_hex": "d7",
+      "magic": 136,
+      "scrambled_hex": "60"
+    },
+    {
+      "assertions": [
+        "encode-datagram",
+        "decode-datagram"
+      ],
+      "checksum_hex": null,
+      "context": "reply",
+      "datagram_hex": "c6",
+      "direction": "controller-to-host",
+      "evidence": {
+        "classification": "pinned-reference",
+        "source_ids": [
+          "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f"
+        ]
+      },
+      "framing": "checksumless-scrambled-payload",
+      "id": "udp.reply.acknowledge-checksumless",
+      "logical_hex": "cc",
+      "magic": 136,
+      "scrambled_hex": "c6"
+    },
+    {
+      "assertions": [
+        "encode-datagram",
+        "decode-datagram"
+      ],
+      "checksum_hex": "01ef",
+      "context": "request",
+      "datagram_hex": "01efd4898909",
+      "direction": "host-to-controller",
+      "evidence": {
+        "classification": "pinned-reference-agreement",
+        "source_ids": [
+          "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+          "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+        ]
+      },
+      "framing": "big-endian-u16-checksum-prefix",
+      "id": "udp.request.get-setting-address-1",
+      "logical_hex": "da000001",
+      "magic": 136,
+      "scrambled_hex": "d4898909"
+    }
+  ]
+}

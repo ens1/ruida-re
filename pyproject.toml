@@ -5,21 +5,35 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ruida-re"
 version = "0.1.0"
-description = "Fixture-driven Ruida protocol reverse engineering"
+description = "Embeddable Ruida protocol codec and controller backend"
 readme = "README.md"
 requires-python = ">=3.11"
+authors = [{ name = "Tyler Long" }]
 license = "MIT"
 license-files = ["LICENSE"]
 keywords = ["laser", "reverse-engineering", "ruida"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Software Development :: Libraries",
+    "Typing :: Typed",
 ]
+
+[project.urls]
+Repository = "https://github.com/ens1/ruida-re"
+Issues = "https://github.com/ens1/ruida-re/issues"
+
+[project.optional-dependencies]
+serial = ["pyserial>=3.5"]
+test = ["jsonschema>=4.23"]
 
 [project.scripts]
 ruida-advanced = "ruida_re.advanced:main"
+ruida-catalog = "ruida_re.catalog:main"
+ruida-conformance = "ruida_re.conformance:main"
+ruida-controller = "ruida_re.controller_cli:main"
 ruida-decode = "ruida_re.decode_cli:main"
 ruida-diff = "ruida_re.diff:main"
 ruida-encode = "ruida_re.encode_cli:main"
@@ -34,3 +48,10 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+ruida_re = [
+    "data/schemas/*.json",
+    "data/spec/*.json",
+    "py.typed",
+]

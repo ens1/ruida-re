@@ -40,12 +40,21 @@ def unframe(packet: bytes) -> bytes:
     return payload
 
 
+def payload_chunks(
+    data: bytes,
+    limit: int = DEFAULT_MTU,
+) -> Iterator[bytes]:
+    """Split bytes at transport boundaries without inspecting commands."""
+    if limit <= 0:
+        raise ValueError("Chunk limit must be positive")
+    for offset in range(0, len(data), limit):
+        yield data[offset : offset + limit]
+
+
 def frame_chunks(data: bytes, mtu: int = DEFAULT_MTU) -> Iterator[bytes]:
     """Frame outbound chunks of an already-scrambled payload."""
-    if mtu <= 0:
-        raise ValueError("MTU must be positive")
-    for offset in range(0, len(data), mtu):
-        yield frame(data[offset : offset + mtu])
+    for chunk in payload_chunks(data, mtu):
+        yield frame(chunk)
 
 
 def encode_packet(logical_payload: bytes, magic: int = 0x88) -> bytes:

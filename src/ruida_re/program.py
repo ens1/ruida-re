@@ -4,19 +4,58 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass, field
+from decimal import Decimal
 from pathlib import Path
 from typing import Any, TypeAlias
 
 from .codec import swizzle, unswizzle
 from .fields import FieldError
+from .jsonio import integer as json_integer
+from .jsonio import loads as load_json
+from .jsonio import number as json_number
 from .registry import get_registry
-from .specs import CommandRegistry
+from .specs import CommandRegistry, NAME_PATTERN
 from .syntax import is_command_start, logical_frames
 from .transport import decode_datagram, encode_datagram
 
 
 SCHEMA = "ruida-re.program.v1"
 CONTAINERS = ("rd", "udp", "logical")
+SHAPE_EVIDENCE = {
+    "conflicting-reports",
+    "external-fixture-observed",
+    "fixture-observed",
+    "reported",
+    "simulator-only",
+    "uncited-hypothesis",
+}
+SEMANTIC_EVIDENCE = {
+    "controlled-fixture",
+    "disputed",
+    "partially-controlled",
+    "reported",
+    "uncited-hypothesis",
+    "unverified",
+}
+
+
+def _hex_bytes(value: Any, label: str) -> bytes:
+    if not isinstance(value, str):
+        raise ValueError(f"{label} must be a hexadecimal string")
+    if (
+        len(value) % 2
+        or value != value.lower()
+        or any(character not in "0123456789abcdef" for character in value)
+    ):
+        raise ValueError(f"{label} must use canonical lowercase hexadecimal")
+    try:
+        return bytes.fromhex(value)
+    except ValueError as error:
+        raise ValueError(f"{label} must be hexadecimal") from error
+
+
+def _offset(value: Any) -> int:
+    return json_integer(value, "Record offset", minimum=0)
 
 
 @dataclass
@@ -30,19 +69,91 @@ class KnownCommand:
     raw: str | None = None
     shape_evidence: str = "reported"
     semantic_evidence: str = "reported"
+    _raw_fallback_values: dict[str, Any] | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
 
     def encode(self, registry: CommandRegistry) -> bytes:
-        opcode = bytes.fromhex(self.opcode)
+        self.offset = _offset(self.offset)
+        opcode = _hex_bytes(self.opcode, "Command opcode")
+        if (
+            not opcode
+            or not is_command_start(opcode[0])
+            or any(is_command_start(value) for value in opcode[1:])
+        ):
+            raise ValueError("Command opcode does not follow frame grammar")
+        if (
+            not isinstance(self.name, str)
+            or not NAME_PATTERN.fullmatch(self.name)
+        ):
+            raise ValueError("Command name must be a stable snake-case name")
+        if not isinstance(self.values, dict):
+            raise ValueError("Command values must be a mapping")
+        for name in self.values:
+            if not isinstance(name, str):
+                raise ValueError("Command field names must be strings")
+        if self.shape_evidence not in SHAPE_EVIDENCE:
+            raise ValueError(
+                f"Unknown shape evidence: {self.shape_evidence!r}"
+            )
+        if self.semantic_evidence not in SEMANTIC_EVIDENCE:
+            raise ValueError(
+                f"Unknown semantic evidence: {self.semantic_evidence!r}"
+            )
         spec = registry.name(self.name)
         if spec is None:
-            raise ValueError(f"Unknown structured command: {self.name}")
+            normalized_values: dict[str, Any] = {}
+            for name, value in self.values.items():
+                if isinstance(value, str):
+                    normalized_values[name] = value
+                elif isinstance(value, bool) or not isinstance(
+                    value,
+                    (int, float, Decimal),
+                ):
+                    raise ValueError(
+                        "Command values must be JSON numbers or strings"
+                    )
+                else:
+                    normalized_values[name] = json_number(
+                        value,
+                        f"Command field {name}",
+                    )
+            self.values = normalized_values
+            if self.raw is None:
+                raise ValueError(
+                    f"Unknown structured command without raw bytes: "
+                    f"{self.name}"
+                )
+            raw = _hex_bytes(self.raw, "Command raw value")
+            if not raw or raw[: len(opcode)] != opcode:
+                raise ValueError(
+                    f"Unknown command {self.name} raw bytes do not "
+                    "match its opcode"
+                )
+            if any(is_command_start(value) for value in raw[1:]):
+                raise ValueError(
+                    f"Unknown command {self.name} raw bytes contain "
+                    "another frame"
+                )
+            if self._raw_fallback_values is None:
+                self._raw_fallback_values = dict(self.values)
+            elif self.values != self._raw_fallback_values:
+                raise ValueError(
+                    f"Cannot edit unknown command {self.name} without "
+                    "a registry specification"
+                )
+            return raw
+        self.values = spec.normalize_values(self.values)
         if opcode != spec.opcode:
             raise ValueError(
                 f"Command {self.name} uses opcode {spec.opcode.hex()}, "
                 f"not {self.opcode}"
             )
+        encoded = spec.encode(self.values)
         if self.raw is not None:
-            raw = bytes.fromhex(self.raw)
+            raw = _hex_bytes(self.raw, "Command raw value")
             try:
                 original, end = spec.decode(raw, 0)
             except (FieldError, ValueError):
@@ -50,7 +161,7 @@ class KnownCommand:
                 end = -1
             if end == len(raw) and original == self.values:
                 return raw
-        return spec.encode(self.values)
+        return encoded
 
     def to_dict(self) -> dict[str, Any]:
         result: dict[str, Any] = {
@@ -76,7 +187,8 @@ class RawSpan:
 
     def encode(self, registry: CommandRegistry) -> bytes:
         del registry
-        return bytes.fromhex(self.raw)
+        self.offset = _offset(self.offset)
+        return _hex_bytes(self.raw, "Raw record")
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -157,23 +269,70 @@ class Program:
     records: list[Record] = field(default_factory=list)
     issues: list[str] = field(default_factory=list)
     source_checksum_basis: int | None = None
+    _registry: CommandRegistry | None = field(
+        default=None,
+        repr=False,
+        compare=False,
+    )
+
+    def _validate_metadata(self) -> bytes:
+        self.magic = json_integer(
+            self.magic,
+            "Magic value",
+            minimum=0,
+            maximum=0xFF,
+        )
+        if self.context not in ("job", "request", "reply"):
+            raise ValueError(f"Unknown protocol context: {self.context}")
+        if self.container not in CONTAINERS:
+            raise ValueError(f"Unknown container: {self.container}")
+        header = _hex_bytes(self.header, "Program header")
+        if header and (
+            len(header) != 10 or not header.startswith(b"RDWORKV")
+        ):
+            raise ValueError(
+                "Program header must be a ten-byte RDWORKV wrapper"
+            )
+        if self.container != "rd" and header:
+            raise ValueError(
+                f"The {self.container} container cannot have an RDWORKV "
+                "header"
+            )
+        if not isinstance(self.records, list):
+            raise ValueError("Program records must be a list")
+        if not all(
+            isinstance(record, (KnownCommand, RawSpan))
+            for record in self.records
+        ):
+            raise ValueError("Program contains an unknown record type")
+        if not isinstance(self.issues, list) or not all(
+            isinstance(issue, str) for issue in self.issues
+        ):
+            raise ValueError("Program issues must be a list of strings")
+        if self.source_checksum_basis is not None:
+            self.source_checksum_basis = json_integer(
+                self.source_checksum_basis,
+                "Source checksum basis",
+                minimum=0,
+            )
+        return header
+
+    def validate(self, registry: CommandRegistry | None = None) -> None:
+        """Validate metadata and every structured record."""
+        self._validate_metadata()
+        if registry is None:
+            registry = self._registry or get_registry(self.context)
+        for record in self.records:
+            record.encode(registry)
 
     def encode(
         self,
         registry: CommandRegistry | None = None,
         checksum_policy: str = "preserve",
     ) -> bytes:
-        if not 0 <= self.magic <= 0xFF:
-            raise ValueError("Magic value must fit in one byte")
+        header = self._validate_metadata()
         if registry is None:
-            registry = get_registry(self.context)
-        header = bytes.fromhex(self.header)
-        if self.container not in CONTAINERS:
-            raise ValueError(f"Unknown container: {self.container}")
-        if self.container != "rd" and header:
-            raise ValueError(
-                f"The {self.container} container cannot have an RDWORKV header"
-            )
+            registry = self._registry or get_registry(self.context)
         parts = [record.encode(registry) for record in self.records]
         if checksum_policy not in ("preserve", "recompute"):
             raise ValueError(
@@ -215,7 +374,11 @@ class Program:
         scrambled = swizzle(stream, self.magic)
         return header + scrambled
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(
+        self,
+        registry: CommandRegistry | None = None,
+    ) -> dict[str, Any]:
+        self.validate(registry)
         return {
             "schema": SCHEMA,
             "magic": self.magic,
@@ -227,58 +390,115 @@ class Program:
             "source_checksum_basis": self.source_checksum_basis,
         }
 
-    def to_json(self, indent: int | None = 2) -> str:
-        return json.dumps(self.to_dict(), indent=indent) + "\n"
+    def to_json(
+        self,
+        indent: int | None = 2,
+        *,
+        registry: CommandRegistry | None = None,
+    ) -> str:
+        return json.dumps(
+            self.to_dict(registry),
+            allow_nan=False,
+            indent=indent,
+        ) + "\n"
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Program:
+    def from_dict(
+        cls,
+        data: dict[str, Any],
+        registry: CommandRegistry | None = None,
+    ) -> Program:
+        if not isinstance(data, dict):
+            raise ValueError("The program document must be a JSON object")
         if data.get("schema") != SCHEMA:
             raise ValueError(f"Unsupported schema: {data.get('schema')!r}")
+        required = {
+            "schema",
+            "magic",
+            "context",
+            "container",
+            "header",
+            "records",
+            "issues",
+            "source_checksum_basis",
+        }
+        actual = set(data)
+        if actual != required:
+            raise ValueError(
+                "Program document fields do not match: "
+                f"missing={sorted(required - actual)}, "
+                f"extra={sorted(actual - required)}"
+            )
+        items = data["records"]
+        if not isinstance(items, list):
+            raise ValueError("Program records must be a list")
         records: list[Record] = []
-        for item in data.get("records", []):
+        for item in items:
+            if not isinstance(item, dict):
+                raise ValueError("Each program record must be an object")
             if item.get("kind") == "command":
+                expected = {
+                    "kind",
+                    "offset",
+                    "opcode",
+                    "name",
+                    "values",
+                    "shape_evidence",
+                    "semantic_evidence",
+                }
+                if "raw" in item:
+                    expected.add("raw")
+                if set(item) != expected:
+                    raise ValueError(
+                        f"Command record fields do not match: {item!r}"
+                    )
                 records.append(
                     KnownCommand(
-                        offset=item.get("offset", 0),
+                        offset=item["offset"],
                         opcode=item["opcode"],
                         name=item["name"],
                         values=item["values"],
                         raw=item.get("raw"),
-                        shape_evidence=item.get(
-                            "shape_evidence",
-                            "reported",
-                        ),
-                        semantic_evidence=item.get(
-                            "semantic_evidence",
-                            "reported",
-                        ),
+                        shape_evidence=item["shape_evidence"],
+                        semantic_evidence=item["semantic_evidence"],
                     )
                 )
             elif item.get("kind") == "raw":
+                if set(item) != {"kind", "offset", "raw"}:
+                    raise ValueError(
+                        f"Raw record fields do not match: {item!r}"
+                    )
                 records.append(
                     RawSpan(
-                        offset=item.get("offset", 0),
+                        offset=item["offset"],
                         raw=item["raw"],
                     )
                 )
             else:
                 raise ValueError(f"Unknown record kind: {item.get('kind')!r}")
-        return cls(
-            magic=data.get("magic", 0x88),
-            context=data.get("context", "job"),
-            container=data.get("container", "rd"),
-            header=data.get("header", ""),
+        program = cls(
+            magic=data["magic"],
+            context=data["context"],
+            container=data["container"],
+            header=data["header"],
             records=records,
-            issues=list(data.get("issues", [])),
-            source_checksum_basis=data.get("source_checksum_basis"),
+            issues=data["issues"],
+            source_checksum_basis=data["source_checksum_basis"],
+            _registry=registry,
         )
+        program.validate(registry)
+        return program
 
     @classmethod
-    def from_json(cls, value: str) -> Program:
-        data = json.loads(value)
+    def from_json(
+        cls,
+        value: str,
+        registry: CommandRegistry | None = None,
+    ) -> Program:
+        data = load_json(value)
         if not isinstance(data, dict):
             raise ValueError("The program document must be a JSON object")
-        return cls.from_dict(data)
+        return cls.from_dict(data, registry)
 
 
 def split_wrapper(raw_data: bytes) -> tuple[bytes, bytes]:
@@ -295,7 +515,11 @@ def decode(
     container: str = "rd",
 ) -> Program:
     """Decode a Ruida file without discarding any input byte."""
-    if not 0 <= magic <= 0xFF:
+    if (
+        not isinstance(magic, int)
+        or isinstance(magic, bool)
+        or not 0 <= magic <= 0xFF
+    ):
         raise ValueError("Magic value must fit in one byte")
     if registry is None:
         registry = get_registry(context)
@@ -334,6 +558,7 @@ def decode(
         records=records,
         issues=issues,
         source_checksum_basis=checksum_basis,
+        _registry=registry,
     )
 
 

@@ -1,8 +1,16 @@
 # ruida-re
 
-`ruida-re` is a standalone Ruida protocol encoder, decoder, and research
-harness. It is intentionally independent of Rayforge and of any particular
+`ruida-re` is a standalone, embeddable Ruida backend and protocol research
+project. It is intentionally independent of Rayforge and of any particular
 laser application.
+
+The host application owns geometry construction, path planning, rasterization,
+the user interface, and the decision to operate a machine. `ruida-re` owns the
+Ruida-specific boundary: validated command records, lossless `.rd` translation,
+scrambling, packetization, direct UDP and USB-serial adapters, UDP
+acknowledgement handling, request/reply decoding, evidence-labelled catalogs,
+and boundary-preserving UDP capture records. It does not provide a generic
+geometry-to-job compiler or a TCP bridge.
 
 The project separates two different claims:
 
@@ -20,14 +28,18 @@ The project separates two different claims:
    both JSON and the command registry.
 
 The current registries contain 184 host/job shapes, 74 provisional request
-candidates, and 10 reported or simulated reply shapes. Thirteen checked-in
-LightBurn exports exercise 65 unique job shapes; all 13 parse without opaque
+candidates, and 10 reported or simulated reply shapes. Fifteen checked-in
+LightBurn exports exercise 67 unique job shapes; all 15 parse without opaque
 frames and reproduce byte-for-byte. A temporary LibLaserCut golden file
 exercises 123 frames with the same result. Those results validate the current
-framing model and exact translation, not every mnemonic or direction in the
-broader catalog.
+framing model and exact translation, not every mnemonic, request, reply, or
+controller dialect in the broader catalog. This is pre-alpha software, not a
+claim that the protocol is complete.
 
-This repository never connects to a controller or starts a laser job.
+Importing the package, constructing a codec, and translating bytes perform no
+device I/O. The controller API is different: opening with its default UDP
+probe sends a keep-alive request, and job methods transmit executable machine
+data. Controller access is always an explicit application action.
 
 ## Install
 
@@ -37,7 +49,123 @@ From a checkout:
 python3 -m pip install -e .
 ```
 
-Python 3.11 or newer is required. The runtime has no third-party dependencies.
+Python 3.11 or newer is required. The core codec and direct UDP runtime use
+only the Python standard library. USB serial support is an optional install:
+
+```sh
+python3 -m pip install -e '.[serial]'
+```
+
+## Embed the codec
+
+Decode and reproduce an `.rd` file without contacting a controller:
+
+```python
+from pathlib import Path
+
+from ruida_re import RuidaCodec
+
+codec = RuidaCodec(context="job")
+source = Path("input.rd").read_bytes()
+program = codec.decode(source, container="rd")
+assert codec.encode(program) == source
+```
+
+Applications can construct validated records by stable command name while the
+codec owns their Ruida byte representation:
+
+```python
+move = codec.command("move_absolute", x_mm=20.0, y_mm=20.0)
+end = codec.command("end_of_file")
+logical = codec.encode_commands([move, end], container="logical")
+```
+
+For controller access, use `ControllerClient` with either `UdpTransport` or
+`SerialTransport`. The following code opens the socket without an implicit
+probe, then explicitly transmits one Ruida keep-alive packet. It does not send
+a job:
+
+```python
+from ruida_re import ControllerClient, UdpTransport
+
+transport = UdpTransport("CONTROLLER_IP")
+client = ControllerClient(transport)
+client.open(probe=False)
+try:
+    receipt = client.keep_alive()
+finally:
+    client.close()
+```
+
+**Machine safety:** controller calls can move axes, change outputs, or start
+work depending on the records sent and controller state. Use an idle machine,
+known-safe material and power state, physical supervision, and the machine's
+normal interlocks. Never use an unreviewed decoded or generated job as a live
+test vector.
+
+`ControllerClient` is synchronous and serializes whole exchanges. Queue calls
+from a worker when a UI must remain responsive, and never interleave direct
+transport reads or writes with client operations. An uncertain delivery or
+reply timeout faults the session and in-place recovery is refused. Because
+the protocol has no transaction identifier, even reopening the same endpoint
+cannot prove that every delayed response is gone. Close the session and start
+a new one only after the application has established link and controller
+quiescence, while treating residual correlation risk explicitly. See the
+[integration guide](docs/integration.md) for link profiles, bounded reply
+policies, custom transports, request flow, and diagnostics.
+
+## Controller command line
+
+The installed `ruida-controller` command provides a noninteractive, JSON
+operation surface. Select exactly one direct link. A UDP probe sends a Ruida
+keep-alive and waits for a controller acknowledgement:
+
+```sh
+ruida-controller probe --udp 192.0.2.10
+```
+
+The safe `request` surface is derived from catalog interaction metadata and
+exposes only evidence-backed, read-only commands known to produce reply data.
+The command must also declare its accepted reply name and correlation fields.
+Currently that set contains `get_setting`:
+
+```sh
+ruida-controller request get_setting \
+  --udp 192.0.2.10 --values '{"address":5}' \
+  --max-chunks 1 --max-bytes 64 --expected-chunks 1
+```
+
+Every CLI request requires an explicit completion rule. UDP can use an
+expected datagram count or byte count. Serial must use `--expected-bytes` and
+cannot use read-chunk counts, because operating-system stream reads are not
+protocol boundaries.
+
+Sending a job can move the machine and produce laser output. It requires both
+an unmistakable execution acknowledgement and an explicit checksum policy:
+
+```sh
+ruida-controller send-job reviewed-job.rd --udp 192.0.2.10 \
+  --confirm-machine-execution --checksum recompute
+```
+
+The command decodes and validates the `.rd` file before opening a transport.
+Decode issues stop execution unless `--allow-decode-issues` is explicit.
+USB serial uses `--serial DEVICE` instead of `--udp HOST`.
+
+UDP transcripts require an explicit local endpoint and are atomic,
+no-clobber files unless `--force` is supplied:
+
+```sh
+ruida-controller probe --udp 192.0.2.10 \
+  --local-host 192.0.2.20 --transcript probe.json
+```
+
+Success writes one JSON object to standard output. Failures write JSON to
+standard error; an interrupted operation exits `130`. A nonzero status alone
+never proves that a machine operation did not complete: inspect
+`operation_completed`, `delivery_certainty`, and any partial `receipt` before
+deciding whether a retry is safe. Serial transcript output is refused because
+serial reads are stream chunks, not UDP datagrams.
 
 ## Translate
 
@@ -104,6 +232,31 @@ ruida-spec --context request
 ruida-spec --context reply
 ```
 
+Generate the versioned, language-neutral command catalog:
+
+```sh
+ruida-catalog --output catalog.json
+ruida-conformance --output conformance.json
+```
+
+The structural Program envelope, catalog, conformance vectors, and UDP
+transcript formats have JSON Schemas under `schemas/`; the transcript schema
+is self-contained. The generated catalog snapshot under `spec/` supplies
+normative command and field validation. Its companion vectors exercise every
+primitive field codec, byte scrambling, job checksum construction, and
+direction-aware UDP framing. Applications can read the same versioned
+artifacts without repository paths:
+
+```python
+from ruida_re import CATALOG_V1, CONFORMANCE_V1, read_artifact_json
+
+catalog = read_artifact_json(CATALOG_V1)
+vectors = read_artifact_json(CONFORMANCE_V1)
+```
+
+See the [conformance guide](docs/conformance.md) for the language-neutral test
+contract.
+
 Compare two exports after unscrambling them:
 
 ```sh
@@ -119,24 +272,32 @@ ruida-verify input.rd --expected-sha256 DIGEST --require-structured
 ## Test
 
 ```sh
+python3 -m pip install -e '.[test]'
 PYTHONPATH=src:tests python3 -m unittest discover -s tests -v
 ```
 
 The suite covers byte scrambling, numeric boundaries, signed coordinate
 forms, synthetic encode/decode symmetry for every registered schema, every
 split point of every registered shape, semantic-frame isolation, arbitrary
-binary and JSON round trips, packet framing, checksum updates, and real
-LightBurn output.
+binary and JSON round trips, packet framing, checksum updates, versioned
+catalog and transcript data, injectable UDP and serial adapters, controller
+session state, and real LightBurn output. The automated suite does not contact
+hardware.
 
 The LibLaserCut comparison can be repeated without checking its LGPL fixture
 into this repository:
 
 ```sh
-curl -L \
-  https://raw.githubusercontent.com/t-oster/LibLaserCut/ebe72ea3af3b2ab52d797d8100c635f68722100e/test-output/de.thomas_oster.liblasercut.drivers.Ruida.out \
+liblasercut_root='https://raw.githubusercontent.com/t-oster/LibLaserCut'
+liblasercut_commit='ebe72ea3af3b2ab52d797d8100c635f68722100e'
+liblasercut_fixture='test-output/'\
+'de.thomas_oster.liblasercut.drivers.Ruida.out'
+liblasercut_sha='5842a78ecb9abd195db502551b95de4d4'
+liblasercut_sha="${liblasercut_sha}10cebe16cf2212fbad8d7bcf32a0500"
+curl -L "$liblasercut_root/$liblasercut_commit/$liblasercut_fixture" \
   -o /tmp/liblasercut-ruida.out
 ruida-verify /tmp/liblasercut-ruida.out \
-  --expected-sha256 5842a78ecb9abd195db502551b95de4d410cebe16cf2212fbad8d7bcf32a0500 \
+  --expected-sha256 "$liblasercut_sha" \
   --require-structured
 ```
 
@@ -169,6 +330,12 @@ ruida-fixture record
 ruida-matrix record
 ruida-advanced record
 ```
+
+Advanced recording is incremental: it records every available export and
+labels unavailable discovery cases. LightBurn exported the
+multilayer and relative-motion cases. It rejected the negative machine-space
+case because no shape remained inside the configured work area, so that case
+is retained as `blocked` without inventing an `.rd` result.
 
 Generators refuse to overwrite an existing project or manifest unless
 `--force` is explicit. They also accept `--directory`, so an installed command

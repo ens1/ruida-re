@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install -e .
+      - run: python -m pip install -e ".[test]"
       - run: python -m unittest discover -s tests -v
 
   distribution:
@@ -28,3 +28,25 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install build
       - run: python -m build
+      - run: python -m venv /tmp/ruida-wheel
+      - run: /tmp/ruida-wheel/bin/python -m pip install dist/*.whl
+      - name: Verify installed generated artifacts
+        run: |
+          /tmp/ruida-wheel/bin/ruida-catalog \
+            --check spec/catalog-v1.json
+          /tmp/ruida-wheel/bin/ruida-conformance \
+            --check spec/conformance-v1.json
+      - name: Verify installed controller CLI help
+        run: |
+          /tmp/ruida-wheel/bin/ruida-controller --help
+          /tmp/ruida-wheel/bin/ruida-controller probe --help
+          /tmp/ruida-wheel/bin/ruida-controller request --help
+          /tmp/ruida-wheel/bin/ruida-controller send-job --help
+      - name: Verify installed integration artifacts
+        run: |
+          /tmp/ruida-wheel/bin/python - <<'PY'
+          from ruida_re.resources import ARTIFACTS, read_artifact_json
+
+          for name in ARTIFACTS:
+              assert read_artifact_json(name)
+          PY

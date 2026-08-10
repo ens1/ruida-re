@@ -1,0 +1,1101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ruida-re:schema:catalog:v1",
+  "title": "ruida-re command catalog v1",
+  "description": "Language-neutral Ruida command and field catalog.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "program_schema",
+    "catalog_sources",
+    "sources",
+    "codecs",
+    "contexts",
+    "commands"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ruida-re.catalog.v1"
+    },
+    "program_schema": {
+      "const": "ruida-re.program.v1"
+    },
+    "catalog_sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "codecs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/codec"
+      }
+    },
+    "contexts": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/context"
+      }
+    },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/command"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "url",
+        "revision",
+        "license"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "comparison-oracle",
+            "local-fixture",
+            "permissive-reference"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "license": {
+          "enum": [
+            null,
+            "GPL-2.0-only",
+            "LGPL-3.0-or-later",
+            "MIT"
+          ]
+        },
+        "local_path": {
+          "type": "string",
+          "pattern": "^fixtures/[a-zA-Z0-9._/-]+$"
+        }
+      }
+    },
+    "codec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "json_type",
+        "wire_groups",
+        "parameters",
+        "description",
+        "semantics"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "absolute-mm-s32",
+            "bytes-7bit",
+            "color-bgr-u35",
+            "cstring-7bit",
+            "packed-bytes8-u35",
+            "power-u14",
+            "relative-mm-s14",
+            "s7",
+            "s35",
+            "scaled-s32",
+            "scaled-u35",
+            "u7",
+            "u14",
+            "u35"
+          ]
+        },
+        "json_type": {
+          "enum": [
+            "integer",
+            "number",
+            "string"
+          ]
+        },
+        "wire_groups": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "parameters": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "scale",
+              "size"
+            ]
+          }
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantics": {
+          "$ref": "#/$defs/codecSemantics"
+        }
+      }
+    },
+    "codecSemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "json",
+        "wire",
+        "conversion"
+      ],
+      "properties": {
+        "json": {
+          "$ref": "#/$defs/jsonSemantics"
+        },
+        "wire": {
+          "$ref": "#/$defs/wireSemantics"
+        },
+        "conversion": {
+          "$ref": "#/$defs/conversionSemantics"
+        }
+      }
+    },
+    "jsonSemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "unit",
+        "canonical_form"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "finite-number",
+            "integer",
+            "lowercase-hex-bytes"
+          ]
+        },
+        "unit": {
+          "enum": [
+            "bytes",
+            "field-defined",
+            "mm",
+            "percent",
+            "rgb-0xrrggbb",
+            "unitless"
+          ]
+        },
+        "canonical_form": {
+          "enum": [
+            "finite-json-number",
+            "json-integer",
+            "lowercase-even-length-hex"
+          ]
+        },
+        "arithmetic": {
+          "const": "ieee-754-binary64"
+        },
+        "finite": {
+          "const": true,
+          "description": "NaN and infinities are not accepted."
+        },
+        "minimum": {
+          "type": "number",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "maximum": {
+          "type": "number",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "pattern": {
+          "const": "^(?:[0-9a-f]{2})*$",
+          "description": "Canonical hex is lowercase and even-length."
+        },
+        "byte_length": {
+          "$ref": "#/$defs/byteLength"
+        },
+        "byte_minimum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "byte_maximum": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "integer"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "minimum",
+              "maximum"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "finite-number"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "finite",
+              "arithmetic"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "lowercase-hex-bytes"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "pattern",
+              "byte_length",
+              "byte_minimum",
+              "byte_maximum"
+            ]
+          }
+        }
+      ]
+    },
+    "byteLength": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "field-parameter",
+            "fixed",
+            "unbounded"
+          ]
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "parameter": {
+          "const": "size"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "fixed"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "field-parameter"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "parameter"
+            ]
+          }
+        }
+      ]
+    },
+    "wireSemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "group_bits",
+        "group_order",
+        "group_high_bit",
+        "encoder_padding",
+        "decoder_padding"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "base128-integer",
+            "packed-base128-integers",
+            "seven-bit-byte-string",
+            "zero-terminated-seven-bit-byte-string"
+          ]
+        },
+        "group_bits": {
+          "const": 7
+        },
+        "group_order": {
+          "enum": [
+            "most-significant-first",
+            "source-order"
+          ]
+        },
+        "group_high_bit": {
+          "const": "zero",
+          "description": "Every wire group is a byte from 0 through 127."
+        },
+        "group_count": {
+          "$ref": "#/$defs/groupCount"
+        },
+        "carrier_bits": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "value_bits": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "representation": {
+          "enum": [
+            "twos-complement",
+            "unsigned"
+          ]
+        },
+        "encoder_padding": {
+          "enum": [
+            "not-applicable",
+            "zero"
+          ],
+          "description": "Padding emitted by the canonical encoder."
+        },
+        "decoder_padding": {
+          "enum": [
+            "ignored",
+            "not-applicable",
+            "zero-only",
+            "zero-or-negative-sign-extension"
+          ],
+          "description": "Padding accepted by the decoder."
+        },
+        "terminator_hex": {
+          "const": "00"
+        },
+        "terminator_included_in_json": {
+          "const": false
+        },
+        "word_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "groups_per_word": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "source_bytes_per_word": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "source_byte_order": {
+          "const": "big-endian"
+        },
+        "word_order": {
+          "const": "source-order"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "base128-integer"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "carrier_bits",
+              "value_bits",
+              "representation"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "seven-bit-byte-string"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "group_count"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "zero-terminated-seven-bit-byte-string"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "group_count",
+              "terminator_hex",
+              "terminator_included_in_json"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "packed-base128-integers"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "carrier_bits",
+              "value_bits",
+              "representation",
+              "word_count",
+              "groups_per_word",
+              "source_bytes_per_word",
+              "source_byte_order",
+              "word_order"
+            ]
+          }
+        }
+      ]
+    },
+    "groupCount": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "field-parameter",
+            "payload-bytes-plus-terminator"
+          ]
+        },
+        "parameter": {
+          "const": "size"
+        },
+        "terminator_groups": {
+          "const": 1
+        }
+      }
+    },
+    "conversionSemantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "encode_operation",
+        "decode_operation",
+        "rounding",
+        "encoder_range_check"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "channel-reorder",
+            "identity-bytes",
+            "identity-integer",
+            "packed-byte-words",
+            "proportional-integer",
+            "scaled-integer",
+            "terminated-bytes"
+          ]
+        },
+        "wire_integer_minimum": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "wire_integer_maximum": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "encode_operation": {
+          "enum": [
+            "hex-decode",
+            "hex-decode-then-append-zero",
+            "hex-decode-to-big-endian-u32-words",
+            "identity",
+            "rgb-to-bgr",
+            "round-json-times-scale",
+            "round-json-times-wire-full-scale-over-json-full-scale"
+          ]
+        },
+        "decode_operation": {
+          "enum": [
+            "bgr-to-rgb",
+            "identity",
+            "lowercase-hex-encode",
+            "read-to-first-zero-then-lowercase-hex-encode",
+            "u32-words-to-lowercase-hex",
+            "wire-divided-by-scale",
+            "wire-times-json-full-scale-over-wire-full-scale"
+          ]
+        },
+        "rounding": {
+          "enum": [
+            "exact",
+            "nearest-ties-to-even",
+            "nearest-ties-toward-positive-infinity"
+          ],
+          "description": "Rounding applied by encode_operation."
+        },
+        "encoder_range_check": {
+          "enum": [
+            "after-rounding",
+            "before-conversion"
+          ],
+          "description": "The stage at which the encoder checks its domain."
+        },
+        "scale": {
+          "$ref": "#/$defs/scale"
+        },
+        "json_full_scale": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "wire_full_scale": {
+          "type": "integer",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "channel_bits": {
+          "const": 8
+        },
+        "json_channel_order": {
+          "const": "RGB"
+        },
+        "wire_value_channel_order": {
+          "const": "BGR"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "identity-integer",
+                  "scaled-integer"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "wire_integer_minimum",
+              "wire_integer_maximum"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "scaled-integer"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "scale"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "proportional-integer"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "wire_integer_minimum",
+              "wire_integer_maximum",
+              "json_full_scale",
+              "wire_full_scale"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "channel-reorder"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "wire_integer_minimum",
+              "wire_integer_maximum",
+              "channel_bits",
+              "json_channel_order",
+              "wire_value_channel_order"
+            ]
+          }
+        }
+      ]
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "meaning"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "constant",
+            "field-parameter"
+          ]
+        },
+        "meaning": {
+          "const": "wire-units-per-json-unit"
+        },
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 9007199254740991
+        },
+        "parameter": {
+          "const": "scale"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "constant"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "value"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "field-parameter"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "parameter"
+            ]
+          }
+        }
+      ]
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "membership_evidence"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "job",
+            "request",
+            "reply"
+          ]
+        },
+        "membership_evidence": {
+          "enum": [
+            "mixed-catalog",
+            "provisional-family-selection",
+            "reported-and-simulator-hypotheses"
+          ]
+        }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contexts",
+        "opcode",
+        "name",
+        "fields",
+        "shape_evidence",
+        "semantic_evidence",
+        "shape_sources",
+        "semantic_sources",
+        "controller_effect",
+        "reply_behavior",
+        "reply_commands",
+        "reply_field_matches",
+        "notes"
+      ],
+      "properties": {
+        "contexts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "job",
+              "request",
+              "reply"
+            ]
+          }
+        },
+        "opcode": {
+          "$ref": "#/$defs/opcode"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/field"
+          }
+        },
+        "shape_evidence": {
+          "$ref": "#/$defs/shapeEvidence"
+        },
+        "semantic_evidence": {
+          "$ref": "#/$defs/semanticEvidence"
+        },
+        "shape_sources": {
+          "$ref": "#/$defs/sources"
+        },
+        "semantic_sources": {
+          "$ref": "#/$defs/sources"
+        },
+        "controller_effect": {
+          "enum": [
+            "unknown",
+            "read-only",
+            "state-changing",
+            "machine-action"
+          ]
+        },
+        "reply_behavior": {
+          "enum": [
+            "unknown",
+            "none",
+            "control",
+            "data"
+          ]
+        },
+        "reply_commands": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          }
+        },
+        "reply_field_matches": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "request_field",
+              "reply_field"
+            ],
+            "properties": {
+              "request_field": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              },
+              "reply_field": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {
+                "properties": {
+                  "reply_commands": {
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "reply_commands"
+                ]
+              },
+              {
+                "properties": {
+                  "reply_field_matches": {
+                    "minItems": 1
+                  }
+                },
+                "required": [
+                  "reply_field_matches"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "reply_behavior": {
+                "const": "data"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "reply_field_matches": {
+                "minItems": 1
+              }
+            },
+            "required": [
+              "reply_field_matches"
+            ]
+          },
+          "then": {
+            "properties": {
+              "reply_commands": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "codec",
+        "parameters"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "codec": {
+          "enum": [
+            "absolute-mm-s32",
+            "bytes-7bit",
+            "color-bgr-u35",
+            "cstring-7bit",
+            "packed-bytes8-u35",
+            "power-u14",
+            "relative-mm-s14",
+            "s7",
+            "s35",
+            "scaled-s32",
+            "scaled-u35",
+            "u7",
+            "u14",
+            "u35"
+          ]
+        },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "scale": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "codec": {
+              "const": "bytes-7bit"
+            },
+            "parameters": {
+              "required": [
+                "size"
+              ],
+              "properties": {
+                "size": {}
+              },
+              "maxProperties": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "codec": {
+              "enum": [
+                "scaled-s32",
+                "scaled-u35"
+              ]
+            },
+            "parameters": {
+              "required": [
+                "scale"
+              ],
+              "properties": {
+                "scale": {}
+              },
+              "maxProperties": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "codec": {
+              "enum": [
+                "absolute-mm-s32",
+                "color-bgr-u35",
+                "cstring-7bit",
+                "packed-bytes8-u35",
+                "power-u14",
+                "relative-mm-s14",
+                "s7",
+                "s35",
+                "u7",
+                "u14",
+                "u35"
+              ]
+            },
+            "parameters": {
+              "maxProperties": 0
+            }
+          }
+        }
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "shapeEvidence": {
+      "enum": [
+        "conflicting-reports",
+        "external-fixture-observed",
+        "fixture-observed",
+        "reported",
+        "simulator-only",
+        "uncited-hypothesis"
+      ]
+    },
+    "semanticEvidence": {
+      "enum": [
+        "controlled-fixture",
+        "disputed",
+        "partially-controlled",
+        "reported",
+        "uncited-hypothesis",
+        "unverified"
+      ]
+    },
+    "opcode": {
+      "type": "string",
+      "pattern": "^(?:[89a-f][0-9a-f])(?:[0-7][0-9a-f])*$"
+    }
+  }
+}

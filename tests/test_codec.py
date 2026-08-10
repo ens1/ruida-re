@@ -30,6 +30,10 @@ class ByteTransformTest(unittest.TestCase):
         self.assertEqual(unswizzle(swizzle(values)), values)
         self.assertEqual(swizzle(unswizzle(values)), values)
 
+    def test_boolean_magic_is_not_a_byte_value(self) -> None:
+        with self.assertRaises(ValueError):
+            swizzle(b"", True)
+
 
 class NumberCodecTest(unittest.TestCase):
     def test_u14_boundaries_round_trip(self) -> None:
@@ -66,6 +70,14 @@ class NumberCodecTest(unittest.TestCase):
             for value in values:
                 with self.assertRaises(ValueError):
                     encoder(value)
+
+    def test_boolean_and_nonfinite_values_are_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            encode_u14(True)
+        with self.assertRaises(ValueError):
+            encode_mm(float("nan"))
+        with self.assertRaises(ValueError):
+            encode_power(float("inf"))
 
     def test_physical_values_round_trip(self) -> None:
         self.assertEqual(decode_mm(encode_mm(20.0)), 20.0)

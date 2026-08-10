@@ -489,6 +489,8 @@ SPECS = (
 LIGHTBURN_OBSERVED = {
     "88",
     "a8",
+    "aa",
+    "ab",
     "c601",
     "c602",
     "c612",
@@ -578,6 +580,8 @@ PROVISIONAL_NOTES = {
 CONTROLLED_SEMANTICS = {
     "88",
     "a8",
+    "aa",
+    "ab",
     "c601",
     "c602",
     "c621",
@@ -589,6 +593,8 @@ CONTROLLED_SEMANTICS = {
     "c902",
     "c904",
     "ca06",
+    "ca02",
+    "ca22",
     "e505",
     "e703",
     "e707",
@@ -629,6 +635,14 @@ SEMANTIC_NOTES = {
     "c4": "Tentative and encoder tables disagree on the laser index.",
     "c615": "Timing meaning differs across prior implementations.",
     "c616": "Timing meaning differs across prior implementations.",
+    "da00": (
+        "Two pinned implementations report a controller-memory read "
+        "followed by reply data. Hardware capture absent."
+    ),
+    "da01": (
+        "Two pinned implementations distinguish this controller-memory "
+        "write from DA00. Hardware capture absent."
+    ),
     "ca01": "Only air operations 0x12 and 0x13 were varied directly.",
     "e704": "Field interpretation differs across prior implementations.",
     "e708": "Field interpretation differs across prior implementations.",
@@ -656,11 +670,35 @@ REPORTED_SHAPE_SOURCES = {
     "c615": (SRC_RUIDA_PA, SRC_MEERK40T, SRC_RUIDA_LASER),
     "c616": (SRC_RUIDA_PA, SRC_MEERK40T, SRC_RUIDA_LASER),
     "d812": (SRC_RUIDA_PA, SRC_MEERK40T, SRC_RUIDA_LASER),
+    "da00": (SRC_RUIDA_PA, SRC_MEERK40T),
+    "da01": (SRC_RUIDA_PA, SRC_MEERK40T),
+}
+
+
+REPORTED_SEMANTIC_SOURCES = {
+    "da00": (SRC_RUIDA_PA, SRC_MEERK40T),
+    "da01": (SRC_RUIDA_PA, SRC_MEERK40T),
+}
+
+
+CONTROLLER_INTERACTIONS = {
+    "da00": {
+        "controller_effect": "read-only",
+        "reply_behavior": "data",
+        "reply_commands": ("setting_reply",),
+        "reply_field_matches": (("address", "address"),),
+    },
+    "da01": {
+        "controller_effect": "state-changing",
+        "reply_behavior": "none",
+    },
 }
 
 
 def _with_evidence(spec: CommandSpec) -> CommandSpec:
     opcode = spec.opcode.hex()
+    interaction = CONTROLLER_INTERACTIONS.get(opcode, {})
+    spec = replace(spec, **interaction)
     if opcode in LIGHTBURN_OBSERVED:
         semantic_evidence = "uncited-hypothesis"
         if opcode in CONTROLLED_SEMANTICS:
@@ -669,6 +707,8 @@ def _with_evidence(spec: CommandSpec) -> CommandSpec:
             semantic_evidence = "partially-controlled"
         elif opcode in DISPUTED_SEMANTICS:
             semantic_evidence = "disputed"
+        elif opcode in REPORTED_SEMANTIC_SOURCES:
+            semantic_evidence = "reported"
         return replace(
             spec,
             shape_evidence="fixture-observed",
@@ -678,7 +718,10 @@ def _with_evidence(spec: CommandSpec) -> CommandSpec:
                 (SRC_LIGHTBURN,)
                 if semantic_evidence
                 in ("controlled-fixture", "partially-controlled")
-                else DISPUTED_SEMANTIC_SOURCES.get(opcode, ())
+                else DISPUTED_SEMANTIC_SOURCES.get(
+                    opcode,
+                    REPORTED_SEMANTIC_SOURCES.get(opcode, ()),
+                )
             ),
             notes=SEMANTIC_NOTES.get(opcode, spec.notes),
         )
@@ -713,9 +756,16 @@ def _with_evidence(spec: CommandSpec) -> CommandSpec:
         semantic_evidence=(
             "disputed"
             if opcode in DISPUTED_SEMANTICS
-            else "uncited-hypothesis"
+            else (
+                "reported"
+                if opcode in REPORTED_SEMANTIC_SOURCES
+                else "uncited-hypothesis"
+            )
         ),
-        semantic_sources=DISPUTED_SEMANTIC_SOURCES.get(opcode, ()),
+        semantic_sources=DISPUTED_SEMANTIC_SOURCES.get(
+            opcode,
+            REPORTED_SEMANTIC_SOURCES.get(opcode, ()),
+        ),
         shape_sources=REPORTED_SHAPE_SOURCES.get(opcode, ()),
         notes=SEMANTIC_NOTES.get(opcode, spec.notes),
     )
@@ -740,6 +790,8 @@ REQUEST_SPECS = tuple(
         shape_sources=(SRC_MEERK40T,),
         semantic_sources=(SRC_MEERK40T,),
         notes="Reported as an outbound controller keepalive.",
+        controller_effect="read-only",
+        reply_behavior="control",
     ),
 )
 REQUEST_REGISTRY = CommandRegistry(REQUEST_SPECS)

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from ruida_re.codec import swizzle, unswizzle
 from ruida_re.program import decode
@@ -77,6 +78,18 @@ class StreamDecoderTest(unittest.TestCase):
                         actual.extend(decoder.feed(logical[split:]))
                         actual.extend(decoder.finish())
                         self.assertEqual(actual, expected)
+
+    def test_dense_large_feed_does_not_rescan_suffixes(self) -> None:
+        size = 50_000
+        decoder = StreamDecoder()
+        with patch(
+            "ruida_re.stream.next_frame_boundary",
+            create=True,
+            side_effect=AssertionError("suffix rescan"),
+        ):
+            records = decoder.feed(bytes([0xD7]) * size, final=True)
+        self.assertEqual(len(records), size)
+        self.assertEqual(decoder.offset, size)
 
 
 if __name__ == "__main__":

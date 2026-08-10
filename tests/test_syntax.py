@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import unittest
+from unittest.mock import patch
 
 from ruida_re.syntax import logical_frames, next_frame_boundary
 
@@ -26,6 +27,20 @@ class LogicalFramingTest(unittest.TestCase):
             next_frame_boundary(bytes.fromhex("c63100 d7")),
             3,
         )
+
+    def test_dense_large_stream_uses_one_lexical_pass(self) -> None:
+        size = 250_000
+        data = bytes([0x80]) * size
+        with patch(
+            "ruida_re.syntax.next_frame_boundary",
+            side_effect=AssertionError("suffix rescan"),
+        ):
+            count = 0
+            for offset, frame in logical_frames(data):
+                self.assertEqual(offset, count)
+                self.assertEqual(frame, b"\x80")
+                count += 1
+        self.assertEqual(count, size)
 
 
 if __name__ == "__main__":

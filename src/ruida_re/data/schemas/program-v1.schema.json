@@ -1,0 +1,200 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ruida-re:schema:program:v1",
+  "title": "ruida-re structural program envelope v1",
+  "description": "Structural schema for a lossless decoded Ruida program. Command identity, field domains, and raw-byte consistency are validated with catalog-v1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "magic",
+    "context",
+    "container",
+    "header",
+    "records",
+    "issues",
+    "source_checksum_basis"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ruida-re.program.v1"
+    },
+    "magic": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 255
+    },
+    "context": {
+      "enum": [
+        "job",
+        "request",
+        "reply"
+      ]
+    },
+    "container": {
+      "enum": [
+        "rd",
+        "udp",
+        "logical"
+      ]
+    },
+    "header": {
+      "type": "string",
+      "pattern": "^(?:|5244574f524b56[0-9a-f]{6})$"
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/commandRecord"
+          },
+          {
+            "$ref": "#/$defs/rawRecord"
+          }
+        ]
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_checksum_basis": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 9007199254740991
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "container": {
+            "enum": [
+              "udp",
+              "logical"
+            ]
+          }
+        },
+        "required": [
+          "container"
+        ]
+      },
+      "then": {
+        "properties": {
+          "header": {
+            "const": ""
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hexBytes": {
+      "type": "string",
+      "pattern": "^(?:[0-9a-f]{2})*$"
+    },
+    "opcode": {
+      "type": "string",
+      "pattern": "^(?:[89a-f][0-9a-f])(?:[0-7][0-9a-f])*$"
+    },
+    "commandRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "offset",
+        "opcode",
+        "name",
+        "values",
+        "shape_evidence",
+        "semantic_evidence"
+      ],
+      "properties": {
+        "kind": {
+          "const": "command"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "opcode": {
+          "$ref": "#/$defs/opcode"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "values": {
+          "description": "Catalog integer fields require an exact mathematical integer; catalog number fields canonicalize bounded input to IEEE-754 binary64.",
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "string"
+            ],
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "raw": {
+          "$ref": "#/$defs/hexBytes"
+        },
+        "shape_evidence": {
+          "$ref": "#/$defs/shapeEvidence"
+        },
+        "semantic_evidence": {
+          "$ref": "#/$defs/semanticEvidence"
+        }
+      }
+    },
+    "rawRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "offset",
+        "raw"
+      ],
+      "properties": {
+        "kind": {
+          "const": "raw"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "raw": {
+          "$ref": "#/$defs/hexBytes"
+        }
+      }
+    },
+    "shapeEvidence": {
+      "enum": [
+        "conflicting-reports",
+        "external-fixture-observed",
+        "fixture-observed",
+        "reported",
+        "simulator-only",
+        "uncited-hypothesis"
+      ]
+    },
+    "semanticEvidence": {
+      "enum": [
+        "controlled-fixture",
+        "disputed",
+        "partially-controlled",
+        "reported",
+        "uncited-hypothesis",
+        "unverified"
+      ]
+    }
+  }
+}

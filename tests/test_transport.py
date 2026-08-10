@@ -12,6 +12,7 @@ from ruida_re.transport import (
     encode_packet,
     frame,
     frame_chunks,
+    payload_chunks,
     unframe,
 )
 
@@ -55,6 +56,21 @@ class TransportFramingTest(unittest.TestCase):
         sizes = [len(packet) for packet in packets]
         self.assertEqual(sizes, [1002, 1002, 1002, 252])
         self.assertEqual(b"".join(unframe(packet) for packet in packets), data)
+
+    def test_payload_chunking_is_independent_of_command_frames(self) -> None:
+        logical = bytes.fromhex("da000001 ce d7")
+        chunks = tuple(payload_chunks(logical, limit=3))
+        self.assertEqual(
+            chunks,
+            (
+                bytes.fromhex("da0000"),
+                bytes.fromhex("01ced7"),
+            ),
+        )
+
+    def test_payload_chunking_rejects_an_invalid_limit(self) -> None:
+        with self.assertRaises(ValueError):
+            tuple(payload_chunks(bytes.fromhex("da000001"), limit=0))
 
 
 if __name__ == "__main__":

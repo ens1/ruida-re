@@ -9,8 +9,11 @@ source expression were not translated into this repository.
 
 - LightBurn 2.1.03 on macOS.
 - User-configured `Ruida 644XS` profile.
-- One baseline and 12 one-variable exports checked into
+- One baseline, 12 one-variable exports, and two advanced exports checked into
   `fixtures/lightburn-2.1.03`.
+- The advanced corpus includes a real two-layer file and signed relative X/Y
+  motion. A third generated project crosses negative machine X; LightBurn
+  rejects it as out of bounds, so no `.rd` is claimed for that case.
 - Project and machine-file SHA-256 values recorded in adjacent JSON manifests.
 - LightBurn application SHA-256, complete profile dimensions/mirroring, and
   per-file generation stage recorded in those manifests. The baseline project
@@ -21,6 +24,11 @@ These fixtures decide local shape and value questions. Merely seeing an opcode
 establishes its frame shape for this LightBurn dialect, not its mnemonic. That
 distinction is represented by separate `shape_evidence` and
 `semantic_evidence` fields.
+
+No RDWorks fixture is currently claimed. Future Windows exports will be kept
+as a separately versioned, producer-labelled corpus and compared against the
+same neutral Program, catalog, and conformance contracts; they will not be
+silently treated as equivalent to the LightBurn dialect.
 
 ## Permissive references
 
@@ -47,6 +55,61 @@ One ruida-pa table contains an unresolved comment about logical bytes
 `D0 29 89 89`, which conflicts with the current seven-bit-operand grammar:
 [pinned table](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/protocols/ruida/ruida_protocol.py#L505-L507).
 It is recorded as contrary evidence, not implemented as an opcode exception.
+
+## Transport evidence
+
+Transport defaults and exchange behavior are taken from pinned source, not an
+unversioned wiki or a moving branch:
+
+- Ruida-pa's direct UDP adapter sends to port 50200 and binds the routed local
+  address on port 40200: [pinned UDP
+  adapter](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/ruidadriver/transport/udp_transport.py#L15-L42).
+  MeerK40t independently labels the same two ports as controller-defined:
+  [pinned UDP
+  transport](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/udp_transport.py#L16-L23).
+- Ruida-pa's USB adapter opens a pyserial connection at 115200 baud, eight data
+  bits, no parity, and one stop bit: [pinned USB-serial
+  adapter](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/ruidadriver/transport/usb_transport.py#L36-L44).
+- Its shared transport scrambles both paths but prepends the additive checksum
+  only for UDP: [pinned packet
+  construction](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/ruidadriver/rd_transport.py#L185-L193).
+  The same implementation enters ACK handling only for UDP and explicitly
+  proceeds without an ACK on USB serial: [pinned send
+  state](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/ruidadriver/rd_transport.py#L274-L291).
+- MeerK40t also constructs UDP packets as a big-endian additive checksum over
+  scrambled data: [pinned packet
+  construction](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/udp_connection.py#L145-L147).
+  Its handshaker describes serialized send/ACK/reply operation without
+  sequence numbers and resends on NAK: [pinned state-machine
+  description](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/udp_connection.py#L204-L229),
+  [pinned ACK/NAK
+  handling](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/udp_connection.py#L256-L305).
+
+These links support the adapter defaults and the current session policy. They
+are not a substitute for controller captures. In particular, timeout behavior,
+the meanings of logical `CD` and `CF`, reply termination, and differences
+among controller models remain evidence-labelled research questions.
+
+## Read-only setting request evidence
+
+The installed CLI exposes `DA 00` only because both pinned implementations
+distinguish it from the state-changing `DA 01` operation and expect reply
+data:
+
+- ruida-pa labels controller memory readable via `DA`, defines `DA 00` as
+  `GET_SETTING`/read and `DA 01` as `SET_SETTING`/write, then parses fixed
+  `DA 01` replies: [pinned command
+  table](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/protocols/ruida/ruida_protocol.py#L201-L205),
+  [pinned DA entries](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/protocols/ruida/ruida_protocol.py#L547-L550),
+  [pinned reply parser](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/ruidadriver/rd_transport.py#L195-L213).
+- MeerK40t's emulator handles `DA 00` as a memory lookup followed by a
+  `DA 01` response, while its `DA 01` branch writes values:
+  [pinned emulator](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/emulator.py#L661-L696).
+
+This establishes independent implementation evidence, not a hardware capture
+or a guarantee that every address and controller dialect uses the same reply
+shape. The catalog therefore labels both command semantics `reported` and
+keeps their source identifiers explicit.
 
 ## Other comparison oracles
 

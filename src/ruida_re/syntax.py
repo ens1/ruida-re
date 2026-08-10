@@ -25,10 +25,11 @@ def next_frame_boundary(data: bytes) -> int | None:
 
 def logical_frames(data: bytes) -> Iterator[tuple[int, bytes]]:
     """Yield offsets and complete frames from a finite logical stream."""
-    offset = 0
-    while offset < len(data):
-        boundary = next_frame_boundary(data[offset:])
-        if boundary is None:
-            boundary = len(data) - offset
-        yield offset, data[offset : offset + boundary]
-        offset += boundary
+    if not data:
+        return
+    frame_start = 0
+    for index in range(1, len(data)):
+        if is_command_start(data[index]):
+            yield frame_start, data[frame_start:index]
+            frame_start = index
+    yield frame_start, data[frame_start:]

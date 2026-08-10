@@ -30,6 +30,17 @@ def main() -> None:
             "semantic_evidence": spec.semantic_evidence,
             "shape_sources": list(spec.shape_sources),
             "semantic_sources": list(spec.semantic_sources),
+            "controller_effect": spec.controller_effect,
+            "reply_behavior": spec.reply_behavior,
+            "reply_commands": list(spec.reply_commands),
+            "reply_field_matches": [
+                {
+                    "request_field": request_field,
+                    "reply_field": reply_field,
+                }
+                for request_field, reply_field
+                in spec.reply_field_matches
+            ],
             "notes": spec.notes,
             "fields": [
                 {
