@@ -354,6 +354,17 @@ deterministic path-derived default and accepts an explicit
 `reported_job_metric_mm` only when a host has producer provenance for that
 metadata value.
 
+A subsequent supervised Boss LS2040 test executed one 574-byte,
+single-section 45-degree planned-path job through a configured Ruida 644XS.
+At 15% and 100 mm/s, the operator observed five intended separate lines and
+no connecting burn. The exact job and the preceding 10% motion-only result are
+recorded in the
+[planned-path hardware manifest](../fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/manifest-v1.json).
+The executed file used five absolute travel/cut pairs. It did not contain the
+operation-5 section separator, signed-relative `A9` motion, a second section,
+or modulation, so none of those receive hardware-execution evidence from this
+test.
+
 The remaining controlled results are:
 
 - **Two laser heads (c006-c010).** `CA 03` is an enable bitmask: values 1, 2,
@@ -396,11 +407,14 @@ unknown fields, and no rotary hardware was available. No `.rd` fixture or
 rotary compiler behavior is inferred.
 
 The conservative job profile excludes planned-path raster and every other
-capability that lacks hardware execution evidence. Planned-path raster,
-two-head power, dynamic mark power, stationary events, RF frequency, fiber
-pulse width, and paired Z offsets each use a separate opt-in research profile.
-Those profiles reproduce their offline goldens exactly and have
-`execution_evidence="not-observed"` for the advanced mode.
+advanced capability. Planned-path raster, two-head power, dynamic mark power,
+stationary events, RF frequency, fiber pulse width, and paired Z offsets each
+use a separate opt-in research profile. Those profiles reproduce their
+offline goldens exactly. One single-section 45-degree planned path has the
+scoped operator observation above; the broad planned-path mode still has
+`execution_evidence="not-observed"` because it also includes an unexecuted
+multiple-section separator. The other advanced modes have no hardware
+execution evidence.
 
 ## Registry coverage
 

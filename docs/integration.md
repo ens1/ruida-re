@@ -115,11 +115,13 @@ The conservative `LIGHTBURN_2103_644XS` profile supports planar XY vector and
 raster motion, one laser head, the four native scan modes above, and air
 assist. Planned-path raster sections require the explicit
 `LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH` profile. Its envelope has
-controlled offline fixture evidence; only the earlier mixed cardinal
-vector/raster job has operator-observed execution evidence.
+controlled offline fixture evidence. One single-section 45-degree subset now
+also has operator-observed execution evidence; multiple sections and
+cross-hatch remain offline-only.
 
 The c001-c044 compiler extensions are intentionally isolated behind opt-in
-profiles whose advanced modes have no hardware-execution evidence:
+profiles. Except for that scoped planned-path observation, their advanced
+modes have no hardware-execution evidence:
 
 | Profile | Accepted plan feature | Evidence-backed lowering |
 | --- | --- | --- |
@@ -172,6 +174,21 @@ assist off. It was transmitted twice, each time after explicit operator
 approval. The first transmission produced observed machine activity, but the
 material was misplaced. After repositioning it, the operator reported complete
 success from the second transmission.
+
+A second
+[planned-path hardware manifest](../fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/manifest-v1.json)
+records one 574-byte 45-degree job at 10% and an otherwise byte-identical 15%
+variant. Both used one planned-path section, five absolute travel/cut pairs,
+100 mm/s, head 1, and air assist off within X 20 through 32 mm and Y 20 through
+40 mm. The operator observed five motions but no visible marks at 10%. At 15%,
+the operator reported five correct lines, no connecting burn, and no
+over-burning. Serial receipts establish host-side write completion only.
+
+This does not validate the operation-5 separator, a second section,
+cross-hatch, other diagonal directions, relative `A9` cuts, modulation, or
+Rayforge end-to-end generation. The broad planned-path mode remains labelled
+`not-observed` and research-only rather than treating one scoped result as
+general controller parity.
 
 There was no automatic sensor or output verification. This establishes a
 successful operator-observed path for one controller/profile and one mixed
@@ -776,14 +793,16 @@ particular:
 - controlled horizontal and vertical raster motion, grayscale modulation, and
   host-expanded 3D-slice motion are fixture-backed for one profile;
   controlled diagonal raster is fixture-backed as host-planned path motion,
-  not as angle metadata, while diagonal grayscale remains untested;
+  not as angle metadata; one constant-power, single-section 45-degree job has
+  a scoped operator-observed success, while cross-hatch, other diagonal forms,
+  and diagonal grayscale remain untested on hardware;
 - two-head power, dynamic effective vector power, stationary dwell/pulse, RF
   frequency, fiber pulse width, and paired Z-offset serialization have exact
   offline golden coverage but no hardware-execution evidence; cut-through and
   rotary remain unsupported; and
-- live behavior has injectable UDP and serial test coverage plus one
-  operator-observed Ruida 644XS USB-serial success, but no automatic physical
-  verification or public multi-controller compatibility matrix.
+- live behavior has injectable UDP and serial test coverage plus two scoped
+  operator-observed Ruida 644XS USB-serial job results, but no automatic
+  physical verification or public multi-controller compatibility matrix.
 
 See [protocol notes](protocol.md) for layer-level facts and unresolved
 questions, and [sources and provenance](sources.md) for the evidence policy.

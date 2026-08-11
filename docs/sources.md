@@ -156,6 +156,27 @@ measurement verified execution. It covers one controller/profile and one
 generated job. The manifest records the observed reply bytes, but it is not a
 complete serial transcript or a multi-controller compatibility claim.
 
+## Planned-path live hardware validation
+
+The
+[planned-path hardware manifest](../fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/manifest-v1.json)
+content-addresses two 574-byte variants of one single-section 45-degree job.
+Both decoded as 77 known records with no issues and reproduced exactly with a
+recomputed checksum. They used five absolute travel/cut pairs at 100 mm/s,
+head 1, and air assist off within X 20 through 32 mm and Y 20 through 40 mm.
+
+Each serial transfer completed as one 574-byte host write with no retry and no
+controller acknowledgement. At 10%, the operator observed five movements but
+no visible cardboard marks. At 15%, the operator reported five correct lines,
+no connecting burn, and no over-burning. This is execution evidence from one
+Boss LS2040 configured as a Ruida 644XS, not dimensional or power metrology.
+
+The executed files contain no second `RasterSection`, operation-5 section
+separator, cross-hatch, signed-relative diagonal cut, or modulation. The
+broader planned-path profile therefore remains research-only with a
+mode-wide `not-observed` execution label. This preserves the exact successful
+observation without projecting it onto unexecuted planned-path forms.
+
 ## Read-only setting request evidence
 
 The installed CLI exposes request-context `DA 00` because the live observation

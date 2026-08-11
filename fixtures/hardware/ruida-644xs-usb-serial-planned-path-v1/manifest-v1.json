@@ -1,0 +1,217 @@
+{
+  "schema": "ruida-re.hardware-planned-path-validation.v1",
+  "identifier": "hardware-ruida-644xs-usb-serial-planned-path-v1",
+  "observed_on": "2026-08-10",
+  "generating_revision": "7ef0ff5011bd0684a2a70cb72c43e666f9438651",
+  "scope": {
+    "description": "A supervised validation of one single-section 45-degree planned-path raster at two constant power settings.",
+    "validated_subset": [
+      "One layer-zero planned-path raster section.",
+      "Five head-1 constant-power diagonal marks using ordinary absolute XY travel and cut motion.",
+      "Dark travel between the five marks at the successful 15 percent setting."
+    ],
+    "limitations": [
+      "The controller identity is the configured profile and was not independently interrogated.",
+      "The USB serial transport proves delivery only; it has no job acknowledgement or execution-completion response.",
+      "The successful result is an operator observation, not independent dimensional, angular, timing, or power metrology.",
+      "The 10 percent run established motion but produced no visible mark and is not evidence of marking power.",
+      "The material-axis orientation was not recorded.",
+      "The physical air-assist state was not independently observed.",
+      "This validation does not cover a second RasterSection, the section-separator operation, cross-hatch, grayscale modulation, arbitrary angles, or another controller model."
+    ]
+  },
+  "environment": {
+    "host_platform": "macOS",
+    "machine": "Boss LS2040",
+    "configured_controller_profile": "Ruida 644XS",
+    "transport": {
+      "kind": "USB serial",
+      "baud": 115200,
+      "magic_hex": "88",
+      "checksum_prefix": false,
+      "job_acknowledgement_available": false
+    },
+    "material": {
+      "description": "cardboard",
+      "width_mm": 152.4,
+      "length_mm": 762,
+      "reported_origin_mm": {
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "plan": {
+    "compiler_profile": "lightburn-2.1.03-ruida-644xs-planned-path-research",
+    "bounds_mm": {
+      "min_x": 20,
+      "min_y": 20,
+      "max_x": 32,
+      "max_y": 40
+    },
+    "marked_distance_mm": 84.85281374238569,
+    "layer": {
+      "index": 0,
+      "kind": "raster",
+      "speed_mm_s": 100,
+      "air_assist": false,
+      "color_rgb": 0,
+      "laser_index": 1,
+      "raster_processing": "planned-path",
+      "raster_sections": [
+        {
+          "events": [
+            {
+              "type": "travel_to",
+              "x_mm": 20,
+              "y_mm": 20
+            },
+            {
+              "type": "mark_to",
+              "x_mm": 32,
+              "y_mm": 32
+            },
+            {
+              "type": "travel_to",
+              "x_mm": 20,
+              "y_mm": 22
+            },
+            {
+              "type": "mark_to",
+              "x_mm": 32,
+              "y_mm": 34
+            },
+            {
+              "type": "travel_to",
+              "x_mm": 20,
+              "y_mm": 24
+            },
+            {
+              "type": "mark_to",
+              "x_mm": 32,
+              "y_mm": 36
+            },
+            {
+              "type": "travel_to",
+              "x_mm": 20,
+              "y_mm": 26
+            },
+            {
+              "type": "mark_to",
+              "x_mm": 32,
+              "y_mm": 38
+            },
+            {
+              "type": "travel_to",
+              "x_mm": 20,
+              "y_mm": 28
+            },
+            {
+              "type": "mark_to",
+              "x_mm": 32,
+              "y_mm": 40
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "jobs": [
+    {
+      "identifier": "planned-path-45-10pct",
+      "file": "planned-path-45-10pct.rd",
+      "sha256": "1c28e301321fd54bf8e6bc54e7c9b370305fb601c0d1cea5ef4d9976124d953d",
+      "size_bytes": 574,
+      "requested_power_percent": 10,
+      "encoded_power_percent": 9.99816883354697,
+      "checksum": {
+        "command": "file_checksum",
+        "algorithm": "logical-byte-sum-before-file-checksum",
+        "value": 24757
+      },
+      "decode": {
+        "known_records": 77,
+        "opaque_records": 0,
+        "issues": []
+      }
+    },
+    {
+      "identifier": "planned-path-45-15pct",
+      "file": "planned-path-45-15pct.rd",
+      "sha256": "92c328e7fc9d98ba38da1e8179560d2f2675ac79983b4efeef11889bb8bb1123",
+      "size_bytes": 574,
+      "requested_power_percent": 15,
+      "encoded_power_percent": 14.997253250320455,
+      "checksum": {
+        "command": "file_checksum",
+        "algorithm": "logical-byte-sum-before-file-checksum",
+        "value": 24197
+      },
+      "decode": {
+        "known_records": 77,
+        "opaque_records": 0,
+        "issues": []
+      }
+    }
+  ],
+  "transmissions": [
+    {
+      "sequence": 1,
+      "job_identifier": "planned-path-45-10pct",
+      "job_sha256": "1c28e301321fd54bf8e6bc54e7c9b370305fb601c0d1cea5ef4d9976124d953d",
+      "explicit_operator_approval": true,
+      "transport_receipt": {
+        "scope": "host-side serial write completion",
+        "controller_acknowledgement": false,
+        "execution_acknowledgement": false,
+        "packets": 1,
+        "completed_packets": 1,
+        "packet_bytes": 574,
+        "transmissions": 1,
+        "retries": 0
+      },
+      "operator_observation": {
+        "status": "motion-observed-marking-inconclusive",
+        "reported": "The operator observed all five intended movements and no visible marks on the cardboard.",
+        "not_reported": [
+          "alarm state",
+          "flame state",
+          "Z or table motion"
+        ]
+      }
+    },
+    {
+      "sequence": 2,
+      "job_identifier": "planned-path-45-15pct",
+      "job_sha256": "92c328e7fc9d98ba38da1e8179560d2f2675ac79983b4efeef11889bb8bb1123",
+      "explicit_operator_approval": true,
+      "transport_receipt": {
+        "scope": "host-side serial write completion",
+        "controller_acknowledgement": false,
+        "execution_acknowledgement": false,
+        "packets": 1,
+        "completed_packets": 1,
+        "packet_bytes": 574,
+        "transmissions": 1,
+        "retries": 0
+      },
+      "operator_observation": {
+        "status": "operator-reported-success",
+        "reported": "The operator reported five correct lines, no connecting burn, and no over-burning; everything worked as planned.",
+        "not_reported": [
+          "independent dimensional measurement",
+          "independent angular measurement",
+          "independent power measurement"
+        ]
+      }
+    }
+  ],
+  "result": {
+    "status": "operator-reported-success",
+    "observation": "The 15 percent supervised run produced the five intended separate diagonal marks with dark travel between them.",
+    "scoped_execution_evidence": "operator-observed",
+    "mode_wide_execution_evidence": "not-observed",
+    "default_profile_promotion": "withheld",
+    "mode_wide_evidence_reason": "The selectable planned-path research profile also permits multiple RasterSection blocks. Their section-separator operation and cross-hatch execution remain untested."
+  }
+}

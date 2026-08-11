@@ -121,8 +121,9 @@ use general signed X/Y path motion; there is no evidenced Ruida angle field
 for the compiler to fill in. `SetModulation` is not yet supported in a
 planned-path section.
 
-Every capability without hardware execution evidence is available only
-through an explicit offline-research profile:
+Advanced capability surfaces remain isolated behind explicit research
+profiles. One narrow planned-path subset now has operator-observed execution;
+the remaining advanced behavior has offline fixture evidence only:
 
 | Profile | Plan surface | Controlled serialization |
 | --- | --- | --- |
@@ -134,9 +135,12 @@ through an explicit offline-research profile:
 | `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` | balanced, inverse `80 03` deltas around one native raster layer |
 | `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | `MarkWithPower` | explicit effective channel powers immediately before a vector mark |
 
-These profiles reproduce controlled LightBurn machine files exactly, but none
-of the advanced behavior has been executed on hardware. They are opt-in and
-intentionally narrow; the default compiler still rejects those fields. The
+These profiles reproduce controlled LightBurn machine files exactly. A
+single-section 45-degree planned path has also executed successfully on one
+Boss LS2040 configured as a Ruida 644XS. The broader planned-path mode remains
+research-only because its multiple-section separator and cross-hatch behavior
+have not executed on hardware. The profiles are opt-in and intentionally
+narrow; the default compiler still rejects those fields. The
 fixture-derived built-in limits are 200 ms for stationary events, 10–20 kHz
 for RF frequency, 0–200 ns for fiber pulse width, and 1 mm absolute Z offset.
 The dual-head, stationary, RF, fiber, and dynamic-power profiles accept
@@ -178,6 +182,25 @@ verification. It covers one physical controller/profile and one job. It does
 not validate every command, transport, controller model, or safety behavior.
 The host remains responsible for job review, authorization, supervision, and
 machine safety.
+
+### Planned-path live validation
+
+The scoped
+[planned-path hardware manifest](fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/manifest-v1.json)
+records two supervised executions of the same 574-byte, one-section
+45-degree job. It contained five separate marks at 100 mm/s within X 20
+through 32 mm and Y 20 through 40 mm. The 10% run produced all five intended
+motions but no visible cardboard mark. The otherwise byte-identical 15% run
+produced five correct lines with no connecting burn and no reported
+over-burning.
+
+That observation validates only the exact single-section, constant-power,
+head-1 subset. The job used five absolute travel/cut pairs and did not contain
+the operation-5 separator used by multiple sections. Cross-hatch, 135-degree
+and relative diagonal motion, grayscale modulation, dense scanning, and
+Rayforge end-to-end generation remain outside this hardware result. The
+mode-wide profile therefore retains its conservative `not-observed` execution
+label and research-only selector.
 
 ## Embed the codec
 
