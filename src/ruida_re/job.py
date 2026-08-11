@@ -319,6 +319,7 @@ class RuidaJobProfile:
     required_layer_count: int | None = None
     allowed_layer_indices: tuple[int, ...] | None = None
     required_raster_processing: RasterProcessingMode | None = None
+    native_raster_mark_chunk_mm: float | None = None
 
     def mode_for(self, layer: LayerPlan) -> tuple[int, int]:
         """Return the observed metadata and program mode pair."""
@@ -391,6 +392,7 @@ LIGHTBURN_2103_644XS = RuidaJobProfile(
     execution_evidence_source=(
         "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json"
     ),
+    native_raster_mark_chunk_mm=4,
 )
 
 
@@ -708,6 +710,18 @@ def _validate_profile_policy(profile: RuidaJobProfile) -> None:
         raise ValueError(
             "Required planned-path processing needs a planned-path mode"
         )
+    chunk_limit = profile.native_raster_mark_chunk_mm
+    if profile.raster_modes and chunk_limit is None:
+        raise ValueError("Native raster modes require a mark chunk limit")
+    if chunk_limit is not None:
+        chunk_microns = round(
+            _number(chunk_limit, "Native raster mark chunk limit") * 1000
+        )
+        if not 1 <= chunk_microns <= S14_MAX:
+            raise ValueError(
+                "Native raster mark chunk limit must fit the signed "
+                "relative field"
+            )
 
     channel_mode = profile.laser_channel_mode
     mapping_indices: tuple[int, ...] = ()
@@ -2200,7 +2214,18 @@ class RuidaJobCompiler:
 
             target = _coordinates(event)
             if raster_envelope:
-                records.append(self._raster_motion(event, position, target))
+                if (
+                    layer.kind == "raster"
+                    and layer.raster_processing != "planned-path"
+                    and not isinstance(event, TravelTo)
+                ):
+                    records.extend(
+                        self._native_raster_mark_motion(position, target)
+                    )
+                else:
+                    records.append(
+                        self._raster_motion(event, position, target)
+                    )
             elif isinstance(event, TravelTo):
                 stationary_mode = self.profile.stationary_event_mode
                 if (
@@ -2371,6 +2396,49 @@ class RuidaJobCompiler:
             x_mm=target[0] / 1000,
             y_mm=target[1] / 1000,
         )
+
+    def _native_raster_mark_motion(
+        self,
+        position: tuple[int, int] | None,
+        target: tuple[int, int],
+    ) -> list[KnownCommand]:
+        if position is None:
+            raise AssertionError("Raster mark position was not initialized")
+        dx = target[0] - position[0]
+        dy = target[1] - position[1]
+        if dy == 0:
+            name = "cut_horizontal"
+            field = "dx_mm"
+            delta = dx
+        elif dx == 0:
+            name = "cut_vertical"
+            field = "dy_mm"
+            delta = dy
+        else:
+            raise AssertionError("Native raster mark was not axial")
+        chunk_limit = self.profile.native_raster_mark_chunk_mm
+        if chunk_limit is None:
+            raise AssertionError("Native raster mark chunk limit is missing")
+        return [
+            self._command(name, **{field: chunk / 1000})
+            for chunk in self._s14_chunks(
+                delta,
+                round(chunk_limit * 1000),
+            )
+        ]
+
+    @staticmethod
+    def _s14_chunks(delta: int, maximum: int) -> tuple[int, ...]:
+        chunks = []
+        while delta:
+            chunk = (
+                min(delta, maximum)
+                if delta > 0
+                else max(delta, -maximum)
+            )
+            chunks.append(chunk)
+            delta -= chunk
+        return tuple(chunks)
 
     @staticmethod
     def _fits_s14(value: int) -> bool:

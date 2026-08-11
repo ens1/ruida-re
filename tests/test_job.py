@@ -1365,7 +1365,9 @@ class RuidaJobCompilerTest(unittest.TestCase):
         self.assertEqual(metric["first_value"], 1)
         self.assertEqual(metric["second_value"], 1)
 
-    def test_relative_motion_uses_absolute_fallback(self) -> None:
+    def test_native_raster_long_travel_and_mark_use_evidenced_motion(
+        self,
+    ) -> None:
         plan = JobPlan(
             layers=(
                 _raster_layer(
@@ -1388,15 +1390,182 @@ class RuidaJobCompilerTest(unittest.TestCase):
         ]
         first = names.index("move_absolute")
         self.assertEqual(
-            names[first : first + 5],
+            names[first : first + 7],
             [
                 "move_absolute",
                 "move_absolute",
-                "cut_absolute",
+                "cut_horizontal",
+                "cut_horizontal",
+                "cut_horizontal",
                 "move_vertical",
                 "cut_horizontal",
             ],
         )
+
+    def test_native_raster_marks_split_at_profile_chunk_limit(self) -> None:
+        cases = (
+            (
+                "horizontal-positive",
+                "horizontal",
+                TravelTo(0, 0),
+                MarkTo(9, 0),
+                "cut_horizontal",
+                "dx_mm",
+                (4.0, 4.0, 1.0),
+            ),
+            (
+                "horizontal-negative",
+                "horizontal",
+                TravelTo(9, 0),
+                MarkTo(0, 0),
+                "cut_horizontal",
+                "dx_mm",
+                (-4.0, -4.0, -1.0),
+            ),
+            (
+                "vertical-positive",
+                "vertical",
+                TravelTo(0, 0),
+                MarkTo(0, 9),
+                "cut_vertical",
+                "dy_mm",
+                (4.0, 4.0, 1.0),
+            ),
+            (
+                "vertical-negative",
+                "vertical",
+                TravelTo(0, 9),
+                MarkTo(0, 0),
+                "cut_vertical",
+                "dy_mm",
+                (-4.0, -4.0, -1.0),
+            ),
+        )
+
+        for label, axis, start, end, name, field, expected in cases:
+            with self.subTest(case=label):
+                layer = _raster_layer((start, end), scan_axis=axis)
+                result = RuidaJobCompiler().compile(JobPlan((layer,)))
+                cuts = [
+                    record
+                    for record in result.program.records
+                    if isinstance(record, KnownCommand)
+                    and record.name.startswith("cut_")
+                ]
+
+                self.assertEqual(
+                    [record.name for record in cuts],
+                    [name] * 3,
+                )
+                self.assertEqual(
+                    [record.values[field] for record in cuts],
+                    list(expected),
+                )
+                self.assertEqual(result.marked_distance_mm, 9)
+
+    def test_native_raster_chunk_limit_must_fit_relative_field(self) -> None:
+        for limit in (None, 0, 8.192):
+            with self.subTest(limit=limit), self.assertRaises(ValueError):
+                RuidaJobCompiler(
+                    replace(
+                        LIGHTBURN_2103_644XS,
+                        native_raster_mark_chunk_mm=limit,
+                    )
+                )
+
+    def test_native_raster_failure_shape_uses_only_axial_cuts(self) -> None:
+        high = 38 * 100 / 255
+        edge = 5 * 100 / 255
+        events = (
+            TravelTo(120, 8.052),
+            SetModulation(high),
+            MarkTo(96, 8.052),
+            SetModulation(edge),
+            MarkTo(95, 8.052),
+            TravelTo(84, 8.052),
+            SetModulation(edge),
+            MarkTo(83, 8.052),
+            SetModulation(high),
+            MarkTo(66, 8.052),
+            SetModulation(edge),
+            MarkTo(65, 8.052),
+            TravelTo(54, 8.052),
+            SetModulation(edge),
+            MarkTo(53, 8.052),
+            SetModulation(high),
+            MarkTo(30, 8.052),
+            TravelTo(30, 12.052),
+            SetModulation(high),
+            MarkTo(53, 12.052),
+            SetModulation(edge),
+            MarkTo(54, 12.052),
+            TravelTo(65, 12.052),
+            SetModulation(edge),
+            MarkTo(66, 12.052),
+            SetModulation(high),
+            MarkTo(83, 12.052),
+            SetModulation(edge),
+            MarkTo(84, 12.052),
+            TravelTo(95, 12.052),
+            SetModulation(edge),
+            MarkTo(96, 12.052),
+            SetModulation(high),
+            MarkTo(120, 12.052),
+        )
+        layer = _raster_layer(
+            events,
+            raster_strategy="bidirectional",
+            min_power_percent=edge,
+            max_power_percent=15,
+        )
+
+        result = RuidaJobCompiler().compile(JobPlan((layer,)))
+        records = [
+            record
+            for record in result.program.records
+            if isinstance(record, KnownCommand)
+        ]
+        cuts = [record for record in records if record.name.startswith("cut_")]
+        expected_deltas = [
+            *([-4.0] * 6),
+            -1.0,
+            -1.0,
+            *([-4.0] * 4),
+            -1.0,
+            -1.0,
+            -1.0,
+            *([-4.0] * 5),
+            -3.0,
+            *([4.0] * 5),
+            3.0,
+            1.0,
+            1.0,
+            *([4.0] * 4),
+            1.0,
+            1.0,
+            1.0,
+            *([4.0] * 6),
+        ]
+
+        self.assertEqual(
+            [record.name for record in cuts],
+            ["cut_horizontal"] * len(expected_deltas),
+        )
+        self.assertEqual(
+            [record.values["dx_mm"] for record in cuts],
+            expected_deltas,
+        )
+        self.assertNotIn("cut_absolute", [record.name for record in records])
+        self.assertNotIn("cut_relative", [record.name for record in records])
+        self.assertEqual(
+            sum(record.name == "immediate_power_1" for record in records),
+            14,
+        )
+        self.assertEqual(
+            sum(record.name == "immediate_power_3" for record in records),
+            14,
+        )
+        self.assertEqual(result.marked_distance_mm, 136)
 
     def test_rejects_invalid_or_incomplete_plans(self) -> None:
         cases = (
@@ -2461,6 +2630,10 @@ class RuidaJobCompilerTest(unittest.TestCase):
         self.assertEqual(
             LIGHTBURN_2103_644XS.execution_evidence_source,
             "fixtures/hardware/ruida-644xs-usb-serial-v1/manifest-v1.json",
+        )
+        self.assertEqual(
+            LIGHTBURN_2103_644XS.native_raster_mark_chunk_mm,
+            4,
         )
         self.assertTrue(
             (ROOT / LIGHTBURN_2103_644XS.execution_evidence_source).is_file()
