@@ -708,13 +708,14 @@ SEMANTIC_NOTES = {
     "c4": "Tentative and encoder tables disagree on the laser index.",
     "c2": (
         "Controlled grayscale fixtures emit this immediately after C7 "
-        "with the same normalized modulation value. Prior implementations "
-        "call it laser 3, but the physical channel identity is unverified."
+        "with the same normalized position within the layer power range. "
+        "Prior implementations call it laser 3, but the physical channel "
+        "identity is unverified."
     ),
     "c7": (
         "Controlled grayscale fixtures emit this immediately before C2 "
-        "with a normalized modulation value independent of layer minimum "
-        "power."
+        "with a normalized position within the layer power range. Changing "
+        "only layer minimum power leaves this value unchanged."
     ),
     "c601": (
         "Controlled dual-head fixtures independently vary the laser 1 "

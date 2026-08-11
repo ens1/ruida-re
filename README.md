@@ -103,6 +103,10 @@ machine_file = RuidaJobCompiler().compile(plan).encode_rd()
 
 Coordinates are absolute machine-space millimetres, speed is millimetres per
 second, and layer power and modulation are percentages from 0 through 100.
+`SetModulation(m)` selects the normalized position within the layer range, so
+effective output is
+`minimum + m / 100 * (maximum - minimum)`; it is not an absolute output
+percentage.
 The host must already have rendered images, generated scanlines, selected
 blank and marked spans, optimized paths, applied machine transforms, and
 expanded passes. `TravelTo`, `MarkTo`, and `SetModulation` describe that final

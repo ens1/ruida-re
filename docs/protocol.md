@@ -309,11 +309,15 @@ and closes raster motion with `E7 00` before the global `EB` array end and
 final `E7 00` block end.
 
 Grayscale motion uses paired `C7` then `C2` records with identical normalized
-power values before each marked span. Changing only layer minimum power from
-10% to 30% leaves all paired modulation bytes unchanged while changing the
-four layer/runtime minimum-power records. The modulation is therefore kept
-separate from layer min/max transfer. The historical physical channel label
-for `C2` remains unverified.
+range positions before each marked span. Changing only layer minimum power
+from 10% to 30% leaves all paired modulation bytes unchanged while changing
+the four layer/runtime minimum-power records. The seven recorded modulation
+values track the normalized darkness of the resampled two-row source and are
+not confined to either absolute output range. Together with LightBurn's
+documented grayscale rule, this establishes the effective-output model
+`minimum + modulation / 100 * (maximum - minimum)` for these controlled
+exports. The values are not absolute output percentages. The historical
+physical channel label for `C2` remains unverified.
 
 LightBurn selects compact signed relative motion after the first absolute
 position: `8A`/`8B` for blank axial spans, `89` for two-axis travel, and

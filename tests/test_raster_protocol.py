@@ -104,7 +104,9 @@ class RasterProtocolTest(unittest.TestCase):
                 )
                 self.assertEqual(controls[0].raw, f"ca01{operation:02x}")
 
-    def test_grayscale_modulation_ignores_minimum_metadata(self) -> None:
+    def test_grayscale_modulation_is_normalized_within_power_range(
+        self,
+    ) -> None:
         identifiers = (
             "r005-grayscale-range-10-90",
             "r006-grayscale-range-30-90",
@@ -170,6 +172,26 @@ class RasterProtocolTest(unittest.TestCase):
         self.assertAlmostEqual(next(iter(minimums[0].values())), 10.0, 2)
         self.assertAlmostEqual(next(iter(minimums[1].values())), 30.0, 2)
         self.assertEqual(maximums[0], maximums[1])
+
+        normalized = [
+            record.values["power_percent"]
+            for record in commands(
+                self.programs[identifiers[0]],
+                "immediate_power_1",
+            )
+        ]
+        self.assertLess(min(normalized), 30)
+        effective = []
+        for minimum in (10, 30):
+            effective.append(
+                [
+                    minimum + value / 100 * (90 - minimum)
+                    for value in normalized
+                ]
+            )
+        self.assertNotEqual(effective[0], effective[1])
+        self.assertTrue(all(10 <= value <= 90 for value in effective[0]))
+        self.assertTrue(all(30 <= value <= 90 for value in effective[1]))
 
     def test_z_per_pass_does_not_change_exported_rd(self) -> None:
         self.assertEqual(

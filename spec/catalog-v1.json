@@ -1127,7 +1127,7 @@
         }
       ],
       "name": "immediate_power_3",
-      "notes": "Controlled grayscale fixtures emit this immediately after C7 with the same normalized modulation value. Prior implementations call it laser 3, but the physical channel identity is unverified.",
+      "notes": "Controlled grayscale fixtures emit this immediately after C7 with the same normalized position within the layer power range. Prior implementations call it laser 3, but the physical channel identity is unverified.",
       "opcode": "c2",
       "reply_behavior": "unknown",
       "reply_commands": [],
@@ -2019,7 +2019,7 @@
         }
       ],
       "name": "immediate_power_1",
-      "notes": "Controlled grayscale fixtures emit this immediately before C2 with a normalized modulation value independent of layer minimum power.",
+      "notes": "Controlled grayscale fixtures emit this immediately before C2 with a normalized position within the layer power range. Changing only layer minimum power leaves this value unchanged.",
       "opcode": "c7",
       "reply_behavior": "unknown",
       "reply_commands": [],

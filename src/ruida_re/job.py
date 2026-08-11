@@ -90,7 +90,7 @@ class Pulse:
 
 @dataclass(frozen=True)
 class SetModulation:
-    """Set 0..100 raster modulation, independent of layer power limits."""
+    """Set a 0..100 position within the raster layer's power range."""
 
     percent: float
 

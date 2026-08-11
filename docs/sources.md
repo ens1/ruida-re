@@ -156,6 +156,18 @@ measurement verified execution. It covers one controller/profile and one
 generated job. The manifest records the observed reply bytes, but it is not a
 complete serial transcript or a multi-controller compatibility claim.
 
+The controlled LightBurn `r005` and `r006` exports change only grayscale
+minimum power from 10% to 30%. Their paired `C7`/`C2` bytes remain identical,
+and their seven decoded values track normalized source-image darkness rather
+than either absolute output range. This agrees with LightBurn's official
+[grayscale documentation](https://docs.lightburnsoftware.com/latest/Reference/CutSettingsEditor/ImageMode/#grayscale),
+which defines image output between Min Power and Max Power. The
+[pinned Raygeo source](https://github.com/ens1/raygeo/blob/5663bec8c5d47ebb7f3f09d6df0658f5bdac8583/src/image/scan.rs#L641-L665)
+independently confirms that Rayforge scanline bytes are already absolute
+resolved outputs. A Rayforge adapter must therefore inverse-normalize each
+positive byte into the layer range before emitting `SetModulation`; direct
+`sample / 255` transfer would scale the output twice.
+
 ## Planned-path live hardware validation
 
 The

@@ -45,14 +45,16 @@ The public plan types are:
 - `Dwell`, a stationary non-marking wait;
 - `Pulse`, a stationary timed mark;
 - `RasterSection`, one independently closed host-planned raster path block; and
-- `SetModulation`, a normalized raster modulation change before later marked
-  motion.
+- `SetModulation`, a normalized position within the raster layer's power range
+  before later marked motion.
 
 Canonical plan units are absolute machine-space millimetres for X and Y,
 millimetres per second for speed, and percentages from 0 through 100 for layer
 minimum power, layer maximum power, and raster modulation. Layer indices are
-contiguous from zero. `SetModulation` is distinct from the layer power limits;
-the host owns the mapping from source pixels or depth values to modulation.
+contiguous from zero. `SetModulation(m)` is distinct from the layer power
+limits and selects the normalized position `m` within them. Its effective
+output is `minimum + m / 100 * (maximum - minimum)`. The host owns the mapping
+from source pixels or depth values to that normalized value.
 
 Dynamic vector power uses a versioned, stateful contract. Layer setup starts
 at baseline power. `MarkWithPower` emits an active-power envelope and leaves
@@ -236,7 +238,8 @@ Rayforge document/image processing
 ```
 
 The adapter translates final non-marking motion to `TravelTo`, final marking
-motion to `MarkTo`, and normalized per-span raster power to `SetModulation`.
+motion to `MarkTo`, and normalized per-span raster range position to
+`SetModulation`.
 It also transfers supported layer speed, power limits, air state, and raster
 axis and strategy. A bitmap, depth map, optimizer setting, or application
 model should not cross this boundary. That keeps generic laser planning in
@@ -255,12 +258,17 @@ derive the `CA 03` bitmask and preserve each head's independent power range.
 
 For constant-power scanlines, positive spans become `MarkTo` and exact-zero
 spans become `TravelTo`; use the resolved static output as both layer power
-limits and emit no modulation records. For variable-power scanlines, each
-positive eight-bit sample is already the absolute resolved output: emit
-`SetModulation(100 * sample / 255)` followed by `MarkTo`, and translate zero
-to `TravelTo`. Do not multiply those samples by an earlier step-power value a
-second time. Planar depth passes are ordinary repeated motion; any remaining
-nonzero Z coordinate is unsupported.
+limits and emit no modulation records. If a variable-power producer supplies
+an absolute eight-bit output sample `s`, first convert it back to the Ruida
+range position with
+`100 * (100 * s / 255 - minimum) / (maximum - minimum)`, clamp only for the
+producer's documented quantization tolerance, then emit `SetModulation`
+followed by `MarkTo`. A collapsed range uses a nonzero modulation value because
+every position resolves to the same output. Exact-zero samples remain
+`TravelTo`; they must not become zero-modulation marks. Do not pass an absolute
+output percentage directly as modulation, because that applies the layer
+range a second time. Planar depth passes are ordinary repeated motion; any
+remaining nonzero Z coordinate is unsupported.
 
 For a non-cardinal raster, Rayforge must perform the rotation, clipping,
 scanline ordering, bidirectional choice, overscan, and cross-hatch expansion.
