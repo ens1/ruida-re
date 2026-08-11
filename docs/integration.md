@@ -133,10 +133,11 @@ also has operator-observed execution evidence; multiple sections and
 cross-hatch remain offline-only.
 
 The c001-c044 compiler extensions are intentionally isolated behind opt-in
-profiles. In addition to the scoped planned-path observation, two dynamic
-vector jobs have narrow operator observations that exposed persistent active
-power in an uncorrected payload. The corrected restoration sequence and all
-other advanced modes have no hardware-execution evidence:
+profiles. In addition to the scoped planned-path observation, three dynamic
+vector jobs have narrow operator observations. The first two together exposed
+persistent active power in an uncorrected payload; the third exercised the
+corrected restoration sequence successfully. All other advanced modes have no
+hardware-execution evidence:
 
 | Profile | Accepted plan feature | Evidence-backed lowering |
 | --- | --- | --- |
@@ -275,15 +276,19 @@ merely because two adjacent source segments happen to share a value.
 
 The scoped
 [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json)
-records two one-layer jobs on one Boss LS2040. A short 15%-10%-15% job looked
+records three one-layer jobs on one Boss LS2040. A short 15%-10%-15% job looked
 solid and did not establish a visible power change. A longer 15%-5%-15% job
 moved continuously but visibly marked only its first 30 mm. The reviewed
 payload set the reduced active state before the middle span and omitted a
 baseline restore before the final ordinary mark. The result is consistent with
 that state persisting and the later spans remaining below the material's
-visible marking threshold. The corrected compiler sequence has offline tests
-only. It has no controller acknowledgement, calibrated power metrology, or
-mode-wide hardware validation and remains behind the research profile.
+visible marking threshold. A corrected 15%-5%-15% job inserted the explicit
+baseline envelope before the trailing mark. The operator reported an
+approximately 30 mm line, a gap, and another approximately 30 mm line. Its
+one-packet host transfer had no retry, controller acknowledgement, or execution
+acknowledgement. This is scoped evidence for that restore sequence, not
+calibrated power metrology or mode-wide hardware validation, and the feature
+remains behind the research profile.
 
 If Rayforge exposes stationary events, map a non-marking wait to `Dwell` and a
 timed stationary mark to `Pulse`; they are not interchangeable. The controlled
@@ -827,13 +832,15 @@ particular:
   not as angle metadata; one constant-power, single-section 45-degree job has
   a scoped operator-observed success, while cross-hatch, other diagonal forms,
   and diagonal grayscale remain untested on hardware;
-- two-head power, dynamic effective vector power, stationary dwell/pulse, RF
+- dynamic effective vector power has one scoped operator-observed reduction
+  and restore sequence, while two-head power, stationary dwell/pulse, RF
   frequency, fiber pulse width, and paired Z-offset serialization have exact
   offline golden coverage but no hardware-execution evidence; cut-through and
   rotary remain unsupported; and
-- live behavior has injectable UDP and serial test coverage plus two scoped
-  operator-observed Ruida 644XS USB-serial job results, but no automatic
-  physical verification or public multi-controller compatibility matrix.
+- live behavior has injectable UDP and serial test coverage plus three
+  narrowly scoped operator-observed Ruida 644XS USB-serial validation sets,
+  but no automatic physical verification or public multi-controller
+  compatibility matrix.
 
 See [protocol notes](protocol.md) for layer-level facts and unresolved
 questions, and [sources and provenance](sources.md) for the evidence policy.

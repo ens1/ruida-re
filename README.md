@@ -123,9 +123,9 @@ planned-path section.
 
 Advanced capability surfaces remain isolated behind explicit research
 profiles. One narrow planned-path subset has positive operator-observed
-execution. Two dynamic-power jobs have scoped operator observations that
-exposed persistent active power and a missing restore in the executed
-payloads; the corrected restore sequence remains offline-only. The remaining
+execution. Three dynamic-power jobs have scoped operator observations: two
+together exposed persistent active power and a missing restore, and the third
+exercised the corrected explicit restore sequence successfully. The remaining
 advanced behavior has offline fixture evidence only:
 
 | Profile | Plan surface | Controlled serialization |
@@ -167,16 +167,22 @@ not use it. Consecutive `MarkWithPower` events each emit their own explicit
 envelope, and the compiler does not invent an end-of-layer restore. Hosts can
 require this behavior through `DYNAMIC_POWER_RESTORE_CONTRACT == 1`.
 
-The two scoped observations are recorded in the
+The three scoped observations are recorded in the
 [dynamic-vector hardware manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json).
 An initial 15%-10%-15% coupon looked solid and was inconclusive. A longer
 15%-5%-15% coupon moved continuously but visibly marked only its first 30 mm.
 Its reviewed payload lowered active power before the middle span and omitted a
 baseline restore before the last span. For that controller and job, the result
 is consistent with the lower active state persisting and both later spans
-remaining below the cardboard's visible marking threshold. This is not
-calibrated power metrology or mode-wide validation. The corrected restoration
-sequence has offline tests only and the profile remains research-only.
+remaining below the cardboard's visible marking threshold. A corrected
+15%-5%-15% coupon inserted a second operation-5 envelope restoring the layer's
+5%-15% baseline before the final mark. The operator reported an approximately
+30 mm line, a gap, and another approximately 30 mm line. The one-packet host
+transfer had no retry, controller acknowledgement, or execution
+acknowledgement. This supports the explicit restore for that exact one-layer,
+one-enabled-command-channel, 100 mm/s path; it is not calibrated power
+metrology, physical channel-routing evidence, or mode-wide validation, and the
+profile remains research-only.
 
 ### First live validation
 

@@ -382,7 +382,11 @@ The remaining controlled results are:
   visibly marked only its first 30 mm. The corrected compiler treats active
   power as persistent, restores layer baseline before ordinary `MarkTo`, and
   reserves no-restore `MarkWithCurrentPower` for reproducing known producer
-  streams. That correction has offline evidence only; see the
+  streams. A corrected one-layer, one-enabled-command-channel, 100 mm/s
+  payload restored its 5%-15% baseline after a 5% span; the operator reported
+  an approximately 30 mm line, a gap, and another approximately 30 mm line.
+  This is scoped evidence for the explicit restore, not physical channel
+  routing, mode-wide behavior, or calibrated power validation; see the
   [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json).
 - **Stationary timing (c022-c026 and c033-c036).** `C6 11` follows controlled
   start/end delay placement and carries a non-marking dwell duration in
@@ -420,8 +424,9 @@ use a separate opt-in research profile. Those profiles reproduce their
 offline goldens exactly. One single-section 45-degree planned path has the
 scoped operator observation above; the broad planned-path mode still has
 `execution_evidence="not-observed"` because it also includes an unexecuted
-multiple-section separator. The other advanced modes have no hardware
-execution evidence.
+multiple-section separator. The dynamic-power profile likewise retains
+`execution_evidence="not-observed"` despite the one scoped restore observation.
+The other advanced modes have no hardware execution evidence.
 
 ## Registry coverage
 

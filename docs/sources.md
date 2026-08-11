@@ -177,6 +177,32 @@ broader planned-path profile therefore remains research-only with a
 mode-wide `not-observed` execution label. This preserves the exact successful
 observation without projecting it onto unexecuted planned-path forms.
 
+## Dynamic-power live hardware validation
+
+The
+[dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json)
+content-addresses three exact Rayforge-generated one-layer jobs executed on one
+Boss LS2040. The first 15%-10%-15% coupon was visually inconclusive. A longer
+15%-5%-15% coupon visibly marked only its first approximately 30 mm; its
+payload contained a reduced-power envelope but no explicit baseline restore.
+
+The corrected 564-byte job decoded as 86 known records with no issues and
+reproduced exactly with preserved and recomputed checksums. It used three 30 mm
+absolute cuts at Y 95 mm and 100 mm/s. A seven-record envelope selected layer
+zero and reduced the laser-1 active-power command fields to 5% before the
+middle cut. A second seven-record envelope restored the layer's 5%-15%
+laser-1 command-field range before the trailing cut; inactive laser-2 command
+fields remained 40%-40% in both envelopes.
+
+The corrected artifact completed one 564-byte host-side serial transfer with
+no retry. That receipt is not a controller or execution acknowledgement. The
+operator reported, "Perfect. A ~30mm line, a gap, and a ~30mm line". This is
+scoped evidence for the explicit restore in that exact one-enabled-command-
+channel, one-layer, 100 mm/s sequence. It is not dimensional or optical-power
+metrology, physical channel-routing evidence, or validation of arbitrary
+dynamic-power paths. The broad profile retains its mode-wide `not-observed`
+label and remains research-only.
+
 ## Read-only setting request evidence
 
 The installed CLI exposes request-context `DA 00` because the live observation
