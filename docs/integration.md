@@ -37,9 +37,11 @@ The public plan types are:
 - `JobPlan`, an ordered tuple of layers;
 - `LayerPlan`, one vector or raster layer and its final ordered events;
 - `TravelTo`, an absolute non-marking XY move;
-- `MarkTo`, an absolute marking XY move;
+- `MarkTo`, an absolute marking XY move at the layer baseline power;
 - `LaserChannelPlan`, an explicit head enable state and effective power range;
-- `MarkWithPower`, a vector mark preceded by resolved per-head power;
+- `MarkWithPower`, a vector mark that sets persistent resolved per-head power;
+- `MarkWithCurrentPower`, a producer-reproduction mark that deliberately keeps
+  a preceding `MarkWithPower` state;
 - `Dwell`, a stationary non-marking wait;
 - `Pulse`, a stationary timed mark;
 - `RasterSection`, one independently closed host-planned raster path block; and
@@ -51,6 +53,17 @@ millimetres per second for speed, and percentages from 0 through 100 for layer
 minimum power, layer maximum power, and raster modulation. Layer indices are
 contiguous from zero. `SetModulation` is distinct from the layer power limits;
 the host owns the mapping from source pixels or depth values to modulation.
+
+Dynamic vector power uses a versioned, stateful contract. Layer setup starts
+at baseline power. `MarkWithPower` emits an active-power envelope and leaves
+that state active after its mark. An ordinary `MarkTo` always means layer
+baseline; after an override the compiler emits a baseline envelope before the
+mark. `MarkWithCurrentPower` emits no restore and requires an active preceding
+override. It exists only for exact reconstruction of known producer streams,
+not normal host lowering or byte-count optimization. Consecutive
+`MarkWithPower` events each emit their explicit envelopes. The compiler does
+not add an end-of-layer restore. Integrations that depend on these semantics
+can require `DYNAMIC_POWER_RESTORE_CONTRACT == 1`.
 
 A raster `LayerPlan` must state both `scan_axis` and `raster_strategy`. The
 controlled profile accepts the four evidenced combinations:
@@ -120,8 +133,10 @@ also has operator-observed execution evidence; multiple sections and
 cross-hatch remain offline-only.
 
 The c001-c044 compiler extensions are intentionally isolated behind opt-in
-profiles. Except for that scoped planned-path observation, their advanced
-modes have no hardware-execution evidence:
+profiles. In addition to the scoped planned-path observation, two dynamic
+vector jobs have narrow operator observations that exposed persistent active
+power in an uncorrected payload. The corrected restoration sequence and all
+other advanced modes have no hardware-execution evidence:
 
 | Profile | Accepted plan feature | Evidence-backed lowering |
 | --- | --- | --- |
@@ -131,7 +146,7 @@ modes have no hardware-execution evidence:
 | `LIGHTBURN_2103_644XS_RF_RESEARCH` | vector `frequency_hz` | two `C6 60` records carrying hertz |
 | `LIGHTBURN_2103_644XS_FIBER_RESEARCH` | vector `pulse_width_ns` | one `C6 66` record carrying nanoseconds |
 | `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` on exactly one native raster layer | inverse `80 03` entry and restore deltas |
-| `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | vector `MarkWithPower` with explicit layer channels | per-mark effective active powers |
+| `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | stateful vector power with explicit layer channels | effective active powers plus baseline restoration before ordinary `MarkTo` |
 
 Select a research profile explicitly when constructing `RuidaJobCompiler`.
 They are narrow profiles, not a promise that arbitrary combinations of the
@@ -247,12 +262,28 @@ cut motion. Cross-hatch is two planned path sections, not a boolean Ruida
 mode. Because diagonal grayscale modulation is not established, a host must
 reject that combination rather than silently convert it.
 
-For dynamic vector power, resolve every segment's effective power for every
+For dynamic vector power, resolve each override's effective power for every
 configured channel in Rayforge, then use `MarkWithPower`. Do not pass a source
 PowerScale scalar. In the controlled 10%-minimum/70%-maximum case, LightBurn's
-50% scale became an effective head-1 range of 10% through 40%; the compiler
-API represents that resulting range directly. Each mark's enabled channel
-set must match the layer's channel set.
+50% scale became an effective head-1 range of 10% through 40%; the compiler API
+represents that resulting range directly. Each override's enabled channel set
+must match the layer's channel set. Use ordinary `MarkTo` for the next baseline
+span; the compiler restores the layer powers explicitly. Use
+`MarkWithCurrentPower` only when exact reconstruction of a known producer
+stream requires the preceding override to persist. A host must not select it
+merely because two adjacent source segments happen to share a value.
+
+The scoped
+[dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json)
+records two one-layer jobs on one Boss LS2040. A short 15%-10%-15% job looked
+solid and did not establish a visible power change. A longer 15%-5%-15% job
+moved continuously but visibly marked only its first 30 mm. The reviewed
+payload set the reduced active state before the middle span and omitted a
+baseline restore before the final ordinary mark. The result is consistent with
+that state persisting and the later spans remaining below the material's
+visible marking threshold. The corrected compiler sequence has offline tests
+only. It has no controller acknowledgement, calibrated power metrology, or
+mode-wide hardware validation and remains behind the research profile.
 
 If Rayforge exposes stationary events, map a non-marking wait to `Dwell` and a
 timed stationary mark to `Pulse`; they are not interchangeable. The controlled

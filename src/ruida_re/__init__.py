@@ -42,6 +42,7 @@ from .links import (
     link_for_transport,
 )
 from .job import (
+    DYNAMIC_POWER_RESTORE_CONTRACT,
     Bounds,
     CompileResult,
     Dwell,
@@ -64,6 +65,7 @@ from .job import (
     LayerKind,
     LayerPlan,
     MarkTo,
+    MarkWithCurrentPower,
     MarkWithPower,
     PairedZOffsetMode,
     PlannedPathRasterMode,
@@ -157,6 +159,7 @@ __all__ = (
     "DiagnosticEvent",
     "DrainLimitError",
     "Dwell",
+    "DYNAMIC_POWER_RESTORE_CONTRACT",
     "DynamicVectorPowerMode",
     "Endpoint",
     "ExchangeEvent",
@@ -181,6 +184,7 @@ __all__ = (
     "LayerKind",
     "LayerPlan",
     "MarkTo",
+    "MarkWithCurrentPower",
     "MarkWithPower",
     "NonUdpPolicy",
     "PROGRAM_SCHEMA_V1",

@@ -122,8 +122,11 @@ for the compiler to fill in. `SetModulation` is not yet supported in a
 planned-path section.
 
 Advanced capability surfaces remain isolated behind explicit research
-profiles. One narrow planned-path subset now has operator-observed execution;
-the remaining advanced behavior has offline fixture evidence only:
+profiles. One narrow planned-path subset has positive operator-observed
+execution. Two dynamic-power jobs have scoped operator observations that
+exposed persistent active power and a missing restore in the executed
+payloads; the corrected restore sequence remains offline-only. The remaining
+advanced behavior has offline fixture evidence only:
 
 | Profile | Plan surface | Controlled serialization |
 | --- | --- | --- |
@@ -133,7 +136,7 @@ the remaining advanced behavior has offline fixture evidence only:
 | `LIGHTBURN_2103_644XS_RF_RESEARCH` | `frequency_hz` | paired `C6 60` values in hertz |
 | `LIGHTBURN_2103_644XS_FIBER_RESEARCH` | `pulse_width_ns` | `C6 66` value in nanoseconds |
 | `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` | balanced, inverse `80 03` deltas around one native raster layer |
-| `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | `MarkWithPower` | explicit effective channel powers immediately before a vector mark |
+| `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | stateful `MarkWithPower`, baseline `MarkTo`, producer-only `MarkWithCurrentPower` | explicit effective active powers and baseline restoration |
 
 These profiles reproduce controlled LightBurn machine files exactly. A
 single-section 45-degree planned path has also executed successfully on one
@@ -153,6 +156,27 @@ head-2 through power. Rotary remains blocked without an exported rotary
 template and hardware. Passes remain host-expanded. Controlled changes to
 `zPerPass` and material height produced byte-identical `.rd` files, so neither
 is treated as a Z command.
+
+Dynamic vector power is stateful. Layer setup establishes the baseline.
+`MarkWithPower` emits resolved per-channel active powers, marks to its endpoint,
+and leaves those powers active. A following ordinary `MarkTo` means baseline
+layer power, so the compiler emits an explicit baseline-power envelope before
+that mark. `MarkWithCurrentPower` deliberately keeps the active override and
+exists only to reproduce a known producer stream; normal host lowering should
+not use it. Consecutive `MarkWithPower` events each emit their own explicit
+envelope, and the compiler does not invent an end-of-layer restore. Hosts can
+require this behavior through `DYNAMIC_POWER_RESTORE_CONTRACT == 1`.
+
+The two scoped observations are recorded in the
+[dynamic-vector hardware manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json).
+An initial 15%-10%-15% coupon looked solid and was inconclusive. A longer
+15%-5%-15% coupon moved continuously but visibly marked only its first 30 mm.
+Its reviewed payload lowered active power before the middle span and omitted a
+baseline restore before the last span. For that controller and job, the result
+is consistent with the lower active state persisting and both later spans
+remaining below the cardboard's visible marking threshold. This is not
+calibrated power metrology or mode-wide validation. The corrected restoration
+sequence has offline tests only and the profile remains research-only.
 
 ### First live validation
 
@@ -555,7 +579,7 @@ Raster discovery projects embed tiny synthetic grayscale PNGs and remain
 `pending` until every project has a corresponding LightBurn `.rd` export.
 They cover protocol-facing scan direction, scan axis, interval, variable
 power, and four-pass 3D slicing. The capability matrix adds diagonal planned
-paths, two laser heads, effective per-mark vector power, stationary dwell and
+paths, two laser heads, stateful effective vector power, stationary dwell and
 pulse, RF frequency, fiber pulse width, Z-offset candidates, and negative
 results for other controls. These tools do not implement image processing or
 send data to a controller.

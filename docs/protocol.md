@@ -375,8 +375,15 @@ The remaining controlled results are:
   ranging from 10% to 70% inserts an operation-5/select-layer envelope with
   effective head-1 power from 10% through 40% immediately before each affected
   mark. Omitted, explicit 0%, and explicit 100% cases do not establish three
-  distinct wire states. The compiler consequently accepts resolved per-mark
-  channel powers, not a PowerScale scalar or formula.
+  distinct wire states. The compiler consequently accepts resolved active
+  channel powers, not a PowerScale scalar or formula. Hardware observations on
+  one Boss LS2040 showed that the active values cannot be assumed to reset
+  after the affected mark: a 15%-5%-15% payload without an explicit restore
+  visibly marked only its first 30 mm. The corrected compiler treats active
+  power as persistent, restores layer baseline before ordinary `MarkTo`, and
+  reserves no-restore `MarkWithCurrentPower` for reproducing known producer
+  streams. That correction has offline evidence only; see the
+  [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json).
 - **Stationary timing (c022-c026 and c033-c036).** `C6 11` follows controlled
   start/end delay placement and carries a non-marking dwell duration in
   milliseconds scaled by 1000. Dot mode uses `C6 10` between non-cut moves;

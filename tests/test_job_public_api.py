@@ -8,6 +8,7 @@ import ruida_re
 
 
 PUBLIC_JOB_NAMES = (
+    "DYNAMIC_POWER_RESTORE_CONTRACT",
     "Bounds",
     "CompileResult",
     "Dwell",
@@ -30,6 +31,7 @@ PUBLIC_JOB_NAMES = (
     "LayerKind",
     "LayerPlan",
     "MarkTo",
+    "MarkWithCurrentPower",
     "MarkWithPower",
     "PairedZOffsetMode",
     "PlannedPathRasterMode",
@@ -60,6 +62,9 @@ class JobPublicApiTest(unittest.TestCase):
             len(ruida_re.__all__),
             len(set(ruida_re.__all__)),
         )
+
+    def test_dynamic_power_restore_contract_is_versioned(self) -> None:
+        self.assertEqual(ruida_re.DYNAMIC_POWER_RESTORE_CONTRACT, 1)
 
 
 if __name__ == "__main__":

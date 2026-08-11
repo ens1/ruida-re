@@ -18,6 +18,7 @@ LayerKind = Literal["vector", "raster"]
 ScanAxis = Literal["horizontal", "vertical"]
 RasterStrategy = Literal["unidirectional", "bidirectional"]
 RasterProcessingMode = Literal["native", "planned-path"]
+DYNAMIC_POWER_RESTORE_CONTRACT = 1
 MAX_ABSOLUTE_MM = 2_147_483.647
 MAX_ABSOLUTE_MICRONS = 2_147_483_647
 MAX_U35 = 34_359_738_367
@@ -39,7 +40,7 @@ class TravelTo:
 
 @dataclass(frozen=True)
 class MarkTo:
-    """Mark a line to an absolute machine-space position."""
+    """Mark at layer power to an absolute machine-space position."""
 
     x_mm: float
     y_mm: float
@@ -57,11 +58,19 @@ class LaserChannelPlan:
 
 @dataclass(frozen=True)
 class MarkWithPower:
-    """Mark a line after explicitly setting per-channel power limits."""
+    """Set persistent per-channel active powers, then mark a line."""
 
     x_mm: float
     y_mm: float
     laser_channels: tuple[LaserChannelPlan, ...]
+
+
+@dataclass(frozen=True)
+class MarkWithCurrentPower:
+    """Mark with active powers left by a preceding MarkWithPower."""
+
+    x_mm: float
+    y_mm: float
 
 
 @dataclass(frozen=True)
@@ -86,7 +95,13 @@ class SetModulation:
 
 
 LayerEvent: TypeAlias = (
-    TravelTo | MarkTo | MarkWithPower | Dwell | Pulse | SetModulation
+    TravelTo
+    | MarkTo
+    | MarkWithPower
+    | MarkWithCurrentPower
+    | Dwell
+    | Pulse
+    | SetModulation
 )
 
 
@@ -254,7 +269,7 @@ class PairedZOffsetMode:
 
 @dataclass(frozen=True)
 class DynamicVectorPowerMode:
-    """Observed explicit power envelope immediately before one mark."""
+    """Explicit active-power envelopes for stateful vector marking."""
 
     section_operation: int
     external_io_value: int
@@ -895,7 +910,7 @@ def _channel_plans(
 
 
 def _coordinates(
-    event: TravelTo | MarkTo | MarkWithPower,
+    event: TravelTo | MarkTo | MarkWithPower | MarkWithCurrentPower,
 ) -> tuple[int, int]:
     coordinates = (
         (event.x_mm, "Motion X coordinate"),
@@ -1082,6 +1097,7 @@ def _analyze_event_group(
     saw_mark = False
     mark_sign: int | None = None
     pending_modulation = False
+    dynamic_power_active = False
 
     for event in events:
         if isinstance(event, SetModulation):
@@ -1119,7 +1135,22 @@ def _analyze_event_group(
                 event.laser_channels,
                 "MarkWithPower laser channels",
             )
-        if not isinstance(event, (TravelTo, MarkTo, MarkWithPower)):
+            dynamic_power_active = True
+        if isinstance(event, MarkWithCurrentPower):
+            if layer.kind != "vector":
+                raise UnsupportedJobFeatureError(
+                    "MarkWithCurrentPower is only supported on vector "
+                    "layers"
+                )
+            if not dynamic_power_active:
+                raise ValueError(
+                    "MarkWithCurrentPower requires active powers from a "
+                    "preceding MarkWithPower"
+                )
+        if not isinstance(
+            event,
+            (TravelTo, MarkTo, MarkWithPower, MarkWithCurrentPower),
+        ):
             raise ValueError(f"Unknown layer event: {event!r}")
         target = _coordinates(event)
         if position is None and not isinstance(event, TravelTo):
@@ -1127,7 +1158,10 @@ def _analyze_event_group(
                 "The first positional event in a layer section must be "
                 "TravelTo"
             )
-        if isinstance(event, (MarkTo, MarkWithPower)):
+        if isinstance(
+            event,
+            (MarkTo, MarkWithPower, MarkWithCurrentPower),
+        ):
             if position is None:
                 raise AssertionError("Mark position was not initialized")
             if target == position:
@@ -1151,6 +1185,8 @@ def _analyze_event_group(
             marked_distances.append(math.dist(position, target) / 1000)
             pending_modulation = False
             saw_mark = True
+            if isinstance(event, MarkTo):
+                dynamic_power_active = False
         position = target
         points.append(target)
 
@@ -1510,6 +1546,17 @@ class RuidaJobCompiler:
                             layer_channels,
                             mark_channels,
                         )
+                    if isinstance(event, MarkWithCurrentPower):
+                        if self.profile.dynamic_vector_power_mode is None:
+                            raise UnsupportedJobFeatureError(
+                                "Current dynamic vector power is not "
+                                "supported by this job profile"
+                            )
+                        if layer_channels is None:
+                            raise UnsupportedJobFeatureError(
+                                "Current dynamic vector power requires "
+                                "explicit layer laser channels"
+                            )
 
     def _validate_profile_scope(self, plan: JobPlan) -> None:
         required_count = self.profile.required_layer_count
@@ -2010,6 +2057,7 @@ class RuidaJobCompiler:
 
         position: tuple[int, int] | None = None
         previous_event: LayerEvent | None = None
+        dynamic_power_active = False
         for event in events:
             if isinstance(event, SetModulation):
                 records.extend(
@@ -2055,7 +2103,25 @@ class RuidaJobCompiler:
                 previous_event = event
                 continue
             if isinstance(event, MarkWithPower):
-                records.extend(self._dynamic_power_envelope(layer, event))
+                records.extend(
+                    self._dynamic_power_envelope(
+                        layer,
+                        event.laser_channels,
+                    )
+                )
+                dynamic_power_active = True
+            elif isinstance(event, MarkTo) and dynamic_power_active:
+                if layer.laser_channels is None:
+                    raise AssertionError(
+                        "Dynamic vector power requires layer channels"
+                    )
+                records.extend(
+                    self._dynamic_power_envelope(
+                        layer,
+                        layer.laser_channels,
+                    )
+                )
+                dynamic_power_active = False
 
             target = _coordinates(event)
             if raster_envelope:
@@ -2110,7 +2176,7 @@ class RuidaJobCompiler:
     def _dynamic_power_envelope(
         self,
         layer: LayerPlan,
-        event: MarkWithPower,
+        laser_channels: tuple[LaserChannelPlan, ...],
     ) -> list[KnownCommand]:
         dynamic_mode = self.profile.dynamic_vector_power_mode
         channel_mode = self.profile.laser_channel_mode
@@ -2125,7 +2191,7 @@ class RuidaJobCompiler:
         ]
         for mapping, channel in zip(
             channel_mode.mappings,
-            event.laser_channels,
+            laser_channels,
         ):
             records.extend(
                 (
@@ -2191,7 +2257,7 @@ class RuidaJobCompiler:
 
     def _raster_motion(
         self,
-        event: TravelTo | MarkTo | MarkWithPower,
+        event: TravelTo | MarkTo | MarkWithPower | MarkWithCurrentPower,
         position: tuple[int, int] | None,
         target: tuple[int, int],
     ) -> KnownCommand:
@@ -2251,6 +2317,7 @@ class RuidaJobCompiler:
 
 
 __all__ = (
+    "DYNAMIC_POWER_RESTORE_CONTRACT",
     "LIGHTBURN_2103_644XS",
     "LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH",
     "LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH",
@@ -2273,6 +2340,7 @@ __all__ = (
     "LayerKind",
     "LayerPlan",
     "MarkTo",
+    "MarkWithCurrentPower",
     "MarkWithPower",
     "PairedZOffsetMode",
     "PlannedPathRasterMode",

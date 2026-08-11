@@ -17,7 +17,7 @@ source expression were not translated into this repository.
   machine X; LightBurn rejects it as out of bounds, so no `.rd` is claimed for
   that case.
 - Capability cases c001-c044 cover planned-path diagonal raster, two laser
-  heads, effective per-mark vector power, stationary dwell and pulse, RF
+  heads, stateful effective vector power, stationary dwell and pulse, RF
   frequency, fiber pulse width, paired Z-offset candidates, and controlled
   ambiguity or no-op results for cut-through, `zPerPass`, and material height.
   Nine family experiment manifests and nine strict reports bind those

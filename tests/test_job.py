@@ -23,6 +23,7 @@ from ruida_re.job import (
     LayerEvent,
     LayerPlan,
     MarkTo,
+    MarkWithCurrentPower,
     MarkWithPower,
     Pulse,
     RasterSection,
@@ -696,7 +697,7 @@ class RuidaJobCompilerTest(unittest.TestCase):
                     TravelTo(20, 20),
                     MarkTo(30, 20),
                     MarkWithPower(40, 20, effective),
-                    MarkTo(50, 20),
+                    MarkWithCurrentPower(50, 20),
                 ),
             ),
             (
@@ -705,7 +706,7 @@ class RuidaJobCompilerTest(unittest.TestCase):
                     TravelTo(20, 20),
                     MarkWithPower(30, 20, effective),
                     MarkWithPower(40, 20, effective),
-                    MarkTo(50, 20),
+                    MarkWithCurrentPower(50, 20),
                 ),
             ),
         )
@@ -724,6 +725,219 @@ class RuidaJobCompilerTest(unittest.TestCase):
                     LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH,
                     JobPlan((layer,)),
                 )
+
+    def test_dynamic_power_restores_baseline_before_normal_mark(self) -> None:
+        layer_channels = _capability_channels(
+            laser_1_power=5,
+            laser_1_max_power=15,
+        )
+        reduced = _capability_channels(
+            laser_1_power=5,
+            laser_1_max_power=5,
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=100,
+            min_power_percent=5,
+            max_power_percent=15,
+            events=(
+                TravelTo(30, 75),
+                MarkTo(60, 75),
+                MarkWithPower(90, 75, reduced),
+                MarkTo(120, 75),
+            ),
+            laser_channels=layer_channels,
+        )
+
+        result = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
+        ).compile(JobPlan((layer,)))
+        records = tuple(
+            record
+            for record in result.program.records
+            if isinstance(record, KnownCommand)
+        )
+        cut_indices = tuple(
+            index
+            for index, record in enumerate(records)
+            if record.name == "cut_absolute"
+        )
+
+        self.assertEqual(len(cut_indices), 3)
+        reduced_envelope = records[cut_indices[1] - 7 : cut_indices[1]]
+        restore_envelope = records[cut_indices[2] - 7 : cut_indices[2]]
+        expected_names = (
+            "layer_control",
+            "select_layer",
+            "laser_1_min_power",
+            "laser_1_max_power",
+            "laser_2_min_power",
+            "laser_2_max_power",
+            "external_io",
+        )
+        self.assertEqual(
+            tuple(record.name for record in reduced_envelope),
+            expected_names,
+        )
+        self.assertEqual(
+            tuple(record.name for record in restore_envelope),
+            expected_names,
+        )
+        self.assertEqual(
+            reduced_envelope[3].values["power_percent"],
+            5,
+        )
+        self.assertEqual(
+            restore_envelope[3].values["power_percent"],
+            15,
+        )
+        self.assertEqual(
+            restore_envelope[0].values,
+            {"operation": 5},
+        )
+        self.assertEqual(restore_envelope[1].values, {"layer": 0})
+        self.assertEqual(restore_envelope[6].values, {"value": 0})
+
+    def test_consecutive_dynamic_marks_set_power_then_restore(self) -> None:
+        layer_channels = _capability_channels(
+            laser_1_power=10,
+            laser_1_max_power=70,
+        )
+        reduced = _capability_channels(
+            laser_1_power=10,
+            laser_1_max_power=40,
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=10,
+            min_power_percent=10,
+            max_power_percent=70,
+            events=(
+                TravelTo(20, 20),
+                MarkWithPower(30, 20, reduced),
+                MarkWithPower(40, 20, reduced),
+                MarkTo(50, 20),
+            ),
+            laser_channels=layer_channels,
+        )
+
+        result = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
+        ).compile(JobPlan((layer,)))
+        records = tuple(
+            record
+            for record in result.program.records
+            if isinstance(record, KnownCommand)
+        )
+        cut_indices = tuple(
+            index
+            for index, record in enumerate(records)
+            if record.name == "cut_absolute"
+        )
+
+        self.assertEqual(len(cut_indices), 3)
+        self.assertEqual(
+            tuple(
+                records[index - 4].values["power_percent"]
+                for index in cut_indices
+            ),
+            (40, 40, 70),
+        )
+
+    def test_current_power_mark_requires_an_active_override(self) -> None:
+        compiler = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
+        )
+        channels = _capability_channels(
+            laser_1_power=10,
+            laser_1_max_power=70,
+        )
+        reduced = _capability_channels(
+            laser_1_power=10,
+            laser_1_max_power=40,
+        )
+        cases = (
+            (
+                TravelTo(20, 20),
+                MarkWithCurrentPower(30, 20),
+            ),
+            (
+                TravelTo(20, 20),
+                MarkWithPower(30, 20, reduced),
+                MarkTo(40, 20),
+                MarkWithCurrentPower(50, 20),
+            ),
+        )
+        for events in cases:
+            layer = LayerPlan(
+                index=0,
+                speed_mm_s=10,
+                min_power_percent=10,
+                max_power_percent=70,
+                events=events,
+                laser_channels=channels,
+            )
+            with (
+                self.subTest(events=events),
+                self.assertRaisesRegex(ValueError, "preceding MarkWithPower"),
+            ):
+                compiler.compile(JobPlan((layer,)))
+
+    def test_dynamic_power_state_starts_at_layer_power(self) -> None:
+        channels = _capability_channels(
+            laser_1_power=10,
+            laser_1_max_power=70,
+        )
+        reduced = _capability_channels(
+            laser_1_power=10,
+            laser_1_max_power=40,
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=10,
+            min_power_percent=10,
+            max_power_percent=70,
+            events=(
+                TravelTo(20, 20),
+                MarkTo(30, 20),
+                MarkWithPower(40, 20, reduced),
+            ),
+            laser_channels=channels,
+        )
+
+        result = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
+        ).compile(JobPlan((layer,)))
+        records = tuple(
+            record
+            for record in result.program.records
+            if isinstance(record, KnownCommand)
+        )
+        dynamic_controls = tuple(
+            record
+            for record in records
+            if record.name == "layer_control"
+            and record.values == {"operation": 5}
+        )
+        final_cut_index = max(
+            index
+            for index, record in enumerate(records)
+            if record.name == "cut_absolute"
+        )
+        active_power_names = {
+            "laser_1_min_power",
+            "laser_1_max_power",
+            "laser_2_min_power",
+            "laser_2_max_power",
+        }
+
+        self.assertEqual(len(dynamic_controls), 1)
+        self.assertFalse(
+            any(
+                record.name in active_power_names
+                for record in records[final_cut_index + 1 :]
+            )
+        )
 
     def test_multilayer_is_exact_lightburn_machine_file(self) -> None:
         plan = JobPlan(
