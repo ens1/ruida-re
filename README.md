@@ -122,11 +122,12 @@ for the compiler to fill in. `SetModulation` is not yet supported in a
 planned-path section.
 
 Advanced capability surfaces remain isolated behind explicit research
-profiles. One narrow planned-path subset has positive operator-observed
-execution. Three dynamic-power jobs have scoped operator observations: two
-together exposed persistent active power and a missing restore, and the third
-exercised the corrected explicit restore sequence successfully. The remaining
-advanced behavior has offline fixture evidence only:
+profiles. Exact single-section and two-section cross-hatch planned-path
+subsets have positive operator-observed execution. Four dynamic-power jobs
+have scoped operator observations: two together exposed persistent active
+power and a missing restore, while corrected one-restore and two-restore
+sequences executed successfully. The remaining advanced behavior has offline
+fixture evidence only:
 
 | Profile | Plan surface | Controlled serialization |
 | --- | --- | --- |
@@ -139,11 +140,13 @@ advanced behavior has offline fixture evidence only:
 | `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | stateful `MarkWithPower`, baseline `MarkTo`, producer-only `MarkWithCurrentPower` | explicit effective active powers and baseline restoration |
 
 These profiles reproduce controlled LightBurn machine files exactly. A
-single-section 45-degree planned path has also executed successfully on one
-Boss LS2040 configured as a Ruida 644XS. The broader planned-path mode remains
-research-only because its multiple-section separator and cross-hatch behavior
-have not executed on hardware. The profiles are opt-in and intentionally
-narrow; the default compiler still rejects those fields. The
+single-section 45-degree planned path and a separate two-section cross-hatch
+path have also executed successfully on one Boss LS2040 configured as a Ruida
+644XS. The exact cross-hatch evidence is in its
+[companion manifest](fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/cross-hatch-observation-v1.json).
+The broader planned-path mode remains research-only because these exact coupons
+do not validate arbitrary paths or settings. The profiles are opt-in and
+intentionally narrow; the default compiler still rejects those fields. The
 fixture-derived built-in limits are 200 ms for stationary events, 10–20 kHz
 for RF frequency, 0–200 ns for fiber pulse width, and 1 mm absolute Z offset.
 The dual-head, stationary, RF, fiber, and dynamic-power profiles accept
@@ -167,8 +170,10 @@ not use it. Consecutive `MarkWithPower` events each emit their own explicit
 envelope, and the compiler does not invent an end-of-layer restore. Hosts can
 require this behavior through `DYNAMIC_POWER_RESTORE_CONTRACT == 1`.
 
-The three scoped observations are recorded in the
-[dynamic-vector hardware manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json).
+The first three scoped observations are recorded in the
+[dynamic-vector hardware manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json),
+and the repeated-restore result has a
+[content-addressed companion manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/dynamic-repeated-observation-v4.json).
 An initial 15%-10%-15% coupon looked solid and was inconclusive. A longer
 15%-5%-15% coupon moved continuously but visibly marked only its first 30 mm.
 Its reviewed payload lowered active power before the middle span and omitted a
@@ -183,6 +188,36 @@ acknowledgement. This supports the explicit restore for that exact one-layer,
 one-enabled-command-channel, 100 mm/s path; it is not calibrated power
 metrology, physical channel-routing evidence, or mode-wide validation, and the
 profile remains research-only.
+
+A fourth 15%-5%-15%-5%-15% artifact encoded two reductions and two explicit
+restorations across five planned 16 mm spans. The operator reported three
+lines and two gaps. The approximate reported lengths are not metrology, and
+the gaps are not proof of zero optical output. This supports only that exact
+repeated-restore sequence.
+
+### Zero-power safety boundary
+
+An exact nominal-0% no-dwell control emitted visible laser power and drew a
+rectangle on the same Boss LS2040. The operator reported, "There was laser
+emission. I see a clearly drawn rectangle, maybe 25mmx50mm". The cause was not
+isolated: raw zero may mean default, stale, or no update; a controller or
+power-supply firing floor or another field may contribute. Minimal
+through-power fields were present, but their effect was not isolated. The
+negative evidence and paired program are recorded in the
+[zero-power safety manifest](fixtures/hardware/boss-ls2040-usb-serial-zero-power-safety-v1/manifest-v1.json).
+
+The paired job containing four C6 11 dwell records was stopped before
+transfer, and the planned Z coupons were also withheld and remain quarantined
+offline. C6 11 dwell and Z behavior therefore remain hardware-unobserved. Both
+zero-power programs are published only with `.rd.quarantined` suffixes and are
+do-not-send evidence.
+
+The compiler now rejects marking when any enabled channel's minimum or maximum
+would encode below raw power 16, and applies the same floor to raster marking
+modulation. This is a conservative generation boundary based on the observed
+producer field floor, not proof that raw 16 or another low setting is
+physically safe. It does not inspect, rewrite, or make safe any existing,
+cached, hand-authored, or externally supplied `.rd` file.
 
 ### First live validation
 
@@ -226,11 +261,19 @@ over-burning.
 
 That observation validates only the exact single-section, constant-power,
 head-1 subset. The job used five absolute travel/cut pairs and did not contain
-the operation-5 separator used by multiple sections. Cross-hatch, 135-degree
-and relative diagonal motion, grayscale modulation, dense scanning, and
-Rayforge end-to-end generation remain outside this hardware result. The
-mode-wide profile therefore retains its conservative `not-observed` execution
-label and research-only selector.
+the operation-5 separator used by multiple sections. A later
+[cross-hatch companion](fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/cross-hatch-observation-v1.json)
+records a 666-byte Rayforge artifact containing two sections, one operation-5
+separator, and five marks in each diagonal direction. At 15% and 100 mm/s, the
+operator reported both directions visible and no connection burns. The small
+reported edge is a decoded 0.3507 mm `cut_relative` mark, with no C6 10 pulse
+record. Its one-packet, zero-retry host receipt has no controller or execution
+acknowledgement.
+
+The exact observations do not validate arbitrary cross-hatch paths,
+135-degree or relative diagonal motion generally, grayscale modulation, dense
+scanning, other settings, or other controllers. The mode-wide profile retains
+its conservative `not-observed` execution label and research-only selector.
 
 ## Embed the codec
 

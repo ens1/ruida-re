@@ -1550,6 +1550,193 @@ class RuidaJobCompilerTest(unittest.TestCase):
             ):
                 RuidaJobCompiler().compile(plan)
 
+    def test_legacy_mark_rejects_power_fields_below_wire_floor(self) -> None:
+        layer = _baseline_plan().layers[0]
+        for minimum, maximum in (
+            (0, 0),
+            (0.001, 0.001),
+            (0.09, 0.09),
+            (0, 20),
+        ):
+            plan = JobPlan(
+                (
+                    replace(
+                        layer,
+                        min_power_percent=minimum,
+                        max_power_percent=maximum,
+                    ),
+                )
+            )
+            with (
+                self.subTest(minimum=minimum, maximum=maximum),
+                self.assertRaisesRegex(
+                    ValueError,
+                    "at or above raw power 16",
+                ),
+            ):
+                RuidaJobCompiler().compile(plan)
+
+        floor = replace(
+            layer,
+            min_power_percent=0.1,
+            max_power_percent=0.1,
+        )
+        result = RuidaJobCompiler().compile(JobPlan((floor,)))
+        self.assertTrue(result.encode_rd())
+
+    def test_explicit_mark_rejects_enabled_power_below_floor(self) -> None:
+        for minimum, maximum in ((0, 0), (0, 20)):
+            channels = (
+                LaserChannelPlan(1, True, minimum, maximum),
+                LaserChannelPlan(2, False, 40, 40),
+            )
+            layer = LayerPlan(
+                index=0,
+                speed_mm_s=10,
+                min_power_percent=minimum,
+                max_power_percent=maximum,
+                events=(TravelTo(20, 20), MarkTo(30, 20)),
+                laser_channels=channels,
+            )
+            with (
+                self.subTest(minimum=minimum, maximum=maximum),
+                self.assertRaisesRegex(
+                    ValueError,
+                    "at or above raw power 16",
+                ),
+            ):
+                RuidaJobCompiler(
+                    LIGHTBURN_2103_644XS_STATIONARY_RESEARCH
+                ).compile(JobPlan((layer,)))
+
+    def test_zero_inactive_channel_does_not_block_positive_mark(self) -> None:
+        channels = (
+            LaserChannelPlan(1, True, 20, 20),
+            LaserChannelPlan(2, False, 0, 0),
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=10,
+            min_power_percent=20,
+            max_power_percent=20,
+            events=(TravelTo(20, 20), MarkTo(30, 20)),
+            laser_channels=channels,
+        )
+
+        result = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH
+        ).compile(JobPlan((layer,)))
+
+        self.assertTrue(result.encode_rd())
+
+    def test_each_enabled_channel_requires_observed_power_floor(self) -> None:
+        channels = (
+            LaserChannelPlan(1, True, 20, 20),
+            LaserChannelPlan(2, True, 0, 0),
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=10,
+            min_power_percent=20,
+            max_power_percent=20,
+            events=(TravelTo(20, 20), MarkTo(30, 20)),
+            laser_channels=channels,
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            "every enabled laser channel minimum and maximum",
+        ):
+            RuidaJobCompiler(
+                LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH
+            ).compile(JobPlan((layer,)))
+
+    def test_dynamic_mark_rejects_zero_enabled_override(self) -> None:
+        layer_channels = (
+            LaserChannelPlan(1, True, 0, 70),
+            LaserChannelPlan(2, False, 40, 40),
+        )
+        zero_override = (
+            LaserChannelPlan(1, True, 0, 0),
+            LaserChannelPlan(2, False, 40, 40),
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=10,
+            min_power_percent=0,
+            max_power_percent=70,
+            events=(
+                TravelTo(20, 20),
+                MarkWithPower(30, 20, zero_override),
+            ),
+            laser_channels=layer_channels,
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            "at or above raw power 16",
+        ):
+            RuidaJobCompiler(
+                LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
+            ).compile(JobPlan((layer,)))
+
+    def test_dynamic_override_does_not_mask_unsafe_layer_setup(self) -> None:
+        layer_channels = (
+            LaserChannelPlan(1, True, 0, 70),
+            LaserChannelPlan(2, False, 40, 40),
+        )
+        positive_override = (
+            LaserChannelPlan(1, True, 10, 40),
+            LaserChannelPlan(2, False, 40, 40),
+        )
+        layer = LayerPlan(
+            index=0,
+            speed_mm_s=10,
+            min_power_percent=0,
+            max_power_percent=70,
+            events=(
+                TravelTo(20, 20),
+                MarkWithPower(30, 20, positive_override),
+            ),
+            laser_channels=layer_channels,
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            "at or above raw power 16",
+        ):
+            RuidaJobCompiler(
+                LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
+            ).compile(JobPlan((layer,)))
+
+    def test_raster_mark_rejects_modulation_below_observed_floor(self) -> None:
+        for modulation in (0, 0.09):
+            layer = _raster_layer(
+                (
+                    TravelTo(20, 20),
+                    SetModulation(modulation),
+                    MarkTo(30, 20),
+                )
+            )
+            with (
+                self.subTest(modulation=modulation),
+                self.assertRaisesRegex(
+                    ValueError,
+                    "modulation must encode at or above raw power 16",
+                ),
+            ):
+                RuidaJobCompiler().compile(JobPlan((layer,)))
+
+    def test_zero_power_travel_does_not_become_marking(self) -> None:
+        layer = replace(
+            _baseline_plan().layers[0],
+            min_power_percent=0,
+            max_power_percent=0,
+            events=(TravelTo(20, 20), TravelTo(30, 20)),
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            "at least one marking event",
+        ):
+            RuidaJobCompiler().compile(JobPlan((layer,)))
+
     def test_explicit_laser_channels_fail_closed(self) -> None:
         layer = _capability_vector_layer((TravelTo(20, 20), MarkTo(30, 20)))
         invalid_channels = (

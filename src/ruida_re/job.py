@@ -24,6 +24,7 @@ MAX_ABSOLUTE_MICRONS = 2_147_483_647
 MAX_U35 = 34_359_738_367
 S14_MIN = -(1 << 13)
 S14_MAX = (1 << 13) - 1
+_LIGHTBURN_MARK_POWER_WIRE_FLOOR = 16
 
 
 class UnsupportedJobFeatureError(ValueError):
@@ -873,6 +874,41 @@ def _wire_power_equal(first: float, second: float) -> bool:
     return _wire_power_value(first) == _wire_power_value(second)
 
 
+def _require_observed_mark_power_encoding(
+    layer: LayerPlan,
+    event: LayerEvent,
+    channels: tuple[LaserChannelPlan, ...] | None = None,
+) -> None:
+    effective_channels = channels
+    if effective_channels is None:
+        effective_channels = layer.laser_channels
+    if effective_channels is None:
+        enabled_power_fields = (
+            _wire_power_value(layer.min_power_percent),
+            _wire_power_value(layer.max_power_percent),
+        )
+    else:
+        enabled_power_fields = tuple(
+            value
+            for channel in effective_channels
+            if channel.enabled
+            for value in (
+                _wire_power_value(channel.min_power_percent),
+                _wire_power_value(channel.max_power_percent),
+            )
+        )
+    if not enabled_power_fields or any(
+        value < _LIGHTBURN_MARK_POWER_WIRE_FLOOR
+        for value in enabled_power_fields
+    ):
+        raise ValueError(
+            f"{event.__class__.__name__} requires every enabled laser "
+            "channel minimum and maximum to encode at or above raw power "
+            f"{_LIGHTBURN_MARK_POWER_WIRE_FLOOR}, the LightBurn-observed "
+            "marking floor"
+        )
+
+
 def _channel_plans(
     channels: object,
     label: str,
@@ -1098,10 +1134,15 @@ def _analyze_event_group(
     mark_sign: int | None = None
     pending_modulation = False
     dynamic_power_active = False
+    active_dynamic_channels: tuple[LaserChannelPlan, ...] | None = None
+    modulation_percent: float | None = None
 
     for event in events:
         if isinstance(event, SetModulation):
-            _power(event.percent, "Raster modulation")
+            modulation_percent = _power(
+                event.percent,
+                "Raster modulation",
+            )
             if layer.kind != "raster":
                 raise UnsupportedJobFeatureError(
                     "SetModulation is only supported on raster layers"
@@ -1124,6 +1165,13 @@ def _analyze_event_group(
                     f"{event.__class__.__name__} requires a current position"
                 )
             if isinstance(event, Pulse):
+                _require_observed_mark_power_encoding(layer, event)
+                if active_dynamic_channels is not None:
+                    _require_observed_mark_power_encoding(
+                        layer,
+                        event,
+                        active_dynamic_channels,
+                    )
                 saw_mark = True
             continue
         if isinstance(event, MarkWithPower):
@@ -1131,7 +1179,7 @@ def _analyze_event_group(
                 raise UnsupportedJobFeatureError(
                     "MarkWithPower is only supported on vector layers"
                 )
-            _channel_plans(
+            active_dynamic_channels = _channel_plans(
                 event.laser_channels,
                 "MarkWithPower laser channels",
             )
@@ -1185,8 +1233,35 @@ def _analyze_event_group(
             marked_distances.append(math.dist(position, target) / 1000)
             pending_modulation = False
             saw_mark = True
+            effective_channels = (
+                active_dynamic_channels
+                if isinstance(
+                    event,
+                    (MarkWithPower, MarkWithCurrentPower),
+                )
+                else None
+            )
+            _require_observed_mark_power_encoding(layer, event)
+            if effective_channels is not None:
+                _require_observed_mark_power_encoding(
+                    layer,
+                    event,
+                    effective_channels,
+                )
+            if (
+                layer.kind == "raster"
+                and modulation_percent is not None
+                and _wire_power_value(modulation_percent)
+                < _LIGHTBURN_MARK_POWER_WIRE_FLOOR
+            ):
+                raise ValueError(
+                    "Raster marking modulation must encode at or above "
+                    f"raw power {_LIGHTBURN_MARK_POWER_WIRE_FLOOR}, the "
+                    "LightBurn-observed marking floor"
+                )
             if isinstance(event, MarkTo):
                 dynamic_power_active = False
+                active_dynamic_channels = None
         position = target
         points.append(target)
 

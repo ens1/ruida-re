@@ -171,18 +171,31 @@ no visible cardboard marks. At 15%, the operator reported five correct lines,
 no connecting burn, and no over-burning. This is execution evidence from one
 Boss LS2040 configured as a Ruida 644XS, not dimensional or power metrology.
 
-The executed files contain no second `RasterSection`, operation-5 section
-separator, cross-hatch, signed-relative diagonal cut, or modulation. The
-broader planned-path profile therefore remains research-only with a
-mode-wide `not-observed` execution label. This preserves the exact successful
-observation without projecting it onto unexecuted planned-path forms.
+Those two executed files contain no second `RasterSection`, operation-5
+section separator, cross-hatch, signed-relative diagonal cut, or modulation.
+A later
+[cross-hatch companion manifest](../fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/cross-hatch-observation-v1.json)
+content-addresses a Rayforge-generated 666-byte artifact with two sections,
+five marks in each diagonal direction, and one operation-5 separator. Its host
+summary reported one packet and zero retries, with no controller or execution
+acknowledgement. The operator reported, "Crosshatch is good. Both directions
+are visible, no connection burns, and no burns. I can see the one small edge,
+the beam obviously pulsed at the top left of the crosshatch". The small
+top-left edge is a decoded 0.3507 mm `cut_relative` mark; no C6 10 record
+exists, so it is not pulse evidence.
+
+These exact observations are not dimensional, angle, timing, or power
+metrology. The broader planned-path profile remains research-only with a
+mode-wide `not-observed` execution label rather than projecting the coupons
+onto arbitrary planned paths.
 
 ## Dynamic-power live hardware validation
 
 The
 [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json)
-content-addresses three exact Rayforge-generated one-layer jobs executed on one
-Boss LS2040. The first 15%-10%-15% coupon was visually inconclusive. A longer
+content-addresses the first three exact Rayforge-generated one-layer jobs
+executed on one Boss LS2040. The first 15%-10%-15% coupon was visually
+inconclusive. A longer
 15%-5%-15% coupon visibly marked only its first approximately 30 mm; its
 payload contained a reduced-power envelope but no explicit baseline restore.
 
@@ -202,6 +215,40 @@ channel, one-layer, 100 mm/s sequence. It is not dimensional or optical-power
 metrology, physical channel-routing evidence, or validation of arbitrary
 dynamic-power paths. The broad profile retains its mode-wide `not-observed`
 label and remains research-only.
+
+The
+[repeated-restore companion](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/dynamic-repeated-observation-v4.json)
+records a fourth exact artifact containing five decoded 16 mm spans at
+15%-5%-15%-5%-15% and four alternating reduce/restore envelopes. Its host
+summary reported one packet and zero retries without controller or execution
+acknowledgement. The operator reported, "Yes, I see 3 lines, maybe 20mm each,
+two gaps". The decoded spans are 16 mm, so the reported lengths are not
+metrology. This is scoped evidence for the exact repeated-restore sequence,
+not calibrated-power, zero-output, or mode-wide evidence.
+
+## Zero-power negative hardware evidence
+
+The
+[zero-power safety manifest](../fixtures/hardware/boss-ls2040-usb-serial-zero-power-safety-v1/manifest-v1.json)
+records a nominal-0% no-dwell control that unexpectedly emitted visible laser
+power and drew a rectangle on the same Boss LS2040. The operator reported,
+"There was laser emission. I see a clearly drawn rectangle, maybe 25mmx50mm".
+It was transferred in one host-reported packet with zero retries and no
+controller or execution acknowledgement. The cause was not isolated: raw zero
+may mean default, stale, or no update; a firing floor or another field may
+contribute; and the minimal through-power fields were not independently tested.
+
+The paired artifact with four 200 ms C6 11 delays was stopped before transfer,
+and the planned Z coupons were also withheld and remain quarantined offline.
+C6 11 dwell and logical Z motion therefore remain hardware-unobserved. The two
+zero-power programs are retained only with `.rd.quarantined` suffixes as
+do-not-send evidence.
+
+The compiler now rejects marking if an enabled channel's minimum or maximum,
+or raster marking modulation, would encode below raw value 16. The floor is a
+conservative generation-time boundary derived from producer evidence, not
+proof that raw 16 is physically safe. Existing, cached, hand-authored, and
+external `.rd` files are not retroactively inspected or protected.
 
 ## Read-only setting request evidence
 

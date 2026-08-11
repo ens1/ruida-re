@@ -243,8 +243,9 @@ Selected logical frames are:
 The one-variable matrix establishes:
 
 - power raw values 16, 164, 8192, 16219, and 16383 for requested 0%, 1%, 50%,
-  99%, and 100%; LightBurn clamped the requested 0% case to 16, while raw zero
-  remains representable and controller behavior at zero is untested;
+  99%, and 100%; LightBurn clamped the requested 0% case to 16. Raw zero
+  remains representable, but a later exact raw-zero marking control visibly
+  emitted on one Boss LS2040 and must not be treated as laser-off;
 - exact thousandth precision for 12.345 mm/s and a raw value of 100 for
   0.1 mm/s;
 - `CA 01 12` and `CA 01 13` for air off and on in this job mode;
@@ -365,6 +366,15 @@ operation-5 section separator, signed-relative `A9` motion, a second section,
 or modulation, so none of those receive hardware-execution evidence from this
 test.
 
+A later exact Rayforge cross-hatch artifact did contain two planned-path
+sections, one operation-5 separator, and five marks in each diagonal direction.
+At 15% and 100 mm/s, the operator reported both directions visible and no
+connection burns. The small reported top-left edge decodes as a final
+0.3507 mm `cut_relative` mark; no C6 10 record is present, so it is not pulse
+evidence. The host summary reported one packet and zero retries but no
+controller or execution acknowledgement. See the
+[cross-hatch companion manifest](../fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/cross-hatch-observation-v1.json).
+
 The remaining controlled results are:
 
 - **Two laser heads (c006-c010).** `CA 03` is an enable bitmask: values 1, 2,
@@ -385,14 +395,18 @@ The remaining controlled results are:
   streams. A corrected one-layer, one-enabled-command-channel, 100 mm/s
   payload restored its 5%-15% baseline after a 5% span; the operator reported
   an approximately 30 mm line, a gap, and another approximately 30 mm line.
+  A later 15%-5%-15%-5%-15% artifact contained two reduce/restore cycles over
+  five decoded 16 mm spans; the operator reported three lines and two gaps.
   This is scoped evidence for the explicit restore, not physical channel
   routing, mode-wide behavior, or calibrated power validation; see the
-  [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json).
+  [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json)
+  and [repeated-restore companion](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/dynamic-repeated-observation-v4.json).
 - **Stationary timing (c022-c026 and c033-c036).** `C6 11` follows controlled
   start/end delay placement and carries a non-marking dwell duration in
   milliseconds scaled by 1000. Dot mode uses `C6 10` between non-cut moves;
   its value tracks timed marking pulses in the same units. These are exposed
-  separately as `Dwell` and `Pulse`.
+  separately as `Dwell` and `Pulse`. The prepared C6 11 hardware coupon was
+  never sent, so both stationary behaviors remain hardware-unobserved.
 - **RF and fiber profiles (c037-c042).** Enabling RF override inserts two
   `C6 60` records whose U35 value tracks 20,000 or 10,000 hertz. The two
   selectors remain cautiously named. Under the fiber clone, `C6 66` tracks
@@ -401,7 +415,8 @@ The remaining controlled results are:
 - **Paired Z offset (c043-c044).** Positive LightBurn `zOffset` inserts an
   `80 03` delta of -1 mm before the one native raster block and +1 mm after it;
   negative offset reverses the pair. This proves the balanced serialized
-  envelope, not physical axis direction or hardware effect.
+  envelope, not physical axis direction or hardware effect. The prepared Z
+  coupons were withheld, never sent, and remain quarantined offline.
 - **Negative Z results (c011-c014).** Positive and negative `zPerPass`, and a
   1 mm material-height change, each produce a byte-identical `.rd` relative to
   the zero baseline. They are not mapped to `80 03` or another Z command.
@@ -412,6 +427,21 @@ The remaining controlled results are:
   head-2 through power are therefore not established, and no compiler profile
   exposes cut-through.
 
+A separate nominal-0% no-dwell control emitted visibly on the same Boss and
+drew a rectangle. Raw zero therefore cannot be treated as a laser-off safety
+control on that machine. The cause is unknown: default/stale/no-update
+semantics, a firing floor, or another field could contribute; the minimal
+through-power fields were not isolated. Its C6 11 pair differs only by four
+200 ms delays and the checksum, but was stopped before transfer. Both artifacts
+are published only as `.rd.quarantined` do-not-send evidence in the
+[zero-power safety manifest](../fixtures/hardware/boss-ls2040-usb-serial-zero-power-safety-v1/manifest-v1.json).
+
+The compiler now rejects a marking event if any enabled channel minimum or
+maximum, or raster marking modulation, would encode below raw power 16. This
+is a conservative producer-evidence floor, not proof of physical safety at raw
+16. It protects newly compiled plans only; existing, cached, hand-authored, or
+external `.rd` files are not inspected or made safe retroactively.
+
 The generated c045-c052 rotary cases remain blocked. No project containing one
 authoritative `GantryRotaryConfig` was available to preserve its axis and
 unknown fields, and no rotary hardware was available. No `.rd` fixture or
@@ -421,12 +451,12 @@ The conservative job profile excludes planned-path raster and every other
 advanced capability. Planned-path raster, two-head power, dynamic mark power,
 stationary events, RF frequency, fiber pulse width, and paired Z offsets each
 use a separate opt-in research profile. Those profiles reproduce their
-offline goldens exactly. One single-section 45-degree planned path has the
-scoped operator observation above; the broad planned-path mode still has
-`execution_evidence="not-observed"` because it also includes an unexecuted
-multiple-section separator. The dynamic-power profile likewise retains
-`execution_evidence="not-observed"` despite the one scoped restore observation.
-The other advanced modes have no hardware execution evidence.
+offline goldens exactly. One single-section 45-degree path and one exact
+two-section cross-hatch path have the scoped observations above; the broad
+planned-path mode still has `execution_evidence="not-observed"`. The
+dynamic-power profile likewise retains `execution_evidence="not-observed"`
+despite exact one-restore and two-restore observations. The other advanced
+modes have no hardware execution evidence.
 
 ## Registry coverage
 

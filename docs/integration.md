@@ -129,15 +129,16 @@ raster motion, one laser head, the four native scan modes above, and air
 assist. Planned-path raster sections require the explicit
 `LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH` profile. Its envelope has
 controlled offline fixture evidence. One single-section 45-degree subset now
-also has operator-observed execution evidence; multiple sections and
-cross-hatch remain offline-only.
+also has operator-observed execution evidence. A separate exact two-section
+cross-hatch subset also executed with both directions visible and no reported
+connection burns. The broad profile remains research-only.
 
 The c001-c044 compiler extensions are intentionally isolated behind opt-in
-profiles. In addition to the scoped planned-path observation, three dynamic
+profiles. In addition to the scoped planned-path observations, four dynamic
 vector jobs have narrow operator observations. The first two together exposed
-persistent active power in an uncorrected payload; the third exercised the
-corrected restoration sequence successfully. All other advanced modes have no
-hardware-execution evidence:
+persistent active power in an uncorrected payload; corrected one-restore and
+two-restore sequences then executed successfully. All other advanced modes
+have no hardware-execution evidence:
 
 | Profile | Accepted plan feature | Evidence-backed lowering |
 | --- | --- | --- |
@@ -202,8 +203,15 @@ over-burning. Serial receipts establish host-side write completion only.
 
 This does not validate the operation-5 separator, a second section,
 cross-hatch, other diagonal directions, relative `A9` cuts, modulation, or
-Rayforge end-to-end generation. The broad planned-path mode remains labelled
-`not-observed` and research-only rather than treating one scoped result as
+Rayforge end-to-end generation for those two direct compiler coupons. A later
+[cross-hatch companion](../fixtures/hardware/ruida-644xs-usb-serial-planned-path-v1/cross-hatch-observation-v1.json)
+records a 666-byte Rayforge artifact with two sections, one operation-5
+separator, and five marks in each diagonal direction. At 15% and 100 mm/s,
+the operator reported both directions visible and no connection burns. The
+small reported edge is a decoded 0.3507 mm `cut_relative` mark, and no C6 10
+record exists. Its one-packet, zero-retry host receipt has no controller or
+execution acknowledgement. The broad planned-path mode remains labelled
+`not-observed` and research-only rather than treating either scoped result as
 general controller parity.
 
 There was no automatic sensor or output verification. This establishes a
@@ -276,8 +284,9 @@ merely because two adjacent source segments happen to share a value.
 
 The scoped
 [dynamic-vector hardware manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/manifest-v1.json)
-records three one-layer jobs on one Boss LS2040. A short 15%-10%-15% job looked
-solid and did not establish a visible power change. A longer 15%-5%-15% job
+records the first three one-layer jobs on one Boss LS2040. A short
+15%-10%-15% job looked solid and did not establish a visible power change. A
+longer 15%-5%-15% job
 moved continuously but visibly marked only its first 30 mm. The reviewed
 payload set the reduced active state before the middle span and omitted a
 baseline restore before the final ordinary mark. The result is consistent with
@@ -290,12 +299,38 @@ acknowledgement. This is scoped evidence for that restore sequence, not
 calibrated power metrology or mode-wide hardware validation, and the feature
 remains behind the research profile.
 
+The
+[repeated-restore companion](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-dynamic-vector-v1/dynamic-repeated-observation-v4.json)
+records a fourth 15%-5%-15%-5%-15% artifact with two reductions and two
+restorations across five decoded 16 mm spans. Its one-packet host transfer had
+zero retries and no controller or execution acknowledgement. The operator
+reported three lines and two gaps. This supports only the exact repeated
+sequence; it is not dimensional, calibrated-power, zero-output, or mode-wide
+evidence.
+
 If Rayforge exposes stationary events, map a non-marking wait to `Dwell` and a
 timed stationary mark to `Pulse`; they are not interchangeable. The controlled
 files map them to `C6 11` and `C6 10`, respectively. RF frequency and fiber
 pulse width are layer settings in hertz and nanoseconds. Each mapping requires
 its matching opt-in profile, and the adapter should surface that profile's
-offline-research status to the user.
+offline-research status to the user. The prepared C6 11 artifact was never
+sent, and the prepared Z coupons were withheld and remain quarantined offline,
+so both remain hardware-unobserved.
+
+A nominal-0% no-dwell control unexpectedly emitted visible laser power and
+drew a rectangle on the same Boss. Raw zero must not be treated as a laser-off
+safety control. The cause is unknown: default/stale/no-update semantics, a
+firing floor, or another field may contribute; the minimal through-power
+fields were not isolated. The C6 11 pair differs only by four 200 ms delays
+and its checksum, but was stopped before transfer. Both are retained only with
+`.rd.quarantined` suffixes in the
+[zero-power safety manifest](../fixtures/hardware/boss-ls2040-usb-serial-zero-power-safety-v1/manifest-v1.json).
+
+`RuidaJobCompiler` rejects a marking plan when any enabled channel's minimum
+or maximum, or raster marking modulation, would encode below raw power 16.
+This is a conservative generation-time evidence floor, not proof that raw 16
+is physically safe. It does not inspect, rewrite, or make safe existing,
+cached, hand-authored, or externally supplied `.rd` files.
 
 This mapping requires explicit resolved step metadata: vector or raster kind,
 speed, static and minimum/maximum power, air state, head, scan axis, scan
@@ -829,16 +864,20 @@ particular:
 - controlled horizontal and vertical raster motion, grayscale modulation, and
   host-expanded 3D-slice motion are fixture-backed for one profile;
   controlled diagonal raster is fixture-backed as host-planned path motion,
-  not as angle metadata; one constant-power, single-section 45-degree job has
-  a scoped operator-observed success, while cross-hatch, other diagonal forms,
-  and diagonal grayscale remain untested on hardware;
-- dynamic effective vector power has one scoped operator-observed reduction
-  and restore sequence, while two-head power, stationary dwell/pulse, RF
+  not as angle metadata; one constant-power, single-section 45-degree job and
+  one exact two-section cross-hatch job have scoped operator-observed success,
+  while other diagonal forms and diagonal grayscale remain untested on
+  hardware;
+- dynamic effective vector power has scoped one-restore and two-restore
+  sequences, while two-head power, stationary dwell/pulse, RF
   frequency, fiber pulse width, and paired Z-offset serialization have exact
   offline golden coverage but no hardware-execution evidence; cut-through and
   rotary remain unsupported; and
-- live behavior has injectable UDP and serial test coverage plus three
-  narrowly scoped operator-observed Ruida 644XS USB-serial validation sets,
+- raw-zero marking emitted visibly on one Boss for an exact control, so
+  sub-floor generated marking is rejected and existing `.rd` files must not be
+  assumed safe; and
+- live behavior has injectable UDP and serial test coverage plus narrowly
+  scoped operator-observed Ruida 644XS USB-serial validation sets,
   but no automatic physical verification or public multi-controller
   compatibility matrix.
 
