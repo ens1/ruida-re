@@ -1,0 +1,246 @@
+{
+  "schema": "ruida-re.hardware-dwell-travel-observation.v1",
+  "identifier": "boss-ls2040-usb-serial-rayforge-dwell-travel-v1",
+  "observed_on": "2026-08-11",
+  "generating_revisions": {
+    "rayforge": "d7a5860df144824f45747cc0ee161d3c81cf654a",
+    "ruida_re": "4af8e1cf0be2b4a12c6ffb0fc0d05ecccba4ac0f"
+  },
+  "scope": {
+    "description": "Three supervised executions of an exact staged control, one-delay sentinel, and four-delay payload produced the operator-reported anchor mark and corner pauses without another visible mark.",
+    "limitations": [
+      "Each host transfer summary proves one packet with zero retries, not controller receipt or execution completion.",
+      "The observations were visual and qualitative, with no dimensional, optical, electrical, motion, or timing instrumentation.",
+      "The operator's line orientation and approximate length descriptions are preserved verbatim and are not dimensional or geometric metrology.",
+      "This evidence covers only exact 100 ms C6 11 additional_delay records immediately after TravelTo events in these artifacts.",
+      "The observations do not establish that the perceived pauses lasted 100 ms or validate other delay durations.",
+      "No dwell was adjacent to marking motion, so mark-adjacent delay behavior is not tested.",
+      "The artifacts contain no C6 10 laser_interval record and provide no Pulse execution evidence.",
+      "The result does not validate the earlier quarantined 200 ms zero-power artifact or establish profile-wide behavior."
+    ]
+  },
+  "environment": {
+    "host_platform": "macOS",
+    "machine": "Boss LS2040",
+    "configured_controller_profile": "Ruida 644XS",
+    "transport": {
+      "kind": "USB serial",
+      "baud": 115200,
+      "controller_acknowledgement_available": false,
+      "execution_acknowledgement_available": false
+    },
+    "material": {
+      "description": "cardboard",
+      "dimensions_mm": [
+        152.4,
+        762.0
+      ],
+      "reported_origin_mm": {
+        "x": 0.0,
+        "y": 0.0
+      }
+    },
+    "physical_source_inhibited": false
+  },
+  "process": {
+    "profile": "stationary-research",
+    "kind": "vector",
+    "speed_mm_s": 100.0,
+    "requested_anchor_power_percent": 15.0,
+    "encoded_anchor_power_percent": 14.997253250320455,
+    "air_assist_requested": false,
+    "laser_enable_mask": 1,
+    "controller_bounds_mm": {
+      "min_x": 110.0,
+      "min_y": 132.0,
+      "max_x": 145.0,
+      "max_y": 147.0
+    },
+    "anchor": {
+      "start_mm": [
+        110.0,
+        132.0
+      ],
+      "end_mm": [
+        115.0,
+        132.0
+      ],
+      "planned_length_mm": 5.0,
+      "mark_records": 1
+    },
+    "travel_points_mm": [
+      [
+        125.0,
+        132.0
+      ],
+      [
+        145.0,
+        132.0
+      ],
+      [
+        145.0,
+        147.0
+      ],
+      [
+        125.0,
+        147.0
+      ]
+    ],
+    "inactive_laser_2_encoded_power_percent": 39.99877922236465,
+    "inactive_laser_2_hardware_behavior": "not-tested"
+  },
+  "artifacts": {
+    "control": {
+      "file": "boss-ls2040-anchor-travel-control-x110-y132-offline-v4.rd",
+      "sha256": "380b3d9b68334a0ce13c3bb0084c2417342725fc3458e0563ccadd7722e51521",
+      "size_bytes": 536,
+      "checksum": 24829,
+      "records": 74,
+      "known_records": 74,
+      "opaque_records": 0,
+      "issues": [],
+      "exact_preserve_roundtrip": true,
+      "exact_recompute_roundtrip": true,
+      "travel_records": 5,
+      "mark_records": 1,
+      "c610_laser_interval_records": 0,
+      "c611_additional_delay_records": 0,
+      "c611_additional_delay_ms": [],
+      "c611_after_travel_points_mm": []
+    },
+    "sentinel": {
+      "file": "boss-ls2040-anchor-travel-1x100ms-x110-y132-offline-v4.rd",
+      "sha256": "72b5b63fb71f5e84ddca955d93e596b1d072ff41ead40694074368449b566c27",
+      "size_bytes": 543,
+      "checksum": 25095,
+      "records": 75,
+      "known_records": 75,
+      "opaque_records": 0,
+      "issues": [],
+      "exact_preserve_roundtrip": true,
+      "exact_recompute_roundtrip": true,
+      "travel_records": 5,
+      "mark_records": 1,
+      "c610_laser_interval_records": 0,
+      "c611_additional_delay_records": 1,
+      "c611_additional_delay_ms": [
+        100.0
+      ],
+      "c611_after_travel_points_mm": [
+        [
+          125.0,
+          132.0
+        ]
+      ]
+    },
+    "full": {
+      "file": "boss-ls2040-anchor-travel-4x100ms-x110-y132-offline-v4.rd",
+      "sha256": "b826b5bb0c39f0bb6165599b085967805816c7a3c242ce206551b9d513e25d87",
+      "size_bytes": 564,
+      "checksum": 25893,
+      "records": 78,
+      "known_records": 78,
+      "opaque_records": 0,
+      "issues": [],
+      "exact_preserve_roundtrip": true,
+      "exact_recompute_roundtrip": true,
+      "travel_records": 5,
+      "mark_records": 1,
+      "c610_laser_interval_records": 0,
+      "c611_additional_delay_records": 4,
+      "c611_additional_delay_ms": [
+        100.0,
+        100.0,
+        100.0,
+        100.0
+      ],
+      "c611_after_travel_points_mm": [
+        [
+          125.0,
+          132.0
+        ],
+        [
+          145.0,
+          132.0
+        ],
+        [
+          145.0,
+          147.0
+        ],
+        [
+          125.0,
+          147.0
+        ]
+      ]
+    }
+  },
+  "transmission": {
+    "control": {
+      "explicit_operator_approval": true,
+      "artifact_sha256": "380b3d9b68334a0ce13c3bb0084c2417342725fc3458e0563ccadd7722e51521",
+      "host_log": {
+        "scope": "host-side driver transfer summary",
+        "packets": 1,
+        "payload_bytes": 536,
+        "retries": 0,
+        "controller_acknowledgement": false,
+        "execution_acknowledgement": false
+      }
+    },
+    "sentinel": {
+      "explicit_operator_approval": true,
+      "artifact_sha256": "72b5b63fb71f5e84ddca955d93e596b1d072ff41ead40694074368449b566c27",
+      "host_log": {
+        "scope": "host-side driver transfer summary",
+        "packets": 1,
+        "payload_bytes": 543,
+        "retries": 0,
+        "controller_acknowledgement": false,
+        "execution_acknowledgement": false
+      }
+    },
+    "full": {
+      "explicit_operator_approval": true,
+      "artifact_sha256": "b826b5bb0c39f0bb6165599b085967805816c7a3c242ce206551b9d513e25d87",
+      "host_log": {
+        "scope": "host-side driver transfer summary",
+        "packets": 1,
+        "payload_bytes": 564,
+        "retries": 0,
+        "controller_acknowledgement": false,
+        "execution_acknowledgement": false
+      }
+    }
+  },
+  "operator_observations": {
+    "control": {
+      "reported_verbatim": "I see one faint line, vertical, about 5mm",
+      "instrumented_metrology": false
+    },
+    "sentinel": {
+      "reported_verbatim": "It looks like it did a rectangle with pauses at the corner? Nothing other than a horizontal line, about 5mm",
+      "instrumented_metrology": false
+    },
+    "full": {
+      "reported_verbatim": "Yes, one faint line, pauses at the corners",
+      "instrumented_metrology": false
+    }
+  },
+  "result": {
+    "status": "scoped-c611-after-travel-pass",
+    "one_c611_after_travel": "qualitative-operator-observation-recorded",
+    "four_c611_after_travel": "operator-confirmed-pauses-at-corners",
+    "c611_delay_duration_metrology": "not-performed",
+    "post_anchor_visible_marking": "not-observed-in-all-three-stages",
+    "mark_adjacent_c611": "not-tested",
+    "other_c611_durations": "not-tested",
+    "c610_pulse_execution": "not-tested",
+    "broad_profile_conclusion": "not-established"
+  },
+  "relationship_to_prior_zero_power_evidence": {
+    "identifier": "boss-ls2040-usb-serial-zero-power-safety-v1",
+    "quarantined_200ms_artifact_superseded": false,
+    "disposition": "remains-quarantined-do-not-send",
+    "material_difference": "These artifacts use one intentional 15% anchor mark followed only by TravelTo events; the C611 records follow travel rather than mark events."
+  }
+}
