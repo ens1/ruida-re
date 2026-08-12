@@ -324,6 +324,19 @@ position: `8A`/`8B` for blank axial spans, `89` for two-axis travel, and
 `AA`/`AB` for marked axial spans. The 0.25 mm interval fixture changes planned
 spacing and span count; it does not emit `C6 10` or a native pixel payload.
 
+A scoped hardware artifact applies the normalized modulation model to one
+horizontal, bidirectional Rayforge row at 100 mm/s and a requested 5%-15%
+layer range. Its four paired `C7`/`C2` positions decode to approximately
+99.017%, 24.507%, 24.507%, and 99.017%; the largest modeled effective output
+is approximately 14.899%. Its 23 mm and 26 mm planned marks are separated by
+an 11 mm absolute travel and contain only `AA` chunks no longer than 4 mm.
+After a one-packet, zero-retry host transfer with no controller or execution
+acknowledgement, the operator reported, "Everything is as expected". The
+[exact manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-variable-raster-v1/manifest-v1.json)
+limits this result to the expected appearance of that single row. It does not
+measure geometry or power, distinguish the positive levels optically, prove a
+dark optical gap, or establish broader scan-mode compatibility.
+
 Declared job/layer bounds are derived from emitted motion endpoints and
 rounded half-up to hundredths of a millimetre, while motion retains
 thousandth-millimetre precision. At setting address 800, both values equal the

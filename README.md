@@ -107,6 +107,15 @@ second, and layer power and modulation are percentages from 0 through 100.
 effective output is
 `minimum + m / 100 * (maximum - minimum)`; it is not an absolute output
 percentage.
+One exact Rayforge-generated horizontal variable-power row using those
+semantics has completed a supervised Boss LS2040 transfer at 100 mm/s. The
+5%-15% layer artifact used paired normalized `C7`/`C2` values and only `AA`
+marking chunks no longer than 4 mm; the operator reported, "Everything is as
+expected". The
+[scoped manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-variable-raster-v1/manifest-v1.json)
+records the exact 23 mm mark, 11 mm travel gap, and 26 mm mark plan. This is
+visual evidence for that single row, not dimensional or power metrology,
+proof of zero optical output in the gap, or broad raster validation.
 The host must already have rendered images, generated scanlines, selected
 blank and marked spans, optimized paths, applied machine transforms, and
 expanded passes. `TravelTo`, `MarkTo`, and `SetModulation` describe that final
