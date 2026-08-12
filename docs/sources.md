@@ -242,10 +242,13 @@ not calibrated-power, zero-output, or mode-wide evidence.
 
 The
 [air-assist evidence manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-air-assist-v1/manifest-v1.json)
-records two narrowly scoped results from one Boss LS2040. An air-off motion
+records three narrowly scoped results from one Boss LS2040. An air-off motion
 control completed one host packet with zero retries, but the operator could
-not distinguish possible airflow from motor noise. Its paired air-on motion
-artifact was never transmitted.
+not distinguish possible airflow from motor noise. Its paired 580-byte air-on
+motion artifact was later transferred once with one host packet and zero
+retries. The operator reported, "Air assist is confirmed, I felt the solenoid
+turn on then off". This supports normal full-layer job-context air assist only
+for that exact artifact and setup.
 
 A separately approved standalone sequence wrote logical `CA 01 12`,
 `CA 01 13`, and `CA 01 12` over USB serial with a 5.002178-second host
@@ -253,9 +256,10 @@ interval. Their exact scrambled wire bytes were `c4099b`, `c4091b`, and
 `c4099b`. All three writes and flushes completed, but serial supplied no
 controller or state acknowledgement. The operator observed no physical change
 or relay/solenoid click and reported that LightBurn also appeared to fail.
-That makes a machine-side condition plausible but does not establish
-causality. Standalone air semantics and full-job air-on behavior therefore
-remain unvalidated on this setup; no compiler behavior is promoted.
+That standalone result remains inconclusive and is not evidence for a manual
+toggle. The full-layer observation is tactile operator evidence, not timing,
+pressure, flow, relay-routing, current, or electrical metrology, and it does
+not establish other controllers or UDP. No compiler behavior is changed.
 
 ## Zero-power negative hardware evidence
 
