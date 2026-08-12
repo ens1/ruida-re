@@ -116,6 +116,15 @@ expected". The
 records the exact 23 mm mark, 11 mm travel gap, and 26 mm mark plan. This is
 visual evidence for that single row, not dimensional or power metrology,
 proof of zero optical output in the gap, or broad raster validation.
+An exact two-layer ordinary raster matrix separately exercised horizontal and
+vertical bidirectional native raster at requested 20% power and 100 mm/s. Its
+marked motion used only `AA` and `AB` chunks no longer than 4 mm, with travel
+motion for the gaps. After the supervised transfer, the operator confirmed the
+expected three broken horizontal rows and three broken vertical columns. The
+[scoped matrix manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-ordinary-raster-matrix-v1/manifest-v1.json)
+binds that observation to the exact artifact. It is not dimensional or power
+metrology, proof of zero optical output in the gaps, or unidirectional-raster
+evidence.
 The host must already have rendered images, generated scanlines, selected
 blank and marked spans, optimized paths, applied machine transforms, and
 expanded passes. `TravelTo`, `MarkTo`, and `SetModulation` describe that final

@@ -337,6 +337,19 @@ limits this result to the expected appearance of that single row. It does not
 measure geometry or power, distinguish the positive levels optically, prove a
 dark optical gap, or establish broader scan-mode compatibility.
 
+A separate exact Rayforge matrix contains one horizontal-bidirectional layer
+and one vertical-bidirectional layer at requested 20% power and 100 mm/s.
+Its marked motion consists only of `AA` and `AB` chunks no longer than 4 mm;
+gaps use axial travel, and no `C7`, `C2`, `A8`, or `A9` opcode appears. After
+a one-packet, zero-retry host transfer with no controller or execution
+acknowledgement, the operator confirmed the expected three broken horizontal
+rows and three broken vertical columns. The
+[scoped matrix manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-ordinary-raster-matrix-v1/manifest-v1.json)
+limits this visual evidence to that exact horizontal/vertical bidirectional
+artifact and placement. It provides no dimensional, optical-power, or
+unidirectional-raster validation and does not prove zero optical output in the
+gaps.
+
 Declared job/layer bounds are derived from emitted motion endpoints and
 rounded half-up to hundredths of a millimetre, while motion retains
 thousandth-millimetre precision. At setting address 800, both values equal the
