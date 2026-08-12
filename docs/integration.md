@@ -139,8 +139,9 @@ The c001-c044 compiler extensions are intentionally isolated behind opt-in
 profiles. In addition to the scoped planned-path observations, four dynamic
 vector jobs have narrow operator observations. The first two together exposed
 persistent active power in an uncorrected payload; corrected one-restore and
-two-restore sequences then executed successfully. All other advanced modes
-have no hardware-execution evidence:
+two-restore sequences then executed successfully. Exact paired logical-Z jobs
+also have scoped controller-readout observations. The other advanced modes
+retain no hardware-execution evidence:
 
 | Profile | Accepted plan feature | Evidence-backed lowering |
 | --- | --- | --- |
@@ -166,8 +167,16 @@ represented by repeated planned motion. Controlled LightBurn four-pass
 positive or negative 0.5 mm, and changing material height from zero to 1 mm
 was also byte-identical. Neither setting is treated as a Ruida Z command. The
 separate Z research profile reproduces the balanced `80 03` envelope emitted
-for LightBurn's layer `zOffset`; its physical direction and effect remain
-unvalidated, so a normal source plan that requires actual Z movement must
+for LightBurn's layer `zOffset`. In exact +1.0 and -1.0 mm native-raster jobs,
+an operator observed the machine readout change from a reported 18.2 mm to
+17.2 and 19.2 mm respectively during cutting, then return to 18.2 mm after
+each job. Each host transfer reported one packet and zero retries without
+controller or execution acknowledgement. The
+[paired evidence manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-logical-z-v1/manifest-v1.json)
+limits this to controller-readout sign and numerical-restore observations for
+those payloads. Physical direction, mechanical displacement and accuracy,
+backlash, repeatability, interruption behavior, and broader cases remain
+unvalidated, so a normal source plan that requires general Z movement must
 still be rejected by the conservative profile.
 
 ### Live validation scope
@@ -338,8 +347,10 @@ files map them to `C6 11` and `C6 10`, respectively. RF frequency and fiber
 pulse width are layer settings in hertz and nanoseconds. Each mapping requires
 its matching opt-in profile, and the adapter should surface that profile's
 offline-research status to the user. The prepared C6 11 artifact was never
-sent, and the prepared Z coupons were withheld and remain quarantined offline,
-so both remain hardware-unobserved.
+sent, and the earlier prepared Z coupons were withheld and remain quarantined
+offline. Those artifacts remain hardware-unobserved. The later paired
+logical-Z jobs provide only the scoped controller-readout evidence described
+above and do not establish physical Z metrology.
 
 A nominal-0% no-dwell control unexpectedly emitted visible laser power and
 drew a rectangle on the same Boss. Raw zero must not be treated as a laser-off
@@ -893,8 +904,9 @@ particular:
   while other diagonal forms and diagonal grayscale remain untested on
   hardware;
 - dynamic effective vector power has scoped one-restore and two-restore
-  sequences, while two-head power, stationary dwell/pulse, RF
-  frequency, fiber pulse width, and paired Z-offset serialization have exact
+  sequences; paired ±1 mm logical-Z jobs have scoped controller-readout sign
+  and restore observations without physical metrology; two-head power,
+  stationary dwell/pulse, RF frequency, and fiber pulse width have exact
   offline golden coverage but no hardware-execution evidence; cut-through and
   rotary remain unsupported; and
 - raw-zero marking emitted visibly on one Boss for an exact control, so

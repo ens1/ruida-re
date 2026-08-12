@@ -164,8 +164,9 @@ profiles. Exact single-section and two-section cross-hatch planned-path
 subsets have positive operator-observed execution. Four dynamic-power jobs
 have scoped operator observations: two together exposed persistent active
 power and a missing restore, while corrected one-restore and two-restore
-sequences executed successfully. The remaining advanced behavior has offline
-fixture evidence only:
+sequences executed successfully. A paired logical-Z subset also has scoped
+controller-readout observations. Dual-head, RF, fiber, and the unobserved
+stationary subsets retain offline fixture evidence only:
 
 | Profile | Plan surface | Controlled serialization |
 | --- | --- | --- |
@@ -197,6 +198,21 @@ head-2 through power. Rotary remains blocked without an exported rotary
 template and hardware. Passes remain host-expanded. Controlled changes to
 `zPerPass` and material height produced byte-identical `.rd` files, so neither
 is treated as a Z command.
+
+Two exact 673-byte native-raster jobs used logical Z offsets of +1.0 and
+-1.0 mm. The positive case serialized `80 03` deltas of -1.0 then +1.0 mm;
+the negative case reversed the pair. Each host transfer reported one packet
+and zero retries without controller or execution acknowledgement. From a
+reported 18.2 mm starting readout, the operator observed 17.2 mm during the
+positive job and 19.2 mm during the negative job, followed by returns to
+18.2 mm. The negative job's marks were reported as expected, with no collision
+or unexpected movement. The
+[paired logical-Z manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-logical-z-v1/manifest-v1.json)
+binds those reports to the exact payloads. This is controller-readout evidence,
+not independent physical-direction, displacement, accuracy, backlash, or
+repeatability metrology. Interrupted restoration, other offsets and layer
+structures, and broader compatibility remain unvalidated; the profile stays
+research-only.
 
 Dynamic vector power is stateful. Layer setup establishes the baseline.
 `MarkWithPower` emits resolved per-channel active powers, marks to its endpoint,
@@ -245,10 +261,12 @@ negative evidence and paired program are recorded in the
 [zero-power safety manifest](fixtures/hardware/boss-ls2040-usb-serial-zero-power-safety-v1/manifest-v1.json).
 
 The paired job containing four C6 11 dwell records was stopped before
-transfer, and the planned Z coupons were also withheld and remain quarantined
-offline. C6 11 dwell and Z behavior therefore remain hardware-unobserved. Both
-zero-power programs are published only with `.rd.quarantined` suffixes and are
-do-not-send evidence.
+transfer, and the earlier planned Z coupons were also withheld and remain
+quarantined offline. That C6 11 pair and those earlier Z artifacts therefore
+remain hardware-unobserved. Both zero-power programs are published only with
+`.rd.quarantined` suffixes and are do-not-send evidence. The later paired
+logical-Z readout observations above do not turn the quarantined dwell pair
+into sendable evidence or establish physical Z metrology.
 
 The compiler now rejects marking when any enabled channel's minimum or maximum
 would encode below raw power 16, and applies the same floor to raster marking

@@ -445,8 +445,16 @@ The remaining controlled results are:
 - **Paired Z offset (c043-c044).** Positive LightBurn `zOffset` inserts an
   `80 03` delta of -1 mm before the one native raster block and +1 mm after it;
   negative offset reverses the pair. This proves the balanced serialized
-  envelope, not physical axis direction or hardware effect. The prepared Z
-  coupons were withheld, never sent, and remain quarantined offline.
+  envelope. Two later exact Rayforge native-raster jobs used those inverse
+  pairs. From a reported 18.2 mm starting readout, the operator observed
+  17.2 mm during the logical +1 mm job and 19.2 mm during the logical -1 mm
+  job, with both returning to 18.2 mm. Each host transfer reported one packet
+  and zero retries without controller or execution acknowledgement. The
+  [paired manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-logical-z-v1/manifest-v1.json)
+  scopes this to controller-readout sign and numerical-restore observations,
+  not physical direction, mechanical displacement, accuracy, backlash,
+  repeatability, or interruption behavior. The earlier prepared Z coupons
+  remain quarantined offline.
 - **Negative Z results (c011-c014).** Positive and negative `zPerPass`, and a
   1 mm material-height change, each produce a byte-identical `.rd` relative to
   the zero baseline. They are not mapped to `80 03` or another Z command.
@@ -485,8 +493,9 @@ offline goldens exactly. One single-section 45-degree path and one exact
 two-section cross-hatch path have the scoped observations above; the broad
 planned-path mode still has `execution_evidence="not-observed"`. The
 dynamic-power profile likewise retains `execution_evidence="not-observed"`
-despite exact one-restore and two-restore observations. The other advanced
-modes have no hardware execution evidence.
+despite exact one-restore and two-restore observations. The paired logical-Z
+subset similarly does not promote its broad profile. The other advanced modes
+have no hardware execution evidence.
 
 ## Registry coverage
 
@@ -545,9 +554,10 @@ These are research tasks, not parser exceptions:
 - Controlled raster, grayscale, and 3D-slice jobs use planned motion plus
   power changes rather than a native pixel payload. Recovering an original
   source image from an optimized motion stream is not generally reversible.
-  Diagonal binary raster is now established as planned path motion, but
-  diagonal grayscale, physical Z behavior, overscan bounds, and other
-  controller profiles remain unresolved.
+  Diagonal binary raster is now established as planned path motion. Paired
+  ±1 mm logical-Z jobs have scoped machine-readout observations, but physical Z
+  direction, displacement, and failure behavior remain unresolved, as do
+  diagonal grayscale, overscan bounds, and other controller profiles.
 
 Additional matrices should cover arrays, diagonal grayscale, rotary,
 cut-through endpoint semantics, overscan, physical execution of the advanced

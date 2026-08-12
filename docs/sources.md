@@ -274,10 +274,14 @@ may mean default, stale, or no update; a firing floor or another field may
 contribute; and the minimal through-power fields were not independently tested.
 
 The paired artifact with four 200 ms C6 11 delays was stopped before transfer,
-and the planned Z coupons were also withheld and remain quarantined offline.
-C6 11 dwell and logical Z motion therefore remain hardware-unobserved. The two
-zero-power programs are retained only with `.rd.quarantined` suffixes as
-do-not-send evidence.
+and the earlier planned Z coupons were also withheld and remain quarantined
+offline. Those artifacts therefore remain hardware-unobserved. Two later exact
+±1 mm logical-Z jobs produced opposite operator-observed machine-readout
+changes and numerical returns to the reported start. Their
+[paired manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-logical-z-v1/manifest-v1.json)
+does not claim physical direction or mechanical metrology. The two zero-power
+programs are retained only with `.rd.quarantined` suffixes as do-not-send
+evidence.
 
 The compiler now rejects marking if an enabled channel's minimum or maximum,
 or raster marking modulation, would encode below raw value 16. The floor is a
