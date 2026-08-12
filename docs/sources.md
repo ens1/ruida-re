@@ -238,6 +238,25 @@ two gaps". The decoded spans are 16 mm, so the reported lengths are not
 metrology. This is scoped evidence for the exact repeated-restore sequence,
 not calibrated-power, zero-output, or mode-wide evidence.
 
+## Air-assist negative or inconclusive hardware evidence
+
+The
+[air-assist evidence manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-air-assist-v1/manifest-v1.json)
+records two narrowly scoped results from one Boss LS2040. An air-off motion
+control completed one host packet with zero retries, but the operator could
+not distinguish possible airflow from motor noise. Its paired air-on motion
+artifact was never transmitted.
+
+A separately approved standalone sequence wrote logical `CA 01 12`,
+`CA 01 13`, and `CA 01 12` over USB serial with a 5.002178-second host
+interval. Their exact scrambled wire bytes were `c4099b`, `c4091b`, and
+`c4099b`. All three writes and flushes completed, but serial supplied no
+controller or state acknowledgement. The operator observed no physical change
+or relay/solenoid click and reported that LightBurn also appeared to fail.
+That makes a machine-side condition plausible but does not establish
+causality. Standalone air semantics and full-job air-on behavior therefore
+remain unvalidated on this setup; no compiler behavior is promoted.
+
 ## Zero-power negative hardware evidence
 
 The

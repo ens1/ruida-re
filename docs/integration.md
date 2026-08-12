@@ -316,6 +316,19 @@ reported three lines and two gaps. This supports only the exact repeated
 sequence; it is not dimensional, calibrated-power, zero-output, or mode-wide
 evidence.
 
+Controller-controlled air remains unavailable or inconclusive on the tested
+Boss LS2040 setup. One air-off motion control was ambiguous because motor noise
+masked possible airflow, and its paired air-on motion artifact was never sent.
+A separately approved standalone `CA01` OFF-ON-OFF sequence completed three
+host USB-serial writes around a 5.002178-second host interval, but the operator
+observed no physical response or relay/solenoid click. The
+[scoped manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-air-assist-v1/manifest-v1.json)
+records the exact logical and scrambled bytes. The serial link returned no
+controller or state acknowledgement. The operator also reported an apparent
+LightBurn failure, which makes a machine-side issue plausible without
+establishing causality. Integrations must not treat this as validation of
+standalone air commands or broader full-job air behavior.
+
 If Rayforge exposes stationary events, map a non-marking wait to `Dwell` and a
 timed stationary mark to `Pulse`; they are not interchangeable. The controlled
 files map them to `C6 11` and `C6 10`, respectively. RF frequency and fiber

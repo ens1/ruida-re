@@ -125,6 +125,20 @@ expected three broken horizontal rows and three broken vertical columns. The
 binds that observation to the exact artifact. It is not dimensional or power
 metrology, proof of zero optical output in the gaps, or unidirectional-raster
 evidence.
+Air-assist control remains unavailable or inconclusive on the tested Boss
+LS2040 setup. An exact air-off motion control produced an ambiguous operator
+report of possible airflow masked by motor noise; its paired air-on motion
+artifact was never sent. A separately approved standalone `CA01` OFF-ON-OFF
+sequence contained no motion, marking, or laser-enable commands and used a
+5.002178-second host interval. All three USB-serial writes and flushes
+completed, but the operator reported no change or relay/solenoid click. The
+[scoped air-assist manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-air-assist-v1/manifest-v1.json)
+records the exact bytes and observations. Serial provided no controller or
+state acknowledgement, and the operator also reported that LightBurn appeared
+to fail, so a machine-side issue is plausible but causality is not established.
+This result does not validate standalone air control or change compiler
+behavior.
+
 The host must already have rendered images, generated scanlines, selected
 blank and marked spans, optimized paths, applied machine transforms, and
 expanded passes. `TravelTo`, `MarkTo`, and `SetModulation` describe that final
