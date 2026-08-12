@@ -24,6 +24,7 @@ classifiers = [
 [project.urls]
 Repository = "https://github.com/ens1/ruida-re"
 Issues = "https://github.com/ens1/ruida-re/issues"
+Security = "https://github.com/ens1/ruida-re/security/policy"
 
 [project.optional-dependencies]
 serial = ["pyserial>=3.5"]

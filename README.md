@@ -49,18 +49,33 @@ data. Controller access is always an explicit application action.
 
 ## Install
 
-From a checkout:
+No `ruida-re` package has been published to PyPI yet. After an official
+release is announced from this repository, the normal installs will be:
 
 ```sh
-python3 -m pip install -e .
+python3 -m pip install ruida-re
+python3 -m pip install 'ruida-re[serial]'
+```
+
+Until then, install the current checkout directly:
+
+```sh
+python3 -m pip install .
+python3 -m pip install '.[serial]'
+```
+
+For an editable development install with the test dependencies:
+
+```sh
+python3 -m pip install -e '.[test]'
 ```
 
 Python 3.11 or newer is required. The core codec and direct UDP runtime use
-only the Python standard library. USB serial support is an optional install:
-
-```sh
-python3 -m pip install -e '.[serial]'
-```
+only the Python standard library. The `serial` extra adds USB serial support.
+Before reporting a vulnerability or behavior that could cause unintended
+laser emission or machine motion, follow the
+[security policy](https://github.com/ens1/ruida-re/security/policy) instead of
+opening a public issue.
 
 ## Compile a planned job
 
