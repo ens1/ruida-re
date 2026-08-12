@@ -238,6 +238,18 @@ two gaps". The decoded spans are 16 mm, so the reported lengths are not
 metrology. This is scoped evidence for the exact repeated-restore sequence,
 not calibrated-power, zero-output, or mode-wide evidence.
 
+## Native unidirectional raster live hardware validation
+
+The
+[unidirectional raster manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-unidirectional-raster-v1/manifest-v1.json)
+content-addresses one exact 769-byte Rayforge production-path coupon with
+horizontal and vertical unidirectional native-raster layers. Its host transfer
+reported one packet and zero retries without controller or execution
+acknowledgement. The operator reported the expected 12 marks, no burnt return
+moves, and unchanged Z. This is scoped visual and controller-display evidence
+for that exact artifact, not directional, dimensional, power, zero-output, or
+Z-motion metrology.
+
 ## Air-assist negative or inconclusive hardware evidence
 
 The

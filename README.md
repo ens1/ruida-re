@@ -125,6 +125,16 @@ expected three broken horizontal rows and three broken vertical columns. The
 binds that observation to the exact artifact. It is not dimensional or power
 metrology, proof of zero optical output in the gaps, or unidirectional-raster
 evidence.
+
+An exact 769-byte production-path coupon separately exercised horizontal and
+vertical unidirectional native raster at requested 20% power and 100 mm/s.
+After one host packet with zero retries, the operator reported 12 expected
+marks, no burnt return moves, and unchanged Z. The
+[scoped unidirectional manifest](fixtures/hardware/boss-ls2040-usb-serial-rayforge-unidirectional-raster-v1/manifest-v1.json)
+binds that observation to the exact artifact and mode pairs. It is visual and
+controller-display evidence, not directional, dimensional, power, zero-output,
+or Z-motion metrology.
+
 Normal full-layer job-context air assist has a scoped positive observation on
 the tested Boss LS2040. An exact air-off motion control produced an ambiguous
 operator report of possible airflow masked by motor noise. Its paired 580-byte

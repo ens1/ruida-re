@@ -179,6 +179,16 @@ backlash, repeatability, interruption behavior, and broader cases remain
 unvalidated, so a normal source plan that requires general Z movement must
 still be rejected by the conservative profile.
 
+The conservative profile's native unidirectional path also has a scoped
+production-path observation. One exact Rayforge coupon carried serialized
+horizontal and vertical `unidirectional` settings through host planning into
+the `1`/`2` and `3`/`4` mode/operation pairs. Its one-packet, zero-retry host
+transfer produced the operator-reported expected 12 marks, no burnt return
+moves, and unchanged Z. The
+[exact manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-unidirectional-raster-v1/manifest-v1.json)
+does not turn those visual and controller-display observations into
+directional, dimensional, power, zero-output, or Z-motion metrology.
+
 ### Live validation scope
 
 One generated mixed vector/raster job, recorded in the

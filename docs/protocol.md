@@ -350,6 +350,17 @@ artifact and placement. It provides no dimensional, optical-power, or
 unidirectional-raster validation and does not prove zero optical output in the
 gaps.
 
+A separate 769-byte Rayforge coupon exercised the production serialization
+path for horizontal and vertical unidirectional native raster at requested 20%
+power and 100 mm/s. It used the `1`/`2` and `3`/`4` mode/operation pairs above,
+one signed marking direction per layer, and travel returns. After a one-packet,
+zero-retry host transfer without controller or execution acknowledgement, the
+operator reported the expected 12 marks, no burnt return moves, and unchanged
+Z. The
+[scoped unidirectional manifest](../fixtures/hardware/boss-ls2040-usb-serial-rayforge-unidirectional-raster-v1/manifest-v1.json)
+limits this to visual and controller-display evidence for that exact artifact;
+it is not directional, dimensional, power, zero-output, or Z-motion metrology.
+
 Declared job/layer bounds are derived from emitted motion endpoints and
 rounded half-up to hundredths of a millimetre, while motion retains
 thousandth-millimetre precision. At setting address 800, both values equal the
