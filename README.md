@@ -397,6 +397,14 @@ finally:
     client.close()
 ```
 
+`ControllerClient.stop_process()` sends the evidence-labelled Ruida software
+stop request through the same serialized session. It is not an emergency stop.
+Its receipt proves only the link-specific exchange: UDP success includes a
+controller packet acknowledgement, while serial success records a completed
+host write without an acknowledgement. Neither result proves that physical
+execution has halted, so an integration must retain any execution-unknown
+state until it independently establishes that the controller is idle.
+
 **Machine safety:** controller calls can move axes, change outputs, or start
 work depending on the records sent and controller state. Use an idle machine,
 known-safe material and power state, physical supervision, and the machine's

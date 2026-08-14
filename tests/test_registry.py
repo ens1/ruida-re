@@ -23,6 +23,7 @@ from ruida_re.registry import (
     REGISTRIES,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN_CAPABILITIES,
+    SRC_MEERK40T,
     get_registry,
 )
 from ruida_re.specs import CommandRegistry, CommandSpec
@@ -167,6 +168,19 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(write.reply_field_matches, ())
         self.assertNotEqual(write.shape_evidence, "hardware-observed")
         self.assertNotEqual(write.semantic_evidence, "hardware-observed")
+        stop = request.name("process_stop")
+        self.assertIsNotNone(stop)
+        self.assertEqual(stop.shape_evidence, "reported")
+        self.assertEqual(stop.semantic_evidence, "reported")
+        self.assertEqual(stop.shape_sources, (SRC_MEERK40T,))
+        self.assertEqual(stop.semantic_sources, (SRC_MEERK40T,))
+        self.assertEqual(stop.controller_effect, "machine-action")
+        self.assertEqual(stop.reply_behavior, "none")
+        job_stop = get_registry("job").name("process_stop")
+        self.assertEqual(job_stop.shape_evidence, "uncited-hypothesis")
+        self.assertEqual(job_stop.semantic_evidence, "uncited-hypothesis")
+        self.assertEqual(job_stop.controller_effect, "unknown")
+        self.assertEqual(job_stop.reply_behavior, "unknown")
         self.assertIsNone(reply.name("document_name_reply"))
         hypothesis = reply.name("mainboard_version_reply_hypothesis")
         self.assertIsNotNone(hypothesis)

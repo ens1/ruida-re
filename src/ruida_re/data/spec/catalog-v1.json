@@ -2639,8 +2639,7 @@
     },
     {
       "contexts": [
-        "job",
-        "request"
+        "job"
       ],
       "controller_effect": "unknown",
       "fields": [],
@@ -2654,6 +2653,27 @@
       "semantic_sources": [],
       "shape_evidence": "uncited-hypothesis",
       "shape_sources": []
+    },
+    {
+      "contexts": [
+        "request"
+      ],
+      "controller_effect": "machine-action",
+      "fields": [],
+      "name": "process_stop",
+      "notes": "Pinned MeerK40t defines logical D8 01 as process stop and emits it from its Ruida abort path on the normal controller command channel. This is implementation-reported evidence, not a hardware observation or proof that controller execution has stopped.",
+      "opcode": "d801",
+      "reply_behavior": "none",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
     },
     {
       "contexts": [

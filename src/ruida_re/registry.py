@@ -76,6 +76,12 @@ HARDWARE_SETTING_REPLY_NOTES = (
     "separate ACK. This confirms only that reply shape on the captured "
     "setup."
 )
+REPORTED_PROCESS_STOP_NOTES = (
+    "Pinned MeerK40t defines logical D8 01 as process stop and emits it "
+    "from its Ruida abort path on the normal controller command channel. "
+    "This is implementation-reported evidence, not a hardware observation "
+    "or proof that controller execution has stopped."
+)
 
 
 SPECS = (
@@ -974,16 +980,27 @@ PROVISIONAL_REQUEST_NAMES = {
 
 
 def _with_request_evidence(spec: CommandSpec) -> CommandSpec:
-    if spec.name != "get_setting":
-        return spec
-    return replace(
-        spec,
-        shape_evidence="hardware-observed",
-        semantic_evidence="hardware-observed",
-        shape_sources=HARDWARE_SETTING_SOURCES,
-        semantic_sources=HARDWARE_SETTING_SOURCES,
-        notes=HARDWARE_GET_SETTING_NOTES,
-    )
+    if spec.name == "get_setting":
+        return replace(
+            spec,
+            shape_evidence="hardware-observed",
+            semantic_evidence="hardware-observed",
+            shape_sources=HARDWARE_SETTING_SOURCES,
+            semantic_sources=HARDWARE_SETTING_SOURCES,
+            notes=HARDWARE_GET_SETTING_NOTES,
+        )
+    if spec.name == "process_stop":
+        return replace(
+            spec,
+            shape_evidence="reported",
+            semantic_evidence="reported",
+            shape_sources=(SRC_MEERK40T,),
+            semantic_sources=(SRC_MEERK40T,),
+            notes=REPORTED_PROCESS_STOP_NOTES,
+            controller_effect="machine-action",
+            reply_behavior="none",
+        )
+    return spec
 
 
 REQUEST_SPECS = tuple(

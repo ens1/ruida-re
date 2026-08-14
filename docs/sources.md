@@ -127,6 +127,29 @@ are not a substitute for controller captures. In particular, timeout behavior,
 the meanings of logical `CD` and `CF`, reply termination, and differences
 among controller models remain evidence-labelled research questions.
 
+## Reported software-stop request
+
+The request-context software-stop contract is based on one pinned permissive
+implementation, not a controller capture:
+
+- MeerK40t defines `STOP_PROCESS` as logical `D8 01` in its
+  [pinned command table](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L126-L134).
+- Its Ruida controller's
+  [abort path](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/controller.py#L412-L414)
+  calls the job's stop operation, whose
+  [encoder](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L1869-L1876)
+  emits `STOP_PROCESS` on the normal controller channel.
+- Its UDP
+  [handshaker](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/udp_connection.py#L251-L299)
+  treats only controller-memory reads as reply-producing and otherwise waits
+  for the normal packet acknowledgement.
+
+This supports `reported` shape and semantic evidence, a `machine-action`
+effect, and no application-data reply for request-context `process_stop`.
+It does not promote the overlapping job-context command, establish a
+hardware-observed stop effect, or prove execution completion after a host
+write or packet acknowledgement.
+
 ## First live hardware validation
 
 One configured Ruida 644XS was exercised from macOS over USB serial at 115200

@@ -47,6 +47,7 @@ from ruida_re.registry import (
     REGISTRIES,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN_CAPABILITIES,
+    SRC_MEERK40T,
 )
 from ruida_re.specs import SEMANTIC_EVIDENCE, SHAPE_EVIDENCE
 
@@ -188,6 +189,32 @@ class CatalogTest(unittest.TestCase):
         self.assertNotEqual(
             set_setting["semantic_evidence"],
             "hardware-observed",
+        )
+        process_stop = next(
+            command
+            for command in catalog["commands"]
+            if command["name"] == "process_stop"
+            and command["contexts"] == ["request"]
+        )
+        self.assertEqual(process_stop["shape_evidence"], "reported")
+        self.assertEqual(process_stop["semantic_evidence"], "reported")
+        self.assertEqual(process_stop["shape_sources"], [SRC_MEERK40T])
+        self.assertEqual(process_stop["semantic_sources"], [SRC_MEERK40T])
+        self.assertEqual(process_stop["controller_effect"], "machine-action")
+        self.assertEqual(process_stop["reply_behavior"], "none")
+        job_process_stop = next(
+            command
+            for command in catalog["commands"]
+            if command["name"] == "process_stop"
+            and command["contexts"] == ["job"]
+        )
+        self.assertEqual(
+            job_process_stop["shape_evidence"],
+            "uncited-hypothesis",
+        )
+        self.assertEqual(
+            job_process_stop["semantic_evidence"],
+            "uncited-hypothesis",
         )
 
     def test_codec_semantics_are_complete_and_consistent(self) -> None:

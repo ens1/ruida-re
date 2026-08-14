@@ -627,6 +627,27 @@ example against a machine unless the file, controller state, work area,
 material, power state, interlocks, and emergency-stop access have all been
 reviewed under physical supervision.
 
+### Software stop
+
+`ControllerClient.stop_process()` sends the request-context `process_stop`
+command as one serialized exchange. The command is logical `D8 01`; its shape
+and stop meaning are reported by a pinned implementation, not observed in a
+controller capture. It is a software stop request, not an emergency stop or a
+replacement for physical safety controls.
+
+```python
+receipt = client.stop_process()
+```
+
+On UDP, a successful receipt means the framed packet received the configured
+controller acknowledgement. On serial, it means the scrambled bytes were
+written and flushed; serial supplies no separate acknowledgement. Neither
+result confirms that controller execution halted. A caller that tracks
+execution uncertainty must keep that state latched until it independently
+establishes that the controller is idle. A timeout or transport failure can
+leave delivery unknown, so do not repeat the stop solely because the call
+raised an exception.
+
 ### USB serial
 
 Install the optional dependency, then provide the operating-system serial
@@ -697,10 +718,10 @@ session, but no local policy can prove that a later response will never arrive.
 
 ### Synchronous ownership
 
-The client starts no worker thread. `open`, `keep_alive`, `send_job`, and
-request methods block until their configured timeout or result. An internal
-lock serializes complete exchanges even when callers use multiple threads.
-Treat one client as one protocol session:
+The client starts no worker thread. `open`, `keep_alive`, `stop_process`,
+`send_job`, and request methods block until their configured timeout or result.
+An internal lock serializes complete exchanges even when callers use multiple
+threads. Treat one client as one protocol session:
 
 1. Queue application requests onto one worker when the UI must remain
    responsive.

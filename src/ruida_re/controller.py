@@ -529,6 +529,15 @@ class ControllerClient:
             finally:
                 self._end_operation()
 
+    def stop_process(self) -> SendReceipt:
+        """Send the reported software-stop request as one exchange.
+
+        The receipt describes link delivery, not halted execution.
+        """
+        command = self.request_codec.command("process_stop")
+        program = self.request_codec.program([command])
+        return self.send_no_reply_request(program)
+
     def send_job(
         self,
         program: Program,

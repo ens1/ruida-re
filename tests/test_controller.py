@@ -152,6 +152,78 @@ class ControllerClientTest(unittest.TestCase):
                 receipt = client.keep_alive()
                 self.assertEqual(receipt.transmissions, 1)
 
+    def test_stop_process_udp_uses_exact_wire_and_ack_receipt(self) -> None:
+        transport = self.open_transport()
+        transport.on_send.append([control(0xCC)])
+        events: list[ExchangeEvent] = []
+        client = ControllerClient(transport, observer=events.append)
+
+        receipt = client.stop_process()
+
+        packet = bytes.fromhex("00dbd209")
+        self.assertEqual(transport.sent, [packet])
+        self.assertEqual(receipt.packets, (packet,))
+        self.assertEqual(receipt.transmissions, 1)
+        self.assertEqual(receipt.retries, 0)
+        self.assertEqual(receipt.completed_packets, 1)
+        self.assertEqual(
+            [event.exchange_context for event in events],
+            ["request", "request"],
+        )
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_stop_process_udp_retries_only_after_negative_ack(self) -> None:
+        transport = self.open_transport()
+        transport.on_send.extend(
+            [[control(0xCF)], [control(0xCC)]]
+        )
+        client = ControllerClient(transport)
+
+        receipt = client.stop_process()
+
+        packet = bytes.fromhex("00dbd209")
+        self.assertEqual(transport.sent, [packet, packet])
+        self.assertEqual(receipt.packets, (packet,))
+        self.assertEqual(receipt.transmissions, 2)
+        self.assertEqual(receipt.retries, 1)
+        self.assertEqual(receipt.completed_packets, 1)
+
+    def test_stop_process_udp_timeout_has_unknown_delivery(self) -> None:
+        transport = self.open_transport()
+        client = ControllerClient(transport, acknowledge_timeout=0)
+
+        with self.assertRaises(ControllerTimeoutError) as caught:
+            client.stop_process()
+
+        packet = bytes.fromhex("00dbd209")
+        receipt = caught.exception.receipt
+        self.assertEqual(transport.sent, [packet])
+        self.assertEqual(receipt.packets, (packet,))
+        self.assertEqual(receipt.transmissions, 1)
+        self.assertEqual(receipt.retries, 0)
+        self.assertEqual(receipt.completed_packets, 0)
+        self.assertEqual(
+            caught.exception.delivery_certainty,
+            DeliveryCertainty.UNKNOWN,
+        )
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
+
+    def test_stop_process_serial_uses_exact_wire_and_write_receipt(
+        self,
+    ) -> None:
+        transport = self.open_transport("serial")
+        client = ControllerClient(transport)
+
+        receipt = client.stop_process()
+
+        packet = bytes.fromhex("d209")
+        self.assertEqual(transport.sent, [packet])
+        self.assertEqual(receipt.packets, (packet,))
+        self.assertEqual(receipt.transmissions, 1)
+        self.assertEqual(receipt.retries, 0)
+        self.assertEqual(receipt.completed_packets, 1)
+        self.assertEqual(client.state, SessionState.READY)
+
     def test_session_policies_reject_boolean_and_nonfinite_values(
         self,
     ) -> None:

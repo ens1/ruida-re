@@ -551,6 +551,8 @@ These are research tasks, not parser exceptions:
   projects describe the fields differently. The baseline supports two U14
   counts followed by two coordinate-style values.
 - `D8 00`, `D8 12`, and `F0` have stable shapes and conflicting names.
+- Request-context `D8 01` is reported as software stop by one pinned active
+  implementation, but lacks a controller capture and completion observation.
 - `C6 15` and `C6 16` have stable shapes but disputed timing meaning, so their
   names remain neutral delay-set labels.
 - Several E8, DA05, E732, and D90F payload layouts differ across reported
