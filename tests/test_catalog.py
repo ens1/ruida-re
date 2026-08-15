@@ -45,6 +45,7 @@ from ruida_re.program import (
 from ruida_re.registry import (
     CATALOG_SOURCES,
     REGISTRIES,
+    SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN_CAPABILITIES,
     SRC_MEERK40T,
@@ -156,6 +157,14 @@ class CatalogTest(unittest.TestCase):
             SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
             get_setting["shape_sources"],
         )
+        self.assertIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            get_setting["shape_sources"],
+        )
+        self.assertNotIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            get_setting["semantic_sources"],
+        )
         job_get_setting = next(
             command
             for command in catalog["commands"]
@@ -176,6 +185,14 @@ class CatalogTest(unittest.TestCase):
         self.assertEqual(
             setting_reply["semantic_evidence"],
             "hardware-observed",
+        )
+        self.assertIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            setting_reply["shape_sources"],
+        )
+        self.assertNotIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            setting_reply["semantic_sources"],
         )
         set_setting = next(
             command

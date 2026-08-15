@@ -339,6 +339,12 @@ and both pinned implementations distinguish it from the state-changing
 - MeerK40t's emulator handles `DA 00` as a memory lookup followed by a
   `DA 01` response, while its `DA 01` branch writes values:
   [pinned emulator](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/emulator.py#L661-L696).
+- MeerK40t reports semantic address `0x0200` as machine status and labels
+  `0x01000000`, `0x00000002`, and `0x00000001` as moving, part end, and job
+  running, respectively:
+  [pinned status table](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L217-L249).
+  Those labels remain implementation-reported; the local address-512 capture
+  establishes only the request/reply shape and returned zero value.
 
 The live exchange and independent implementation reports establish different,
 explicitly scoped evidence states. Request-context `get_setting` (`DA 00`) and

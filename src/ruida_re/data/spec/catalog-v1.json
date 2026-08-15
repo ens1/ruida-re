@@ -4,6 +4,7 @@
     "github:jnweiger/ruida-laser@a1e7b9b93b10d5cac79c875bc3efec46f7397a11",
     "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
     "github:t-oster/LibLaserCut@ebe72ea3af3b2ab52d797d8100c635f68722100e",
+    "local:hardware-boss-ls2040-usb-serial-address-512-zero-v1",
     "local:hardware-ruida-644xs-usb-serial-v1",
     "local:lightburn-2.1.03-capability-fixtures",
     "local:lightburn-2.1.03-fixtures"
@@ -3799,7 +3800,7 @@
         }
       ],
       "name": "get_setting",
-      "notes": "One supervised USB serial capture from a controller configured as a Ruida 644XS observed that a DA00 request for address 5 produced a numeric DA01 reply with matching address 5 and value 300000. The stream used magic 0x88 without checksum framing or a separate ACK. This confirms only that exchange on the captured setup, not every address, controller model, or firmware dialect.",
+      "notes": "One supervised USB serial capture from a controller configured as a Ruida 644XS observed that a DA00 request for address 5 produced a numeric DA01 reply with matching address 5 and value 300000. The stream used magic 0x88 without checksum framing or a separate ACK. A separate Boss LS2040 USB-serial capture observed exact logical DA000400 and a matching nine-byte DA01 reply whose value was zero. That second capture confirms only the correlated address-512 exchange shape and zero value at one unspecified instant. It does not establish that address 512 means machine status, that zero means idle, any status flag meaning, controller completion, or a physical side effect. These captures do not establish behavior for every address, controller model, or firmware dialect.",
       "opcode": "da00",
       "reply_behavior": "data",
       "reply_commands": [
@@ -3821,6 +3822,7 @@
       "shape_sources": [
         "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
         "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+        "local:hardware-boss-ls2040-usb-serial-address-512-zero-v1",
         "local:hardware-ruida-644xs-usb-serial-v1"
       ]
     },
@@ -3881,7 +3883,7 @@
         }
       ],
       "name": "setting_reply",
-      "notes": "One supervised USB serial capture from a controller configured as a Ruida 644XS returned address 5 and numeric value 300000 after DA00 address 5. The stream used magic 0x88 without checksum framing or a separate ACK. This confirms only that reply shape on the captured setup.",
+      "notes": "One supervised USB serial capture from a controller configured as a Ruida 644XS returned address 5 and numeric value 300000 after DA00 address 5. The stream used magic 0x88 without checksum framing or a separate ACK. This confirms only that reply shape on the captured setup. A separate Boss LS2040 USB-serial capture returned matching address 512 and numeric value zero in the same nine-byte reply shape. It confirms only that exact reply at one unspecified instant, not the address or value semantics, controller completion, or physical state.",
       "opcode": "da01",
       "reply_behavior": "unknown",
       "reply_commands": [],
@@ -3896,6 +3898,7 @@
       "shape_sources": [
         "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
         "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8",
+        "local:hardware-boss-ls2040-usb-serial-address-512-zero-v1",
         "local:hardware-ruida-644xs-usb-serial-v1"
       ]
     },
@@ -5679,6 +5682,14 @@
       "license": "LGPL-3.0-or-later",
       "revision": "ebe72ea3af3b2ab52d797d8100c635f68722100e",
       "url": "https://github.com/t-oster/LibLaserCut/tree/ebe72ea3af3b2ab52d797d8100c635f68722100e"
+    },
+    {
+      "id": "local:hardware-boss-ls2040-usb-serial-address-512-zero-v1",
+      "kind": "local-fixture",
+      "license": null,
+      "local_path": "fixtures/hardware/boss-ls2040-usb-serial-address-512-zero-v1/manifest-v1.json",
+      "revision": "v1",
+      "url": null
     },
     {
       "id": "local:hardware-ruida-644xs-usb-serial-v1",

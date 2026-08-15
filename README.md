@@ -405,6 +405,16 @@ host write without an acknowledgement. Neither result proves that physical
 execution has halted, so an integration must retain any execution-unknown
 state until it independently establishes that the controller is idle.
 
+`ControllerClient.read_machine_status()` is an experimental read-only status
+query. It returns an immutable `MachineStatus` with the raw numeric word,
+reported `moving`, `job_running`, and `part_end` flags, and every remaining bit
+in `unknown_bits`. The address and flag labels are implementation-reported;
+the library does not infer idle state or execution completion from them. One
+Boss LS2040 USB-serial capture observed the exact address-512 request and a
+correlated zero reply, but did not include an operator physical-state report
+or an active-to-complete transition. See the integration guide before using
+the result for machine state.
+
 **Machine safety:** controller calls can move axes, change outputs, or start
 work depending on the records sent and controller state. Use an idle machine,
 known-safe material and power state, physical supervision, and the machine's

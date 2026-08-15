@@ -31,6 +31,9 @@ SRC_LIGHTBURN_CAPABILITIES = (
 SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1 = (
     "local:hardware-ruida-644xs-usb-serial-v1"
 )
+SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1 = (
+    "local:hardware-boss-ls2040-usb-serial-address-512-zero-v1"
+)
 SRC_MEERK40T = (
     "github:meerk40t/meerk40t@"
     "5f68a45bff41d98e4d3fe8b8267857218099afa8"
@@ -48,6 +51,7 @@ SRC_LIBLASERCUT = (
     "ebe72ea3af3b2ab52d797d8100c635f68722100e"
 )
 CATALOG_SOURCES = (
+    SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN,
     SRC_LIGHTBURN_CAPABILITIES,
@@ -61,20 +65,33 @@ HARDWARE_SETTING_SOURCES = (
     SRC_RUIDA_PA,
     SRC_MEERK40T,
 )
+HARDWARE_SETTING_SHAPE_SOURCES = (
+    SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+    *HARDWARE_SETTING_SOURCES,
+)
 HARDWARE_GET_SETTING_NOTES = (
     "One supervised USB serial capture from a controller configured as a "
     "Ruida 644XS observed that a DA00 request for address 5 produced a "
     "numeric DA01 reply with matching address 5 and value 300000. The "
     "stream used magic 0x88 without checksum framing or a separate ACK. "
-    "This confirms only that exchange on the captured setup, not every "
-    "address, controller model, or firmware dialect."
+    "A separate Boss LS2040 USB-serial capture observed exact logical "
+    "DA000400 and a matching nine-byte DA01 reply whose value was zero. "
+    "That second capture confirms only the correlated address-512 exchange "
+    "shape and zero value at one unspecified instant. It does not establish "
+    "that address 512 means machine status, that zero means idle, any status "
+    "flag meaning, controller completion, or a physical side effect. These "
+    "captures do not establish behavior for every address, controller model, "
+    "or firmware dialect."
 )
 HARDWARE_SETTING_REPLY_NOTES = (
     "One supervised USB serial capture from a controller configured as a "
     "Ruida 644XS returned address 5 and numeric value 300000 after DA00 "
     "address 5. The stream used magic 0x88 without checksum framing or a "
     "separate ACK. This confirms only that reply shape on the captured "
-    "setup."
+    "setup. A separate Boss LS2040 USB-serial capture returned matching "
+    "address 512 and numeric value zero in the same nine-byte reply shape. "
+    "It confirms only that exact reply at one unspecified instant, not the "
+    "address or value semantics, controller completion, or physical state."
 )
 REPORTED_PROCESS_STOP_NOTES = (
     "Pinned MeerK40t defines logical D8 01 as process stop and emits it "
@@ -985,7 +1002,7 @@ def _with_request_evidence(spec: CommandSpec) -> CommandSpec:
             spec,
             shape_evidence="hardware-observed",
             semantic_evidence="hardware-observed",
-            shape_sources=HARDWARE_SETTING_SOURCES,
+            shape_sources=HARDWARE_SETTING_SHAPE_SOURCES,
             semantic_sources=HARDWARE_SETTING_SOURCES,
             notes=HARDWARE_GET_SETTING_NOTES,
         )
@@ -1053,7 +1070,7 @@ REPLY_SPECS = (
         ),
         shape_evidence="hardware-observed",
         semantic_evidence="hardware-observed",
-        shape_sources=HARDWARE_SETTING_SOURCES,
+        shape_sources=HARDWARE_SETTING_SHAPE_SOURCES,
         semantic_sources=HARDWARE_SETTING_SOURCES,
         notes=HARDWARE_SETTING_REPLY_NOTES,
     ),

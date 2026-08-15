@@ -32,6 +32,7 @@ from .registry import (
     CATALOG_SOURCES,
     REGISTRIES,
     REGISTRY_CONTEXT_EVIDENCE,
+    SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIBLASERCUT,
     SRC_LIGHTBURN,
@@ -47,6 +48,18 @@ CATALOG_CONTEXTS = ("job", "request", "reply")
 
 
 _SOURCE_PROVENANCE = (
+    {
+        "id": SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+        "kind": "local-fixture",
+        "url": None,
+        "revision": "v1",
+        "license": None,
+        "local_path": (
+            "fixtures/hardware/"
+            "boss-ls2040-usb-serial-address-512-zero-v1/"
+            "manifest-v1.json"
+        ),
+    },
     {
         "id": SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
         "kind": "local-fixture",

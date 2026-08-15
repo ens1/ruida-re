@@ -1,7 +1,7 @@
 {
   "catalog": {
     "schema": "ruida-re.catalog.v1",
-    "sha256": "79f1cf758618d6896beb77bb317049823b3a42e011547d81ea7048474b5393fd"
+    "sha256": "62d193c81134ff62cb095f6ea08ac3b2112b62b1c461730f020d5fb28781939f"
   },
   "field_vectors": [
     {
@@ -388,6 +388,14 @@
       "license": "LGPL-3.0-or-later",
       "revision": "ebe72ea3af3b2ab52d797d8100c635f68722100e",
       "url": "https://github.com/t-oster/LibLaserCut/tree/ebe72ea3af3b2ab52d797d8100c635f68722100e"
+    },
+    {
+      "id": "local:hardware-boss-ls2040-usb-serial-address-512-zero-v1",
+      "kind": "local-fixture",
+      "license": null,
+      "local_path": "fixtures/hardware/boss-ls2040-usb-serial-address-512-zero-v1/manifest-v1.json",
+      "revision": "v1",
+      "url": null
     },
     {
       "id": "local:hardware-ruida-644xs-usb-serial-v1",

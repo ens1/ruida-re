@@ -28,6 +28,16 @@ ERROR = 0xCD
 KEEP_ALIVE = 0xCE
 NEGATIVE_ACKNOWLEDGE = 0xCF
 DEFAULT_CHUNK_SIZE = 1024
+MACHINE_STATUS_ADDRESS = 0x0200
+MACHINE_STATUS_REPLY_BYTES = 9
+MACHINE_STATUS_MOVING = 0x01000000
+MACHINE_STATUS_PART_END = 0x00000002
+MACHINE_STATUS_JOB_RUNNING = 0x00000001
+MACHINE_STATUS_KNOWN_MASK = (
+    MACHINE_STATUS_MOVING
+    | MACHINE_STATUS_PART_END
+    | MACHINE_STATUS_JOB_RUNNING
+)
 
 
 class SessionState(str, Enum):
@@ -299,6 +309,17 @@ class ControllerResponse:
     logical: bytes
 
 
+@dataclass(frozen=True)
+class MachineStatus:
+    """Reported controller status bits without inferred machine state."""
+
+    raw_word: int
+    moving: bool
+    job_running: bool
+    part_end: bool
+    unknown_bits: int
+
+
 EventDirection = Literal["send", "receive"]
 
 
@@ -537,6 +558,38 @@ class ControllerClient:
         command = self.request_codec.command("process_stop")
         program = self.request_codec.program([command])
         return self.send_no_reply_request(program)
+
+    def read_machine_status(self) -> MachineStatus:
+        """Read the experimental machine-status word at address 0x0200.
+
+        Flag meanings are implementation-reported and are not a proof of
+        idle state or execution completion.
+        """
+        expected_chunks = None
+        if self.link.receive_boundaries == "datagram":
+            expected_chunks = 1
+        policy = replace(
+            self.reply_policy,
+            expected_chunks=expected_chunks,
+            expected_bytes=MACHINE_STATUS_REPLY_BYTES,
+            complete_when=None,
+        )
+        response = self.request_command(
+            "get_setting",
+            address=MACHINE_STATUS_ADDRESS,
+            reply_policy=policy,
+        )
+        record = response.program.records[0]
+        assert isinstance(record, KnownCommand)
+        raw_word = record.values["value"]
+        assert isinstance(raw_word, int)
+        return MachineStatus(
+            raw_word=raw_word,
+            moving=bool(raw_word & MACHINE_STATUS_MOVING),
+            job_running=bool(raw_word & MACHINE_STATUS_JOB_RUNNING),
+            part_end=bool(raw_word & MACHINE_STATUS_PART_END),
+            unknown_bits=raw_word & ~MACHINE_STATUS_KNOWN_MASK,
+        )
 
     def send_job(
         self,

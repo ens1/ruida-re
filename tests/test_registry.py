@@ -21,6 +21,7 @@ from ruida_re.registry import (
     DEFAULT_REGISTRY,
     LIGHTBURN_OBSERVED,
     REGISTRIES,
+    SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN_CAPABILITIES,
     SRC_MEERK40T,
@@ -148,8 +149,16 @@ class RegistryTest(unittest.TestCase):
             read.reply_field_matches,
             (("address", "address"),),
         )
-        self.assertEqual(len(read.shape_sources), 3)
+        self.assertEqual(len(read.shape_sources), 4)
         self.assertEqual(len(read.semantic_sources), 3)
+        self.assertIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            read.shape_sources,
+        )
+        self.assertNotIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            read.semantic_sources,
+        )
         self.assertIn(
             SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
             read.semantic_sources,
@@ -206,6 +215,14 @@ class RegistryTest(unittest.TestCase):
         self.assertIn(
             SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
             reply.shape_sources,
+        )
+        self.assertIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            reply.shape_sources,
+        )
+        self.assertNotIn(
+            SRC_HARDWARE_BOSS_LS2040_ADDRESS_512_ZERO_V1,
+            reply.semantic_sources,
         )
 
     def test_non_hypothesis_evidence_has_specific_sources(self) -> None:

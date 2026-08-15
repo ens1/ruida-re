@@ -648,6 +648,56 @@ establishes that the controller is idle. A timeout or transport failure can
 leave delivery unknown, so do not repeat the stop solely because the call
 raised an exception.
 
+### Experimental machine-status read
+
+`ControllerClient.read_machine_status()` performs a bounded, structured
+`get_setting` exchange for semantic U14 address `0x0200`. Base-128 encoding
+places that address on the logical wire as `04 00`, so the complete request is
+logical `DA 00 04 00`. With magic `0x88`, its serial wire form is
+`D4 89 8D 89`; the checksummed UDP request is `02 73 D4 89 8D 89`.
+
+```python
+status = client.read_machine_status()
+print(status.raw_word, status.unknown_bits)
+```
+
+The method requires one structured, correlated `setting_reply` containing
+exactly nine logical bytes. Serial may deliver those bytes across arbitrary
+stream reads. UDP requires the normal acknowledgement followed by one reply
+datagram. Short, excess, malformed, split-UDP, or wrong-address replies fail
+under the normal controller error rules and desynchronize the session.
+
+The immutable `MachineStatus` result preserves the complete `raw_word` and
+exposes three implementation-reported bits:
+
+- `moving`: `0x01000000`
+- `job_running`: `0x00000001`
+- `part_end`: `0x00000002`
+
+`unknown_bits` contains every other set bit. The address label and flag labels
+come from the pinned
+[MeerK40t machine-status table](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L217-L249);
+they are not yet validated by an active-job hardware trace. In particular,
+`part_end` is a reported label, not a documented pulse or latch contract.
+
+One approved Boss LS2040 USB-serial capture returned matching address 512 and
+numeric value zero. It proves the correlated request/reply shape and returned
+value only. Operator presence at the instant of the query was not confirmed,
+no physical-effect report accompanied it, and the request merely contained no
+motion, marking, laser, or output opcode. The capture does not prove that the
+address is machine status, that zero means idle, or that any flag identifies
+execution completion.
+
+Do not clear execution uncertainty from a single zero result. An application
+that proposes automatic completion detection must first obtain supervised,
+machine-specific evidence of an observed inactive state, an observed active
+transition for the submitted job, and repeated stable inactive samples after
+that transition. Unknown bits, missed active samples, polling failures, a
+desynchronized session, or any contradictory flag combination must preserve
+the uncertainty latch and require operator confirmation. This policy belongs
+above ruida-re; the typed read deliberately makes no idle or completion
+inference.
+
 ### USB serial
 
 Install the optional dependency, then provide the operating-system serial

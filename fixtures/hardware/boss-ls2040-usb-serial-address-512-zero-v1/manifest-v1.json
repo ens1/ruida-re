@@ -1,0 +1,79 @@
+{
+  "schema": "ruida-re.hardware-read-observation.v1",
+  "identifier": "hardware-boss-ls2040-usb-serial-address-512-zero-v1",
+  "observed_on": "2026-08-15",
+  "capture_time_utc_approximate": "2026-08-15T17:34:00Z",
+  "runtime_revisions": {
+    "rayforge": "b2ec7d0324572b75785c71be3cd48d77511379f6",
+    "ruida_re": "912879daa692cb38b51ee810c07255cc68fb9602"
+  },
+  "scope": {
+    "description": "One approved read-only USB-serial exchange with a Boss LS2040 controller returned a correlated zero value for semantic U14 address 512.",
+    "limitations": [
+      "Operator presence at the instant of the query was not confirmed.",
+      "No physical machine-state, motion, emission, output, sound, or controller-display observation accompanied the exchange.",
+      "The request contained no motion, marking, laser, or output opcode; that offline opcode fact is not a physical-effect observation.",
+      "The capture does not establish that semantic address 512 means machine status or that zero means idle.",
+      "The capture does not establish any flag meaning, active-job transition, pause state, stop state, execution completion, or safe automatic replay condition.",
+      "The capture does not establish compatibility with another controller, firmware revision, transport, or UDP."
+    ]
+  },
+  "environment": {
+    "host_platform": "macOS",
+    "machine": "Boss LS2040",
+    "transport": {
+      "kind": "USB serial",
+      "baud": 115200,
+      "magic": 136,
+      "checksum_prefix": false,
+      "separate_acknowledgement": false
+    }
+  },
+  "operation": {
+    "explicit_user_approval": true,
+    "connection_probe": false,
+    "request": {
+      "command": "get_setting",
+      "semantic_address": 512,
+      "encoded_address_groups_hex": "0400",
+      "logical_hex": "da000400",
+      "wire_hex": "d4898d89",
+      "wire_evidence": "Observed host transmission bytes."
+    },
+    "response": {
+      "wire_hex": "d4098d898989898989",
+      "logical_hex": "da0104000000000000",
+      "wire_evidence": "Observed controller response bytes.",
+      "decoded": {
+        "command": "setting_reply",
+        "semantic_address": 512,
+        "value": 0
+      }
+    },
+    "receipt": {
+      "packets": 1,
+      "transmissions": 1,
+      "retries": 0,
+      "completed_packets": 1
+    },
+    "request_opcode_audit": {
+      "structured_commands": [
+        "get_setting"
+      ],
+      "motion_opcodes": 0,
+      "marking_opcodes": 0,
+      "laser_opcodes": 0,
+      "output_opcodes": 0
+    }
+  },
+  "evidence": {
+    "correlated_address_512_numeric_reply": "hardware-observed",
+    "returned_value_zero": "hardware-observed",
+    "address_512_machine_status_semantics": "implementation-reported-only",
+    "known_flag_semantics": "implementation-reported-only",
+    "zero_means_idle": "not-established",
+    "active_or_completion_transition": "not-observed",
+    "physical_effect": "not-assessed-no-operator-report",
+    "udp": "not-tested"
+  }
+}

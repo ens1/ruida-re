@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import threading
 import unittest
+from dataclasses import FrozenInstanceError
 from functools import partial
 
-from ruida_re.codec import swizzle
+from ruida_re.codec import encode_u14, encode_u35, swizzle
 from ruida_re.controller import (
     ControllerClient as ControllerClientClass,
     ControllerError,
@@ -17,6 +18,7 @@ from ruida_re.controller import (
     DeliveryCertainty,
     ExchangeEvent,
     HandshakeProfile,
+    MachineStatus,
     ReplyLimitError,
     ReplyPolicy,
     SessionDesynchronizedError,
@@ -83,9 +85,9 @@ def control(value: int) -> bytes:
 
 
 def setting_reply(address: int, value: int) -> bytes:
-    logical = bytes.fromhex("da0100")
-    logical += bytes((address,))
-    logical += value.to_bytes(5, "big")
+    logical = bytes.fromhex("da01")
+    logical += encode_u14(address)
+    logical += encode_u35(value)
     return swizzle(logical)
 
 
@@ -223,6 +225,92 @@ class ControllerClientTest(unittest.TestCase):
         self.assertEqual(receipt.retries, 0)
         self.assertEqual(receipt.completed_packets, 1)
         self.assertEqual(client.state, SessionState.READY)
+
+    def test_read_machine_status_udp_uses_exact_wire(self) -> None:
+        transport = self.open_transport()
+        raw_word = 0x01000043
+        reply = setting_reply(0x0200, raw_word)
+        transport.on_send.append([control(0xCC), reply])
+        client = ControllerClient(transport)
+
+        status = client.read_machine_status()
+
+        self.assertEqual(transport.sent, [bytes.fromhex("0273d4898d89")])
+        self.assertEqual(
+            status,
+            MachineStatus(
+                raw_word=raw_word,
+                moving=True,
+                job_running=True,
+                part_end=True,
+                unknown_bits=0x40,
+            ),
+        )
+        with self.assertRaises(FrozenInstanceError):
+            setattr(status, "raw_word", 0)
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_read_machine_status_serial_assembles_split_reply(self) -> None:
+        transport = self.open_transport("serial")
+        logical = bytes.fromhex("da0104000008000002")
+        transport.on_send.append(
+            [swizzle(logical[:4]), swizzle(logical[4:])]
+        )
+        client = ControllerClient(transport)
+
+        status = client.read_machine_status()
+
+        self.assertEqual(transport.sent, [bytes.fromhex("d4898d89")])
+        self.assertEqual(status.raw_word, 0x01000002)
+        self.assertTrue(status.moving)
+        self.assertFalse(status.job_running)
+        self.assertTrue(status.part_end)
+        self.assertEqual(status.unknown_bits, 0)
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_read_machine_status_matches_zero_value_hardware_capture(
+        self,
+    ) -> None:
+        transport = self.open_transport("serial")
+        transport.on_send.append([bytes.fromhex("d4098d898989898989")])
+        client = ControllerClient(transport)
+
+        status = client.read_machine_status()
+
+        self.assertEqual(
+            status,
+            MachineStatus(
+                raw_word=0,
+                moving=False,
+                job_running=False,
+                part_end=False,
+                unknown_bits=0,
+            ),
+        )
+
+    def test_read_machine_status_udp_rejects_split_datagrams(self) -> None:
+        transport = self.open_transport()
+        logical = bytes.fromhex("da0104000000000001")
+        transport.on_send.append(
+            [control(0xCC), swizzle(logical[:4]), swizzle(logical[4:])]
+        )
+        client = ControllerClient(transport)
+
+        with self.assertRaises(ReplyLimitError):
+            client.read_machine_status()
+
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
+
+    def test_read_machine_status_rejects_wrong_reply_address(self) -> None:
+        transport = self.open_transport("serial")
+        transport.on_send.append([setting_reply(0x0201, 0)])
+        client = ControllerClient(transport)
+
+        with self.assertRaises(UnexpectedControllerReply):
+            client.read_machine_status()
+
+        self.assertEqual(transport.sent, [bytes.fromhex("d4898d89")])
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
 
     def test_session_policies_reject_boolean_and_nonfinite_values(
         self,
