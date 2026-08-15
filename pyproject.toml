@@ -9,8 +9,8 @@ description = "Embeddable Ruida protocol codec and controller backend"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Tyler Long" }]
-license = "MIT"
-license-files = ["LICENSE"]
+license = "WTFPL"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 keywords = ["laser", "reverse-engineering", "ruida"]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",

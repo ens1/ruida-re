@@ -12,10 +12,10 @@ LightBurn is a trademark of LightBurn Software LLC and is not affiliated with
 this repository.
 
 The fixture manifests, synthetic project inputs, and captured machine-file
-outputs are distributed under the repository's MIT license to the extent they
-are copyrightable. They consist primarily of test data and observed protocol
-bytes. The LGPL LibLaserCut golden used as a comparison oracle is deliberately
-not included; its pinned source and digest are documented in
+outputs are distributed under the repository's WTFPL Version 2 to the extent
+they are copyrightable. They consist primarily of test data and observed
+protocol bytes. The LGPL LibLaserCut golden used as a comparison oracle is
+deliberately not included; its pinned source and digest are documented in
 `docs/sources.md`.
 
 An `.rd` file is controller program data. These fixtures are for decoding and

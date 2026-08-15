@@ -746,3 +746,10 @@ directory. The checked-in `fixtures/` tree is never a default output target.
 
 See [protocol notes](docs/protocol.md) for the layers and verified facts, and
 [sources and provenance](docs/sources.md) for the source and provenance policy.
+
+## License
+
+Original `ruida-re` material is released under the
+[Do What The Fuck You Want To Public License, Version 2](LICENSE). Applicable
+permissions and attribution for referenced third-party source expression are
+preserved in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

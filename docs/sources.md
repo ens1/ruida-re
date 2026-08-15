@@ -1,9 +1,11 @@
 # Sources and provenance
 
-`ruida-re` is an original, schema-driven implementation released under the
-MIT license. Existing projects are used as factual leads and executable
-comparison oracles; their parser control flow, job builders, text formats, and
-source expression were not translated into this repository.
+Original `ruida-re` material is released under the WTFPL Version 2. Existing
+projects are used as factual leads and executable comparison oracles. Except
+for compact protocol primitives conservatively attributed in
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md), their parser control
+flow, job builders, text formats, and source expression were not translated
+into this repository.
 
 ## Primary fixtures
 
