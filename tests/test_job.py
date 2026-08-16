@@ -12,6 +12,7 @@ from ruida_re.job import (
     LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH,
     LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH,
     LIGHTBURN_2103_644XS_FIBER_RESEARCH,
+    LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH,
     LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH,
     LIGHTBURN_2103_644XS_RF_RESEARCH,
     LIGHTBURN_2103_644XS_STATIONARY_RESEARCH,
@@ -260,6 +261,29 @@ def _raster_layer(
         scan_axis=scan_axis,
         raster_strategy=raster_strategy,
     )
+
+
+def _focus_test_plan(targets_mm: tuple[float, ...]) -> JobPlan:
+    segment_length_mm = 2.5
+    start_x_mm = 20.0
+    y_mm = 20.0
+    layers = []
+    for index, target_mm in enumerate(targets_mm):
+        segment_start_mm = start_x_mm + index * segment_length_mm
+        segment_end_mm = segment_start_mm + segment_length_mm
+        layers.append(
+            replace(
+                _raster_layer(
+                    (
+                        TravelTo(segment_start_mm, y_mm),
+                        MarkTo(segment_end_mm, y_mm),
+                    )
+                ),
+                index=index,
+                z_offset_mm=target_mm,
+            )
+        )
+    return JobPlan(tuple(layers))
 
 
 def _horizontal_unidirectional_plan() -> JobPlan:
@@ -671,6 +695,264 @@ class RuidaJobCompilerTest(unittest.TestCase):
                     LIGHTBURN_2103_644XS_Z_RESEARCH,
                     JobPlan((layer,)),
                 )
+
+    def test_focus_test_emits_differential_staircase(self) -> None:
+        result = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+        ).compile(_focus_test_plan((1.2, 0.4, 0, -0.7)))
+        records = tuple(
+            record
+            for record in result.program.records
+            if isinstance(record, KnownCommand)
+        )
+        z_indices = tuple(
+            index
+            for index, record in enumerate(records)
+            if record.name == "z_offset_delta"
+        )
+        z_records = tuple(records[index] for index in z_indices)
+
+        self.assertEqual(
+            tuple(record.values["delta_mm"] for record in z_records),
+            (-1.2, 0.8, 0.4, 0.7, -0.7),
+        )
+        self.assertEqual(
+            sum(
+                round(record.values["delta_mm"] * 1000)
+                for record in z_records
+            ),
+            0,
+        )
+
+        wrapped_layers = (0, 1, 2, 3, 3)
+        for delta_index, (record_index, layer_index) in enumerate(
+            zip(z_indices, wrapped_layers)
+        ):
+            with self.subTest(
+                delta_index=delta_index,
+                layer_index=layer_index,
+            ):
+                prefix = records[record_index - 7 : record_index]
+                self.assertEqual(
+                    tuple(record.name for record in prefix),
+                    (
+                        "layer_control",
+                        "axis_speed",
+                        "layer_control",
+                        "select_layer",
+                        "layer_control",
+                        "layer_control",
+                        "enable_laser_tube_start",
+                    ),
+                )
+                self.assertEqual(
+                    tuple(
+                        record.values["operation"]
+                        for record in prefix
+                        if record.name == "layer_control"
+                    ),
+                    (5, 0, 0x30, 0x10),
+                )
+                self.assertEqual(prefix[1].values["speed_mm_s"], 15)
+                self.assertEqual(prefix[3].values["layer"], layer_index)
+                self.assertEqual(prefix[6].values["enabled"], 3)
+                if delta_index < len(z_indices) - 1:
+                    self.assertEqual(
+                        records[record_index + 1].name,
+                        "axis_speed",
+                    )
+                    self.assertEqual(
+                        records[record_index + 1].values["speed_mm_s"],
+                        15,
+                    )
+
+        last_cut_index = max(
+            index
+            for index, record in enumerate(records)
+            if record.name.startswith("cut_")
+        )
+        self.assertGreater(z_indices[-1], last_cut_index)
+
+    def test_focus_test_accepts_large_representable_targets(self) -> None:
+        result = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+        ).compile(_focus_test_plan((0, 25.4)))
+        deltas = tuple(
+            record.values["delta_mm"]
+            for record in result.program.records
+            if isinstance(record, KnownCommand)
+            and record.name == "z_offset_delta"
+        )
+        self.assertEqual(deltas, (-25.4, 25.4))
+
+        with self.assertRaisesRegex(ValueError, "signed coordinate"):
+            RuidaJobCompiler(
+                LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+            ).compile(_focus_test_plan((0, 2_147_483.648)))
+
+    def test_focus_test_rejects_unsupported_layer_forms(self) -> None:
+        valid = _focus_test_plan((0, 0.5))
+        native = valid.layers[0]
+        vector = replace(
+            _baseline_plan().layers[0],
+            z_offset_mm=0,
+        )
+        planned = replace(
+            native,
+            events=(),
+            scan_axis=None,
+            raster_strategy=None,
+            raster_processing="planned-path",
+            raster_sections=(
+                RasterSection((TravelTo(20, 20), MarkTo(30, 20))),
+            ),
+            z_offset_mm=0,
+        )
+        mixed_vector = replace(
+            vector,
+            index=1,
+            events=(TravelTo(22.5, 20), MarkTo(25, 20)),
+            z_offset_mm=0.5,
+        )
+        mixed_planned = replace(
+            planned,
+            index=1,
+            raster_sections=(
+                RasterSection((TravelTo(22.5, 20), MarkTo(25, 20))),
+            ),
+            z_offset_mm=0.5,
+        )
+        cases = (
+            ("vector", JobPlan((vector,))),
+            ("planned", JobPlan((planned,))),
+            ("mixed-vector", JobPlan((native, mixed_vector))),
+            ("mixed-planned", JobPlan((native, mixed_planned))),
+            (
+                "missing-target",
+                JobPlan((replace(valid.layers[0], z_offset_mm=None),)
+                        + valid.layers[1:]),
+            ),
+            (
+                "disconnected",
+                JobPlan(
+                    (
+                        valid.layers[0],
+                        replace(
+                            valid.layers[1],
+                            events=(TravelTo(23, 20), MarkTo(25.5, 20)),
+                        ),
+                    )
+                ),
+            ),
+            (
+                "negative-x",
+                JobPlan(
+                    (
+                        replace(
+                            valid.layers[0],
+                            events=(TravelTo(22.5, 20), MarkTo(20, 20)),
+                        ),
+                        valid.layers[1],
+                    )
+                ),
+            ),
+            (
+                "extra-mark",
+                JobPlan(
+                    (
+                        replace(
+                            valid.layers[0],
+                            events=(
+                                TravelTo(20, 20),
+                                MarkTo(21, 20),
+                                MarkTo(22.5, 20),
+                            ),
+                        ),
+                        valid.layers[1],
+                    )
+                ),
+            ),
+            (
+                "different-speed",
+                JobPlan(
+                    (
+                        valid.layers[0],
+                        replace(valid.layers[1], speed_mm_s=101),
+                    )
+                ),
+            ),
+            (
+                "different-power",
+                JobPlan(
+                    (
+                        valid.layers[0],
+                        replace(valid.layers[1], max_power_percent=51),
+                    )
+                ),
+            ),
+            (
+                "different-air",
+                JobPlan(
+                    (
+                        valid.layers[0],
+                        replace(valid.layers[1], air_assist=True),
+                    )
+                ),
+            ),
+        )
+        compiler = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+        )
+        for label, plan in cases:
+            with (
+                self.subTest(case=label),
+                self.assertRaises(UnsupportedJobFeatureError),
+            ):
+                compiler.compile(plan)
+
+    def test_focus_test_requires_sequential_monotonic_targets(self) -> None:
+        compiler = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+        )
+        valid_index_plan = _focus_test_plan((0, 0.5))
+        invalid_indices = (
+            replace(
+                valid_index_plan,
+                layers=(
+                    valid_index_plan.layers[0],
+                    replace(
+                        valid_index_plan.layers[1],
+                        index=0,
+                    ),
+                ),
+            ),
+            replace(
+                valid_index_plan,
+                layers=(
+                    valid_index_plan.layers[0],
+                    replace(
+                        valid_index_plan.layers[1],
+                        index=2,
+                    ),
+                ),
+            ),
+        )
+        for plan in invalid_indices:
+            with (
+                self.subTest(plan=plan),
+                self.assertRaisesRegex(ValueError, "contiguous from zero"),
+            ):
+                compiler.compile(plan)
+
+        for targets in ((0, 0), (0, 1, 0.5)):
+            with (
+                self.subTest(targets=targets),
+                self.assertRaisesRegex(
+                    UnsupportedJobFeatureError,
+                    "strictly monotonic",
+                ),
+            ):
+                compiler.compile(_focus_test_plan(targets))
 
     def test_dynamic_vector_power_matches_capability_goldens(self) -> None:
         layer_channels = _capability_channels(
@@ -2209,9 +2491,13 @@ class RuidaJobCompilerTest(unittest.TestCase):
             LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
             .dynamic_vector_power_mode
         )
+        focus_mode = LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH.focus_test_mode
+        z_mode = LIGHTBURN_2103_644XS_Z_RESEARCH.paired_z_offset_mode
         assert dual_mode is not None
         assert frequency_mode is not None
         assert dynamic_mode is not None
+        assert focus_mode is not None
+        assert z_mode is not None
         profiles = (
             replace(
                 LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH,
@@ -2242,6 +2528,21 @@ class RuidaJobCompilerTest(unittest.TestCase):
             replace(
                 LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH,
                 planned_path_raster_mode=None,
+            ),
+            replace(
+                LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH,
+                allowed_layer_kinds=("vector",),
+            ),
+            replace(
+                LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH,
+                paired_z_offset_mode=z_mode,
+            ),
+            replace(
+                LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH,
+                focus_test_mode=replace(
+                    focus_mode,
+                    z_offset_mode=None,
+                ),
             ),
         )
         for profile in profiles:
@@ -2494,6 +2795,7 @@ class RuidaJobCompilerTest(unittest.TestCase):
             LIGHTBURN_2103_644XS_RF_RESEARCH.layer_frequency_mode,
             LIGHTBURN_2103_644XS_FIBER_RESEARCH.fiber_pulse_width_mode,
             LIGHTBURN_2103_644XS_Z_RESEARCH.paired_z_offset_mode,
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH.focus_test_mode,
             LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
             .dynamic_vector_power_mode,
         )

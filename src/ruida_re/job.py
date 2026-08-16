@@ -269,6 +269,16 @@ class PairedZOffsetMode:
 
 
 @dataclass(frozen=True)
+class FocusTestMode:
+    """Static differential Z staircase across connected raster segments."""
+
+    z_offset_mode: PairedZOffsetMode
+    semantic_evidence: str
+    evidence_source: str
+    execution_evidence: str = "not-observed"
+
+
+@dataclass(frozen=True)
 class DynamicVectorPowerMode:
     """Explicit active-power envelopes for stateful vector marking."""
 
@@ -314,6 +324,7 @@ class RuidaJobProfile:
     layer_frequency_mode: LayerFrequencyMode | None = None
     fiber_pulse_width_mode: FiberPulseWidthMode | None = None
     paired_z_offset_mode: PairedZOffsetMode | None = None
+    focus_test_mode: FocusTestMode | None = None
     dynamic_vector_power_mode: DynamicVectorPowerMode | None = None
     allowed_layer_kinds: tuple[LayerKind, ...] | None = None
     required_layer_count: int | None = None
@@ -537,6 +548,22 @@ LIGHTBURN_2103_644XS_FIBER_RESEARCH = _research_profile(
 LIGHTBURN_2103_644XS_Z_RESEARCH = _research_profile(
     "z-research",
     paired_z_offset_mode=_PAIRED_Z_OFFSET_MODE,
+)
+LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH = _research_profile(
+    "focus-test-research",
+    focus_test_mode=FocusTestMode(
+        z_offset_mode=replace(
+            _PAIRED_Z_OFFSET_MODE,
+            maximum_abs_offset_mm=None,
+        ),
+        semantic_evidence="static-producer-implementation",
+        evidence_source=(
+            "LightBurn 2.1.03 FocusTest::Generate and "
+            "Protocol_Ruida::OutputShapeCuts static implementation"
+        ),
+    ),
+    allowed_layer_kinds=("raster",),
+    required_raster_processing="native",
 )
 LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH = _research_profile(
     "dynamic-power-research",
@@ -817,8 +844,41 @@ def _validate_profile_policy(profile: RuidaJobProfile) -> None:
                 "Minimum fiber pulse width cannot exceed maximum pulse width"
             )
 
-    z_mode = profile.paired_z_offset_mode
-    if z_mode is not None and z_mode.maximum_abs_offset_mm is not None:
+    focus_mode = profile.focus_test_mode
+    if focus_mode is not None and not isinstance(focus_mode, FocusTestMode):
+        raise ValueError("Focus Test mode must be a FocusTestMode")
+    if focus_mode is not None and not isinstance(
+        focus_mode.z_offset_mode,
+        PairedZOffsetMode,
+    ):
+        raise ValueError(
+            "Focus Test Z-offset mode must be a PairedZOffsetMode"
+        )
+    focus_z_mode = (
+        focus_mode.z_offset_mode if focus_mode is not None else None
+    )
+    z_modes = tuple(
+        mode
+        for mode in (profile.paired_z_offset_mode, focus_z_mode)
+        if mode is not None
+    )
+    if (
+        profile.paired_z_offset_mode is not None
+        and focus_mode is not None
+    ):
+        raise ValueError(
+            "Paired Z-offset and Focus Test modes cannot be combined"
+        )
+    if focus_mode is not None and (
+        profile.allowed_layer_kinds != ("raster",)
+        or profile.required_raster_processing != "native"
+    ):
+        raise ValueError(
+            "Focus Test mode requires a native-raster-only profile"
+        )
+    for z_mode in z_modes:
+        if z_mode.maximum_abs_offset_mm is None:
+            continue
         maximum = _number(
             z_mode.maximum_abs_offset_mm,
             "Maximum absolute Z offset",
@@ -1373,10 +1433,9 @@ def _analyze(plan: JobPlan) -> _PlanAnalysis:
         if layer.z_offset_mm is not None:
             offset = _number(layer.z_offset_mm, "Layer Z offset")
             microns = round(offset * 1000)
-            if not 1 <= abs(microns) <= MAX_ABSOLUTE_MICRONS:
+            if abs(microns) > MAX_ABSOLUTE_MICRONS:
                 raise ValueError(
-                    "Layer Z offset must quantize to a nonzero balanced "
-                    "signed coordinate"
+                    "Layer Z offset must fit the signed coordinate field"
                 )
         if layer.kind not in ("vector", "raster"):
             raise UnsupportedJobFeatureError(
@@ -1462,8 +1521,11 @@ class RuidaJobCompiler:
         ):
             records.extend(self._layer_metadata(layer, bounds))
         records.extend(self._document_metadata(plan, analysis))
-        for layer in plan.layers:
-            records.extend(self._layer_program(layer))
+        if self.profile.focus_test_mode is not None:
+            records.extend(self._focus_test_program(plan))
+        else:
+            for layer in plan.layers:
+                records.extend(self._layer_program(layer))
         records.extend(self._epilogue(analysis.marked_distance_mm))
 
         basis = sum(
@@ -1500,11 +1562,16 @@ class RuidaJobCompiler:
         z_layers = [
             layer for layer in plan.layers if layer.z_offset_mm is not None
         ]
-        if z_layers:
+        if self.profile.focus_test_mode is not None:
+            self._validate_focus_test(plan)
+        elif z_layers:
             if self.profile.paired_z_offset_mode is None:
                 raise UnsupportedJobFeatureError(
                     "Z offsets are not supported by this job profile"
                 )
+            z_mode = self.profile.paired_z_offset_mode
+            if z_mode is None:
+                raise AssertionError("Paired Z offset mode was not validated")
             if (
                 len(plan.layers) != 1
                 or len(z_layers) != 1
@@ -1514,18 +1581,21 @@ class RuidaJobCompiler:
                 raise UnsupportedJobFeatureError(
                     "Z offsets require exactly one native raster layer"
                 )
-            z_mode = self.profile.paired_z_offset_mode
-            if z_mode is None:
-                raise AssertionError("Paired Z offset mode was not validated")
-            if (
-                z_mode.maximum_abs_offset_mm is not None
-                and abs(z_layers[0].z_offset_mm)
-                > z_mode.maximum_abs_offset_mm
-            ):
-                raise UnsupportedJobFeatureError(
-                    "Z offset exceeds this job profile's absolute limit"
-                )
-
+            for layer in z_layers:
+                microns = round(layer.z_offset_mm * 1000)
+                if microns == 0:
+                    raise ValueError(
+                        "Layer Z offset must quantize to a nonzero balanced "
+                        "signed coordinate"
+                    )
+                if (
+                    z_mode.maximum_abs_offset_mm is not None
+                    and abs(layer.z_offset_mm)
+                    > z_mode.maximum_abs_offset_mm
+                ):
+                    raise UnsupportedJobFeatureError(
+                        "Z offset exceeds this job profile's absolute limit"
+                    )
         for layer in plan.layers:
             layer_channels = self._validate_laser_configuration(layer)
             if layer.frequency_hz is not None:
@@ -1646,6 +1716,125 @@ class RuidaJobCompiler:
                                 "Current dynamic vector power requires "
                                 "explicit layer laser channels"
                             )
+
+    def _validate_focus_test(self, plan: JobPlan) -> None:
+        if len(plan.layers) < 2:
+            raise UnsupportedJobFeatureError(
+                "Focus Test requires at least two raster segments"
+            )
+
+        first = plan.layers[0]
+        reference_settings = (
+            round(first.speed_mm_s * 1000),
+            _wire_power_value(first.min_power_percent),
+            _wire_power_value(first.max_power_percent),
+            first.air_assist,
+        )
+        previous_end: tuple[int, int] | None = None
+        previous_target: int | None = None
+        target_direction: int | None = None
+
+        for layer in plan.layers:
+            if layer.z_offset_mm is None:
+                raise UnsupportedJobFeatureError(
+                    "Every Focus Test segment requires a logical Z target"
+                )
+            if (
+                layer.scan_axis != "horizontal"
+                or layer.raster_strategy != "unidirectional"
+                or len(layer.events) != 2
+                or not isinstance(layer.events[0], TravelTo)
+                or not isinstance(layer.events[1], MarkTo)
+            ):
+                raise UnsupportedJobFeatureError(
+                    "Focus Test layers must each be one horizontal "
+                    "TravelTo/MarkTo raster segment"
+                )
+            start = _coordinates(layer.events[0])
+            end = _coordinates(layer.events[1])
+            if start[1] != end[1] or end[0] <= start[0]:
+                raise UnsupportedJobFeatureError(
+                    "Focus Test segments must mark in the positive X "
+                    "direction at one Y coordinate"
+                )
+            if previous_end is not None and start != previous_end:
+                raise UnsupportedJobFeatureError(
+                    "Focus Test segments must connect end-to-start"
+                )
+            settings = (
+                round(layer.speed_mm_s * 1000),
+                _wire_power_value(layer.min_power_percent),
+                _wire_power_value(layer.max_power_percent),
+                layer.air_assist,
+            )
+            if settings != reference_settings:
+                raise UnsupportedJobFeatureError(
+                    "Focus Test segments must share speed, power, and air"
+                )
+
+            target = round(layer.z_offset_mm * 1000)
+            if previous_target is not None:
+                difference = target - previous_target
+                if difference == 0:
+                    raise UnsupportedJobFeatureError(
+                        "Focus Test Z targets must be strictly monotonic"
+                    )
+                if abs(difference) > MAX_ABSOLUTE_MICRONS:
+                    raise ValueError(
+                        "Focus Test Z transition must fit the signed "
+                        "coordinate field"
+                    )
+                direction = 1 if difference > 0 else -1
+                if target_direction is None:
+                    target_direction = direction
+                elif direction != target_direction:
+                    raise UnsupportedJobFeatureError(
+                        "Focus Test Z targets must be strictly monotonic"
+                    )
+            previous_end = end
+            previous_target = target
+
+    def _focus_test_program(self, plan: JobPlan) -> list[KnownCommand]:
+        focus_mode = self.profile.focus_test_mode
+        if focus_mode is None:
+            raise AssertionError("Focus Test mode was not validated")
+
+        records: list[KnownCommand] = []
+        previous_target_microns = 0
+        for layer in plan.layers:
+            if layer.z_offset_mm is None:
+                raise AssertionError("Focus Test Z target was not validated")
+            target_microns = round(layer.z_offset_mm * 1000)
+            delta_microns = previous_target_microns - target_microns
+            if delta_microns:
+                records.extend(
+                    self._z_offset_envelope(
+                        layer,
+                        delta_microns / 1000,
+                        entering=True,
+                        mode=focus_mode.z_offset_mode,
+                    )
+                )
+            records.extend(
+                self._layer_section_program(
+                    layer,
+                    layer.events,
+                    self.profile.mode_for(layer)[1],
+                    raster_envelope=True,
+                )
+            )
+            previous_target_microns = target_microns
+
+        if previous_target_microns:
+            records.extend(
+                self._z_offset_envelope(
+                    plan.layers[-1],
+                    previous_target_microns / 1000,
+                    entering=False,
+                    mode=focus_mode.z_offset_mode,
+                )
+            )
+        return records
 
     def _validate_profile_scope(self, plan: JobPlan) -> None:
         required_count = self.profile.required_layer_count
@@ -2056,8 +2245,9 @@ class RuidaJobCompiler:
         delta_mm: float,
         *,
         entering: bool,
+        mode: PairedZOffsetMode | None = None,
     ) -> list[KnownCommand]:
-        mode = self.profile.paired_z_offset_mode
+        mode = mode or self.profile.paired_z_offset_mode
         if mode is None:
             raise AssertionError("Paired Z offset mode was not validated")
         records = [
@@ -2465,6 +2655,7 @@ __all__ = (
     "LIGHTBURN_2103_644XS_DUAL_LASER_RESEARCH",
     "LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH",
     "LIGHTBURN_2103_644XS_FIBER_RESEARCH",
+    "LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH",
     "LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH",
     "LIGHTBURN_2103_644XS_RF_RESEARCH",
     "LIGHTBURN_2103_644XS_STATIONARY_RESEARCH",
@@ -2474,6 +2665,7 @@ __all__ = (
     "Dwell",
     "DynamicVectorPowerMode",
     "FiberPulseWidthMode",
+    "FocusTestMode",
     "JobPlan",
     "LaserChannelMapping",
     "LaserChannelMode",

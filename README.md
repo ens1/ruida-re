@@ -201,9 +201,12 @@ stationary subsets retain offline fixture evidence only:
 | `LIGHTBURN_2103_644XS_RF_RESEARCH` | `frequency_hz` | paired `C6 60` values in hertz |
 | `LIGHTBURN_2103_644XS_FIBER_RESEARCH` | `pulse_width_ns` | `C6 66` value in nanoseconds |
 | `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` | balanced, inverse `80 03` deltas around one native raster layer |
+| `LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH` | connected +X native-raster segments whose `z_offset_mm` values are logical targets | initial, differential, and final-restore `80 03` deltas |
 | `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | stateful `MarkWithPower`, baseline `MarkTo`, producer-only `MarkWithCurrentPower` | explicit effective active powers and baseline restoration |
 
-These profiles reproduce controlled LightBurn machine files exactly. A
+The fixture-derived profiles reproduce controlled LightBurn machine files
+exactly; Focus Test instead follows the statically inspected producer
+implementation. A
 single-section 45-degree planned path and a separate two-section cross-hatch
 path have also executed successfully on one Boss LS2040 configured as a Ruida
 644XS. The exact cross-hatch evidence is in its
@@ -212,11 +215,19 @@ The broader planned-path mode remains research-only because these exact coupons
 do not validate arbitrary paths or settings. The profiles are opt-in and
 intentionally narrow; the default compiler still rejects those fields. The
 fixture-derived built-in limits are 200 ms for stationary events, 10–20 kHz
-for RF frequency, 0–200 ns for fiber pulse width, and 1 mm absolute Z offset.
+for RF frequency, 0–200 ns for fiber pulse width, and 1 mm absolute Z offset
+for `Z_RESEARCH`.
 The dual-head, stationary, RF, fiber, and dynamic-power profiles accept
 exactly one vector layer at index zero. Planned-path and Z profiles each
 accept exactly one raster layer at index zero; Z requires native raster. The
-host must provide resolved per-head powers to `MarkWithPower`, not a source
+Focus Test profile accepts at least two native-raster layers with the format's
+sequential indices from zero. Every layer supplies its logical Z target in
+`z_offset_mm`, including an explicit zero target. Each layer is exactly one
+horizontal `TravelTo`/`MarkTo` segment; segments connect end-to-start in +X
+and share speed, power, and air. Its offset range is the `80 03`
+representation range, so callers must separately enforce their configured
+machine travel and collision limits. The host must provide resolved per-head
+powers to `MarkWithPower`, not a source
 application's PowerScale value. Cut-through remains unsupported because the
 fixtures do not distinguish start from end behavior or establish independent
 head-2 through power. Rotary remains blocked without an exported rotary
@@ -238,6 +249,15 @@ not independent physical-direction, displacement, accuracy, backlash, or
 repeatability metrology. Interrupted restoration, other offsets and layer
 structures, and broader compatibility remain unvalidated; the profile stays
 research-only.
+
+`LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH` follows the static LightBurn 2.1.03
+`FocusTest::Generate` and `Protocol_Ruida::OutputShapeCuts` implementation:
+it emits the inverse first target, each previous-target difference, and one
+final target delta to restore net logical Z to zero. Zero deltas are omitted.
+Only the exact single-layer ±1 mm payloads above have controller-readout
+observations. The connected multi-segment staircase and larger targets are
+hardware-unobserved static lowering; initial hardware validation should stay
+within the observed range.
 
 Dynamic vector power is stateful. Layer setup establishes the baseline.
 `MarkWithPower` emits resolved per-channel active powers, marks to its endpoint,

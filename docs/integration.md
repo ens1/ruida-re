@@ -151,6 +151,7 @@ retain no hardware-execution evidence:
 | `LIGHTBURN_2103_644XS_RF_RESEARCH` | vector `frequency_hz` | two `C6 60` records carrying hertz |
 | `LIGHTBURN_2103_644XS_FIBER_RESEARCH` | vector `pulse_width_ns` | one `C6 66` record carrying nanoseconds |
 | `LIGHTBURN_2103_644XS_Z_RESEARCH` | `z_offset_mm` on exactly one native raster layer | inverse `80 03` entry and restore deltas |
+| `LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH` | connected +X native-raster segments whose `z_offset_mm` values are logical targets | initial, differential, and final-restore `80 03` deltas |
 | `LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH` | stateful vector power with explicit layer channels | effective active powers plus baseline restoration before ordinary `MarkTo` |
 
 Select a research profile explicitly when constructing `RuidaJobCompiler`.
@@ -159,7 +160,21 @@ features are supported. The default compiler rejects their plan fields, and
 all profiles reject rotary, cut-through, and unprofiled combinations instead
 of discarding or approximating them. Built-in research bounds are 200 ms for
 stationary events, 10–20 kHz for RF frequency, 0–200 ns for fiber pulse
-width, and 1 mm absolute Z offset.
+width, and 1 mm absolute Z offset for `Z_RESEARCH`. The Focus Test profile
+uses the signed `80 03` representation range; integrations must constrain it
+to the configured machine travel and collision-safe range.
+
+Focus Test layers use sequential unique indices beginning at zero, and every
+layer supplies a logical Z target in `z_offset_mm`; an explicit zero is valid.
+Each layer contains one horizontal `TravelTo`/`MarkTo` segment. The +X
+segments connect end-to-start and share speed, power, and air. The compiler
+emits `-target[0]`, each `target[i-1] - target[i]`, and then `+target[-1]`.
+It omits zero deltas, so the final wire-micron sum is zero. Vector,
+planned-path, mixed, disconnected, and non-monotonic plans are rejected. This
+follows the static
+LightBurn 2.1.03 `FocusTest::Generate` and
+`Protocol_Ruida::OutputShapeCuts` implementation; the staircase and targets
+beyond ±1 mm remain hardware-unobserved.
 
 Pass expansion also belongs to the host. Repeated planar passes can be
 represented by repeated planned motion. Controlled LightBurn four-pass

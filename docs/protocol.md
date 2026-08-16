@@ -465,7 +465,13 @@ The remaining controlled results are:
   scopes this to controller-readout sign and numerical-restore observations,
   not physical direction, mechanical displacement, accuracy, backlash,
   repeatability, or interruption behavior. The earlier prepared Z coupons
-  remain quarantined offline.
+  remain quarantined offline. Static inspection of LightBurn 2.1.03
+  `FocusTest::Generate` and `Protocol_Ruida::OutputShapeCuts` shows target Z
+  offsets lowered as inverse-first, previous-minus-next transitions, and one
+  final restore. The Focus Test research profile applies that differential
+  staircase to connected +X native-raster segments. The staircase and offsets
+  beyond ±1 mm are hardware-unobserved; machine travel and collision limits
+  are not protocol metadata and remain the caller's responsibility.
 - **Negative Z results (c011-c014).** Positive and negative `zPerPass`, and a
   1 mm material-height change, each produce a byte-identical `.rd` relative to
   the zero baseline. They are not mapped to `80 03` or another Z command.
