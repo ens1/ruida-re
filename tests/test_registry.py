@@ -178,6 +178,15 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(write.reply_field_matches, ())
         self.assertNotEqual(write.shape_evidence, "hardware-observed")
         self.assertNotEqual(write.semantic_evidence, "hardware-observed")
+        self.assertIn(
+            "operator-controlled-ruida-usb-serial-focus-distance-write-v1",
+            write.notes,
+        )
+        self.assertIn("address 0x010E", write.notes)
+        self.assertIn(
+            "does not promote the generic record",
+            write.notes,
+        )
         stop = request.name("process_stop")
         self.assertIsNotNone(stop)
         self.assertEqual(stop.shape_evidence, "reported")

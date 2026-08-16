@@ -731,8 +731,10 @@ implementations. Supervised snapshots from one operator-controlled controller
 have since returned values from these addresses; one `0x010E` reply was raw
 9300 while an operator-supplied private LightBurn machine-settings export
 associated with that exact controller displayed Focus Distance 9.3. The
-controller model was not independently verified. This is single-controller,
-single-value corroboration, not a general conversion or write contract.
+controller model was not independently verified. That initial evidence was
+single-controller, single-value corroboration. The later validation adds a
+second value on the same controller but still does not establish a general
+conversion or write contract.
 `FocusDepthReading` therefore still treats its value as an opaque U35. Its
 `hypothesized_mm` property applies a simulator-only
 unsigned-micrometre hypothesis and must not be used as a write value. The
@@ -824,8 +826,22 @@ those public structured send surfaces from bypassing the typed compare,
 confirmation, bounds, serial-only shape, or single-write constraint. It does
 not turn the library into a safety sandbox: the codec, opaque records, custom
 links, and direct transport access remain low-level protocol research tools.
-The typed method remains experimental because there is no live write capture,
-controller acknowledgement, persistence test, or physical-effect validation.
+One supervised exact-controller validation has since observed one
+9300-to-9400 DA01 host transmission with zero retries, three raw-9400 reads
+through a fresh connection, an operator-reported Focus Distance display of
+9.4, and an operator-reported completed panel-Autofocus endpoint of Z 9.4. One
+9400-to-9300 DA01 rollback with zero retries was followed by three fresh
+raw-9300 reads and an operator-reported restored panel-Autofocus endpoint of Z
+9.3. The
+[scoped manifest](../fixtures/hardware/operator-controlled-ruida-usb-serial-focus-distance-write-v1/manifest-v1.json)
+keeps host observations and operator attestations distinct.
+
+The typed method remains experimental. Its receipt is not a controller
+acknowledgement and it still performs no readback. The validation did not
+include a reset, power cycle, independent position measurement, probe-trigger
+capture, contact-coordinate observation, or live `D8 2E` transmission. It
+does not establish persistence, contact probing, autofocus safety or
+repeatability, arbitrary values, another controller or firmware, or UDP.
 
 ### USB serial
 

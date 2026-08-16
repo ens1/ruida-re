@@ -359,7 +359,7 @@ and both pinned implementations distinguish it from the state-changing
   [pinned emulator value](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/emulator.py#L1088-L1098).
   Those implementation reports alone do not establish values on the
   operator-controlled device, so the typed API preserves raw U35 and labels
-  every unit conversion as a hypothesis. The later single-point capture is
+  every unit conversion as a hypothesis. The initial single-point capture is
   scoped below.
 - Both pinned implementations label logical `D8 2E` as Focus Z, but neither
   establishes its physical effect or reply behavior on hardware:
@@ -371,10 +371,13 @@ The live exchange and independent implementation reports establish different,
 explicitly scoped evidence states. Request-context `get_setting` (`DA 00`) and
 reply-context numeric `setting_reply` (`DA 01`) have `hardware-observed` shape
 and semantic evidence. Job-context `get_setting` remains `reported` on both
-axes. The state-changing `set_setting` (`DA 01`) retains a
-`fixture-observed` shape and `reported` semantics; the numeric reply does not
-validate that write command. These labels do not guarantee the same reply
-shape for every address, controller, or firmware dialect.
+axes. The generic state-changing `set_setting` (`DA 01`) registry record
+retains a `fixture-observed` shape and `reported` semantics; the numeric reply
+does not validate that write command. The later supervised Focus Distance
+exchange provides narrower host-transmission and effect evidence for only
+address `0x010E`, two values, and one exact controller. It does not promote
+the generic registry record or guarantee behavior for another address,
+controller, or firmware dialect.
 
 ## Experimental Focus Distance write evidence
 
@@ -413,13 +416,32 @@ The operator associated both artifacts with the exact same controller; the
 controller model was not independently verified. The full private export is
 deliberately not distributed.
 
-There is no captured Focus Distance write, controller acknowledgement,
-post-write readback, reset, or power-cycle observation. The DA01 write shape,
-duplicated-field rule, and USB-serial completion behavior therefore remain
-`implementation-reported`, not `hardware-observed`. They do not establish
-controller acceptance, physical effect, value lifetime, persistence, or a
-rollback contract. The typed method exposes raw integers and a host-side send
-receipt so none of those missing claims is implied by its API.
+One later supervised sequence on that exact controller started with three
+raw-9300 DA00 samples. Exactly one typed 9300-to-9400 compare-and-set produced
+a `SendReceipt` with one DA01 packet, one transmission, one completed packet,
+and zero retries. After that session closed, a fresh connection returned raw
+9400 three times. The operator reported that the controller displayed Focus
+Distance 9.4 and that a completed panel-invoked Autofocus routine ended at Z
+9.4. Exactly one 9400-to-9300 rollback produced the same one-packet,
+one-transmission, zero-retry receipt shape; another fresh connection returned
+raw 9300 three times, and the operator reported a restored completed-Autofocus
+endpoint of Z 9.3. The public
+[evidence manifest](../fixtures/hardware/operator-controlled-ruida-usb-serial-focus-distance-write-v1/manifest-v1.json)
+separates host observations from operator attestations and omits private device
+metadata. No standalone raw transport transcript file was saved, so the
+manifest explicitly records that no transcript hash is available and names
+the parsed readings, receipt fields, and operator attestations on which it is
+based.
+
+This is immediate acceptance, effect, and rollback evidence for only that
+controller and those two values. The serial receipts remain host-side write
+evidence rather than controller acknowledgements, and the typed method itself
+still performs no readback. No reset or power cycle tested persistence. No
+probe trigger, contact event, contact coordinate, force, physical distance, or
+independent Z position was captured. Autofocus was invoked from the panel;
+logical `D8 2E` remains untested on hardware. The result does not establish
+contact probing, autofocus safety or repeatability, another value, another
+controller or firmware, or UDP.
 Its fixed 0-through-1,000,000,000 raw bounds reproduce the audited LightBurn
 display metadata and signed-integer setter representation. They are not
 controller limits, capability claims, or machine-safe focus bounds. The

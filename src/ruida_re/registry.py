@@ -812,8 +812,13 @@ SEMANTIC_NOTES = {
     "da01": (
         "Two pinned implementations distinguish this controller-memory "
         "write from DA00. The executed mixed-job fixture contains the "
-        "address-800 form, but no controlled hardware observation isolates "
-        "its write effect."
+        "address-800 form. The operator-controlled-ruida-usb-serial-focus-"
+        "distance-write-v1 exact-controller observation isolated address "
+        "0x010E at raw 9300 and 9400 with "
+        "fresh-session readbacks and operator-reported display and "
+        "completed panel-Autofocus effects. That narrow two-value "
+        "observation does not promote the generic record beyond its "
+        "fixture-observed shape and reported semantics."
     ),
     "ca01": (
         "Controlled leading operations select vector 0, horizontal "

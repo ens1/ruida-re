@@ -430,8 +430,10 @@ USB-serial snapshots from one controller returned values from those addresses;
 an exact-controller-associated private LightBurn export identifies Focus
 Distance as 9.3 while one `0x010E` read returned raw 9300. The operator supplied
 both artifacts, but the controller model identity was not independently
-verified. This is one-point corroboration, not a general conversion contract.
-Every result preserves `raw_value`; `hypothesized_mm` remains a
+verified. That was initial one-point corroboration. The supervised validation
+below adds raw 9400 alongside display 9.4 on the same controller, but still
+does not establish a general conversion contract. Every result preserves
+`raw_value`; `hypothesized_mm` remains a
 non-authoritative interpretation, not a calibrated measurement or a value
 safe to write back generically.
 
@@ -454,10 +456,21 @@ can require a large adjustment.
 
 The immutable result records the prior and requested raw values plus host-side
 serial send progress. It is not a controller acknowledgement and performs no
-readback. There is no captured write or evidence of acceptance, effect,
-persistence, or rollback. Generic structured request and job sends reject a
-`set_setting` record for `0x010E`; the low-level codec, opaque-record paths,
-and direct transport access are protocol research tools, not a safety sandbox.
+readback. One supervised exact-controller validation sent 9300 to 9400 once,
+then observed three raw-9400 reads through a fresh connection. The operator
+reported a 9.4 Focus Distance display and a completed panel-Autofocus endpoint
+of Z 9.4. One 9400-to-9300 rollback and three fresh raw-9300 reads followed;
+the operator then reported a restored panel-Autofocus endpoint of Z 9.3. Each
+DA01 receipt contained one packet, one transmission, and zero retries. See the
+[scoped evidence fixture](fixtures/hardware/operator-controlled-ruida-usb-serial-focus-distance-write-v1/manifest-v1.json).
+
+That result applies only to the exact controller and two values. It includes
+no reset or power-cycle persistence test, controller acknowledgement,
+independent position metrology, probe-trigger capture, or contact-coordinate
+validation. Panel Autofocus was used; logical `D8 2E` was not transmitted.
+Generic structured request and job sends reject a `set_setting` record for
+`0x010E`; the low-level codec, opaque-record paths, and direct transport access
+are protocol research tools, not a safety sandbox.
 
 **Machine safety:** controller calls can move axes, change outputs, or start
 work depending on the records sent and controller state. Use an idle machine,

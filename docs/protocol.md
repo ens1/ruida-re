@@ -559,8 +559,11 @@ These are research tasks, not parser exceptions:
   X/Y/Z likewise remain raw and machine-scoped. One experimental typed
   USB-serial operation can emit the implementation-reported DA01 Focus
   Distance shape behind compare, confirmation, representation-range, and
-  serial-shape guards, but no write has been captured and no acceptance,
-  effect, persistence, or rollback behavior is established.
+  serial-shape guards. One exact-controller supervised sequence observed
+  9300-to-9400 acceptance, a 9.4 display and completed panel-Autofocus
+  endpoint, and a 9400-to-9300 rollback with a restored 9.3 endpoint. It did
+  not test reset or power-cycle persistence, contact probing, another value or
+  controller, or live `D8 2E` behavior.
 - `C6 15` and `C6 16` have stable shapes but disputed timing meaning, so their
   names remain neutral delay-set labels.
 - Several E8, DA05, E732, and D90F payload layouts differ across reported

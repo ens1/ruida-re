@@ -1,0 +1,171 @@
+{
+  "schema": "ruida-re.hardware-focus-distance-write-observation.v1",
+  "identifier": "operator-controlled-ruida-usb-serial-focus-distance-write-v1",
+  "observed_on": "2026-08-16",
+  "runtime_revisions": {
+    "ruida_re": "ed64c7449b9c83ca2d168eb86ed391562e91fcc3"
+  },
+  "source_capture": {
+    "standalone_raw_transcript": {
+      "available": false,
+      "sha256": null,
+      "reason": "The supervised session retained parsed DA00 readings and FocusDistanceWriteReceipt and SendReceipt values, but no standalone raw transport transcript file was saved."
+    },
+    "published_evidence_basis": [
+      "Parsed DA00 raw values recorded during the supervised session.",
+      "FocusDistanceWriteReceipt and SendReceipt values recorded during the supervised session.",
+      "Operator attestations retained from the supervised conversation."
+    ]
+  },
+  "scope": {
+    "description": "One supervised 9300-to-9400 Focus Distance write, fresh-connection readback, panel-display and completed-Autofocus observation, and 9400-to-9300 rollback on one exact operator-controlled Ruida controller.",
+    "controller_identity": "exact operator-controlled controller; model and firmware not independently captured",
+    "limitations": [
+      "The result applies only to the exact controller, transport, runtime revision, values, and supervised sequence recorded here.",
+      "The serial SendReceipt records host-side write completion and is not a controller acknowledgement.",
+      "The typed compare-and-set method performed no readback; all post-write samples came from a separately opened fresh connection.",
+      "No controller reset or power cycle was performed, so persistence across either event is unknown.",
+      "The controller display and completed panel-Autofocus endpoints are operator attestations, not host telemetry or independent metrology.",
+      "No probe-trigger signal, contact event, contact coordinate, force, physical distance, or independent Z position was captured.",
+      "The panel invoked Autofocus; logical D82E was not transmitted and remains an offline-only candidate with unknown live behavior.",
+      "The observations do not validate autofocus safety, repeatability, failure behavior, arbitrary Focus Distance values, another controller or firmware, or UDP.",
+      "The two display correlations do not establish a generic unit conversion, controller range, or machine-safe value range.",
+      "Private host paths and device identifiers are intentionally omitted."
+    ]
+  },
+  "environment": {
+    "host_platform": "macOS",
+    "transport": {
+      "kind": "USB serial",
+      "baud": 115200,
+      "magic": 136,
+      "checksum_prefix": false,
+      "controller_acknowledgement_available": false,
+      "automatic_retries": false
+    },
+    "physical_preconditions": {
+      "source_or_high_voltage_off": "operator-attested",
+      "controller_idle": "operator-attested",
+      "panel_exclusion_during_host_exchange": "operator-attested",
+      "physical_supervision": "operator-present"
+    }
+  },
+  "protocol": {
+    "semantic_address": 270,
+    "semantic_address_hex": "0x010e",
+    "read_request": {
+      "command": "get_setting",
+      "logical_hex": "da00020e"
+    },
+    "forward_write": {
+      "command": "set_setting",
+      "expected_raw": 9300,
+      "requested_raw": 9400,
+      "logical_hex": "da01020e00000049380000004938",
+      "serial_wire_hex": "d4098b8789898941b189898941b1"
+    },
+    "rollback_write": {
+      "command": "set_setting",
+      "expected_raw": 9400,
+      "requested_raw": 9300,
+      "logical_hex": "da01020e00000048540000004854",
+      "serial_wire_hex": "d4098b87898989c1dd898989c1dd"
+    }
+  },
+  "host_observations": {
+    "baseline": {
+      "operation": "read_focus_depth",
+      "da00_raw_values": [
+        9300,
+        9300,
+        9300
+      ],
+      "session_closed_after_samples": true
+    },
+    "forward": {
+      "operation": "compare_and_set_focus_distance_raw",
+      "calls": 1,
+      "cas_prior_raw": 9300,
+      "requested_raw": 9400,
+      "da01_write_attempts": 1,
+      "send_receipt": {
+        "packet_count": 1,
+        "packet_hex": "d4098b8789898941b189898941b1",
+        "transmissions": 1,
+        "retries": 0,
+        "completed_packets": 1
+      },
+      "method_readback_performed": false,
+      "fresh_connection_readback": {
+        "operation": "read_focus_depth",
+        "separate_client_session": true,
+        "write_session_closed_before_readback_connection_opened": true,
+        "da00_raw_values": [
+          9400,
+          9400,
+          9400
+        ]
+      }
+    },
+    "rollback": {
+      "operation": "compare_and_set_focus_distance_raw",
+      "calls": 1,
+      "cas_prior_raw": 9400,
+      "requested_raw": 9300,
+      "da01_write_attempts": 1,
+      "send_receipt": {
+        "packet_count": 1,
+        "packet_hex": "d4098b87898989c1dd898989c1dd",
+        "transmissions": 1,
+        "retries": 0,
+        "completed_packets": 1
+      },
+      "method_readback_performed": false,
+      "fresh_connection_readback": {
+        "operation": "read_focus_depth",
+        "separate_client_session": true,
+        "write_session_closed_before_readback_connection_opened": true,
+        "da00_raw_values": [
+          9300,
+          9300,
+          9300
+        ]
+      }
+    }
+  },
+  "operator_attestations": {
+    "pre_write_conditions": {
+      "prompt_context": "The operator was asked to confirm that the source or high voltage was off, the controller was idle, nobody would touch the panel, and Autofocus would not run during the host exchange.",
+      "reported_verbatim": "All are true"
+    },
+    "forward_setting_display": {
+      "focus_distance_display_mm": 9.4,
+      "reported_verbatim": "Yes, focus distance is 9.4 now"
+    },
+    "forward_panel_autofocus": {
+      "completed": true,
+      "final_z_display_mm": 9.4,
+      "reported_verbatim": "Yes, it reads 9.4"
+    },
+    "rollback_panel_autofocus": {
+      "prompt_context": "After fresh raw-9300 readback, the operator was asked to run panel Autofocus and confirm that it finished at 9.3.",
+      "completed": true,
+      "final_z_display_mm": 9.3,
+      "reported_verbatim": "It did"
+    }
+  },
+  "result": {
+    "status": "scoped-exact-controller-write-readback-autofocus-and-rollback-pass",
+    "forward_da01_host_transmission": "one-packet-one-transmission-zero-retries",
+    "forward_acceptance": "observed-by-three-fresh-connection-da00-raw-9400-samples",
+    "forward_display_and_autofocus_effect": "operator-attested-at-9.4",
+    "rollback_da01_host_transmission": "one-packet-one-transmission-zero-retries",
+    "rollback_acceptance": "observed-by-three-fresh-connection-da00-raw-9300-samples",
+    "rollback_autofocus_endpoint": "operator-attested-restored-at-9.3",
+    "controller_acknowledgement": "not-available",
+    "power_cycle_persistence": "not-tested",
+    "contact_probe_trigger_or_coordinate": "not-observed-or-validated",
+    "live_d82e_autofocus": "not-tested",
+    "other_controllers_or_values": "not-established"
+  }
+}
