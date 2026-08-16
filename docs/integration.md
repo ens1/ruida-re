@@ -727,14 +727,19 @@ nine logical bytes are assembled. A wrong address, malformed reply, short
 reply, excess data, or timeout follows the normal fail-closed session rules.
 
 The address labels are independently reported by pinned MeerK40t and ruida-pa
-implementations, but none of these addresses has a Boss LS2040 capture.
-`FocusDepthReading` therefore treats its value as an opaque U35. Its
-`hypothesized_mm` property applies a simulator-only unsigned-micrometre
-hypothesis and must not be used as a write value. The current-position result
-types preserve the same raw U35 while exposing the implementations' reported
-signed-35-bit micrometre interpretation through `hypothesized_micrometres` and
-`hypothesized_mm`. Those properties are candidate interpretations, not
-panel-correlated or machine-calibrated coordinates.
+implementations. Supervised snapshots from one operator-controlled controller
+have since returned values from these addresses; one `0x010E` reply was raw
+9300 while an operator-supplied private LightBurn machine-settings export
+associated with that exact controller displayed Focus Distance 9.3. The
+controller model was not independently verified. This is single-controller,
+single-value corroboration, not a general conversion or write contract.
+`FocusDepthReading` therefore still treats its value as an opaque U35. Its
+`hypothesized_mm` property applies a simulator-only
+unsigned-micrometre hypothesis and must not be used as a write value. The
+current-position result types preserve the same raw U35 while exposing the
+implementations' reported signed-35-bit micrometre interpretation through
+`hypothesized_micrometres` and `hypothesized_mm`. Those properties remain
+candidate interpretations, not machine-calibrated coordinates.
 
 For offline planning, the library can describe the independently reported
 autofocus command candidate:
@@ -750,19 +755,77 @@ assert candidate.controller_effect == "unknown"
 
 The builder performs no I/O and deliberately returns a descriptor rather than
 a live operation. Request-context `focus_z` retains unknown reply behavior, so
-`send_no_reply_request()` rejects it. D8 2E has not been captured on the Boss
+`send_no_reply_request()` rejects it. D8 2E has not been captured on the tested
 controller, and a successful link receipt would not prove that motion ended,
 the focus probe contacted correctly, or the machine reached a safe position.
 It invokes a reported routine candidate; it does not calculate or write a new
 focus-depth setting.
 
-There is no typed focus-depth write API. Generic `set_setting` uses two U35
-fields whose meanings, equality requirement, units, persistence, and rollback
-behavior are not established for focus depth. The controller client explicitly
-rejects DA01 address `0x010E` on its no-reply request surface before
-transmission. A live write must remain out of scope until a staged, supervised
-capture establishes an exact candidate, read-back behavior, physical effect,
-and recovery procedure.
+An experimental, raw, USB-serial-only compare-and-set surface reproduces
+LightBurn 2.1.03's implementation-reported Focus Distance write shape:
+
+```python
+receipt = client.compare_and_set_focus_distance_raw(
+    expected_raw=9300,
+    requested_raw=9400,
+    confirm_unverified_write=True,
+)
+
+assert receipt.prior_raw == 9300
+assert receipt.requested_raw == 9400
+assert receipt.send_receipt.transmissions == 1
+assert receipt.send_receipt.retries == 0
+assert receipt.readback_performed is False
+assert receipt.persistence_evidence == "unknown"
+```
+
+The method first reads fixed address `0x010E` and compares the opaque raw U35
+with `expected_raw`. The read and conditional write hold one
+`ControllerClient` lock and count as one non-reentrant client operation. A
+mismatch raises `FocusDistanceMismatchError` and emits no DA01 write. A false
+`confirm_unverified_write` raises `FocusDistanceWriteNotConfirmedError` before
+any I/O. Expected and requested values must be integers from
+`FOCUS_DISTANCE_RAW_MIN` (0) through `FOCUS_DISTANCE_RAW_MAX` (1000000000),
+inclusive. Boolean values are rejected rather than accepted as integers. These
+source-derived representation bounds reproduce the audited LightBurn metadata
+and signed-integer setter representation; they are not claims about controller
+capability, valid focus distances, or safe machine settings. No fixed delta cap
+is imposed because a legitimate lens change may require a large adjustment.
+The lock excludes other operations on that client only; it does not make the
+two Ruida commands controller-atomic or exclude panel actions and other
+connections.
+
+On a match, the method emits exactly one 14-byte logical command with address
+`0x010E` and the requested nonnegative raw integer encoded into five base-128
+groups twice. For raw 9400, the logical bytes are
+`DA 01 02 0E 00 00 00 49 38 00 00 00 49 38`. The built-in serial link
+scrambles those bytes into one 14-byte transport write; the method requires
+the evidenced magic `0x88` and rejects other magic values, UDP, custom links,
+and a configured chunk size that would split it. A same-value request such as
+expected 9300 and requested 9300 still emits the exact DA01 command; it is not
+optimized away. The serial path never retries and expects no reply.
+
+The compare protects only the value observed immediately before the write.
+`FocusDistanceWriteReceipt.send_receipt` establishes only that the host serial
+write returned. It is not a controller acknowledgement and proves neither
+controller acceptance nor a changed value. The method performs no readback,
+does not establish volatile or persistent lifetime, and provides no automatic
+rollback. An exception or cancellation carries the normal `SendReceipt`
+progress when it is observed within the DA01 exchange. A `BaseException`
+observed while finalizing the typed receipt after the exchange returns receives
+that completed send receipt, marks delivery unknown, and desynchronizes the
+session. Unknown delivery must remain unknown and must not be retried. A fresh,
+separately sequenced read is required for any later observation, and even a
+matching read would not prove persistence over reset or power loss.
+
+Generic structured `send_no_reply_request()`, `send_job()`, and
+`send_job_commands()` calls block `set_setting` at address `0x010E`. This keeps
+those public structured send surfaces from bypassing the typed compare,
+confirmation, bounds, serial-only shape, or single-write constraint. It does
+not turn the library into a safety sandbox: the codec, opaque records, custom
+links, and direct transport access remain low-level protocol research tools.
+The typed method remains experimental because there is no live write capture,
+controller acknowledgement, persistence test, or physical-effect validation.
 
 ### USB serial
 

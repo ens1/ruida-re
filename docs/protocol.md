@@ -556,8 +556,11 @@ These are research tasks, not parser exceptions:
 - Two pinned implementations label `D8 2E` as Focus Z, but its controller
   effect and reply behavior remain unknown. It is exposed only as an offline
   candidate descriptor. Reported DA00 addresses for focus depth and current
-  X/Y/Z likewise remain raw, machine-unvalidated reads; no DA01 focus write is
-  supported.
+  X/Y/Z likewise remain raw and machine-scoped. One experimental typed
+  USB-serial operation can emit the implementation-reported DA01 Focus
+  Distance shape behind compare, confirmation, representation-range, and
+  serial-shape guards, but no write has been captured and no acceptance,
+  effect, persistence, or rollback behavior is established.
 - `C6 15` and `C6 16` have stable shapes but disputed timing meaning, so their
   names remain neutral delay-set labels.
 - Several E8, DA05, E732, and D90F payload layouts differ across reported

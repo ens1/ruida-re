@@ -9,7 +9,7 @@ from collections import deque
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, replace
 from enum import Enum
-from typing import Literal
+from typing import ClassVar, Literal
 
 from .api import RuidaCodec
 from .focus import (
@@ -17,6 +17,8 @@ from .focus import (
     CURRENT_Y_ADDRESS,
     CURRENT_Z_ADDRESS,
     FOCUS_DEPTH_ADDRESS,
+    FOCUS_DISTANCE_RAW_MAX,
+    FOCUS_DISTANCE_RAW_MIN,
     CurrentXReading,
     CurrentYReading,
     CurrentZReading,
@@ -26,6 +28,7 @@ from .links import (
     InboundUnit,
     OutboundPacket,
     RuidaLink,
+    SerialLink,
     link_for_transport,
 )
 from .program import KnownCommand, Program, Record
@@ -47,6 +50,7 @@ MACHINE_STATUS_KNOWN_MASK = (
     | MACHINE_STATUS_JOB_RUNNING
 )
 NUMERIC_SETTING_REPLY_BYTES = 9
+FOCUS_DISTANCE_WRITE_LOGICAL_BYTES = 14
 
 
 class SessionState(str, Enum):
@@ -146,6 +150,34 @@ class SessionDesynchronizedError(ControllerError):
 
 class UnsupportedExchangeError(ControllerError):
     """Raised for an exchange whose reply cannot be correlated safely."""
+
+
+class FocusDistanceWriteNotConfirmedError(ControllerError):
+    """Raised before I/O when an experimental setting write is unconfirmed."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            "Focus-distance writes require explicit confirmation of the "
+            "unverified controller operation"
+        )
+
+
+class FocusDistanceMismatchError(ControllerError):
+    """Raised when the live focus-distance value defeats compare-and-set."""
+
+    def __init__(
+        self,
+        expected_raw: int,
+        actual_raw: int,
+        requested_raw: int,
+    ) -> None:
+        super().__init__(
+            "Focus-distance compare-and-set mismatch: expected raw "
+            f"{expected_raw}, read raw {actual_raw}"
+        )
+        self.expected_raw = expected_raw
+        self.actual_raw = actual_raw
+        self.requested_raw = requested_raw
 
 
 class ReplyLimitError(ControllerError):
@@ -306,6 +338,17 @@ class SendReceipt:
     transmissions: int
     retries: int
     completed_packets: int
+
+
+@dataclass(frozen=True)
+class FocusDistanceWriteReceipt:
+    """Host-side result of one unverified focus-distance write attempt."""
+
+    prior_raw: int
+    requested_raw: int
+    send_receipt: SendReceipt
+    readback_performed: ClassVar[Literal[False]] = False
+    persistence_evidence: ClassVar[Literal["unknown"]] = "unknown"
 
 
 @dataclass(frozen=True)
@@ -589,6 +632,117 @@ class ControllerClient:
             self._read_numeric_setting(FOCUS_DEPTH_ADDRESS)
         )
 
+    def compare_and_set_focus_distance_raw(
+        self,
+        *,
+        expected_raw: int,
+        requested_raw: int,
+        confirm_unverified_write: bool,
+    ) -> FocusDistanceWriteReceipt:
+        """Attempt one implementation-reported serial Focus Distance write.
+
+        The returned receipt proves host-side serial write completion only.
+        It does not prove controller acceptance, readback, effect, or
+        persistence.
+        """
+        with self._lock:
+            self._validate_focus_distance_write(
+                expected_raw,
+                requested_raw,
+                confirm_unverified_write,
+            )
+            self._begin_operation()
+            try:
+                prior_raw = self._read_numeric_setting_locked(
+                    FOCUS_DEPTH_ADDRESS
+                )
+                if prior_raw != expected_raw:
+                    raise FocusDistanceMismatchError(
+                        expected_raw,
+                        prior_raw,
+                        requested_raw,
+                    )
+                command = self.request_codec.command(
+                    "set_setting",
+                    address=FOCUS_DEPTH_ADDRESS,
+                    first_value=requested_raw,
+                    second_value=requested_raw,
+                )
+                program = self.request_codec.program([command])
+                send_receipt: SendReceipt | None = None
+                try:
+                    send_receipt, _ = self._exchange_once_locked(
+                        self.request_codec,
+                        program,
+                        checksum_policy="preserve",
+                        reply_policy=None,
+                        keep_alive=False,
+                    )
+                    return self._focus_distance_write_receipt(
+                        prior_raw,
+                        requested_raw,
+                        send_receipt,
+                    )
+                except BaseException as error:
+                    if send_receipt is not None:
+                        self._fault_completed_exchange(error, send_receipt)
+                    raise
+            finally:
+                self._end_operation()
+
+    def _focus_distance_write_receipt(
+        self,
+        prior_raw: int,
+        requested_raw: int,
+        send_receipt: SendReceipt,
+    ) -> FocusDistanceWriteReceipt:
+        return FocusDistanceWriteReceipt(
+            prior_raw=prior_raw,
+            requested_raw=requested_raw,
+            send_receipt=send_receipt,
+        )
+
+    def _validate_focus_distance_write(
+        self,
+        expected_raw: int,
+        requested_raw: int,
+        confirm_unverified_write: bool,
+    ) -> None:
+        values = (expected_raw, requested_raw)
+        if any(type(value) is not int for value in values):
+            raise ValueError(
+                "Focus-distance raw values must be integers"
+            )
+        if any(
+            not FOCUS_DISTANCE_RAW_MIN <= value <= FOCUS_DISTANCE_RAW_MAX
+            for value in values
+        ):
+            raise ValueError(
+                "Focus-distance raw values must be from "
+                f"{FOCUS_DISTANCE_RAW_MIN} through "
+                f"{FOCUS_DISTANCE_RAW_MAX}"
+            )
+        if type(confirm_unverified_write) is not bool:
+            raise ValueError(
+                "Focus-distance write confirmation must be a boolean"
+            )
+        if not confirm_unverified_write:
+            raise FocusDistanceWriteNotConfirmedError()
+        if self.magic != 0x88:
+            raise UnsupportedExchangeError(
+                "Experimental focus-distance writes require magic 0x88"
+            )
+        if type(self.link) is not SerialLink:
+            raise UnsupportedExchangeError(
+                "Experimental focus-distance writes support only the "
+                "built-in USB-serial link"
+            )
+        if self.chunk_size < FOCUS_DISTANCE_WRITE_LOGICAL_BYTES:
+            raise UnsupportedExchangeError(
+                "Experimental focus-distance writes require one 14-byte "
+                "USB-serial transport write"
+            )
+
     def read_current_x(self) -> CurrentXReading:
         """Read raw address 0x0221 with reported coordinate metadata."""
         return CurrentXReading(
@@ -609,6 +763,15 @@ class ControllerClient:
 
     def _read_numeric_setting(self, address: int) -> int:
         """Read one correlated DA01 numeric reply for a fixed DA00 address."""
+        with self._lock:
+            self._begin_operation()
+            try:
+                return self._read_numeric_setting_locked(address)
+            finally:
+                self._end_operation()
+
+    def _read_numeric_setting_locked(self, address: int) -> int:
+        """Read one numeric setting within the active client operation."""
         expected_chunks = None
         if self.link.receive_boundaries == "datagram":
             expected_chunks = 1
@@ -619,10 +782,17 @@ class ControllerClient:
             max_bytes=NUMERIC_SETTING_REPLY_BYTES,
             complete_when=None,
         )
-        response = self.request_command(
+        command = self.request_codec.command(
             "get_setting",
             address=address,
-            reply_policy=policy,
+        )
+        program = self.request_codec.program([command])
+        request, spec = self._declared_reply_request(program)
+        response = self._request_locked(
+            program,
+            request,
+            spec,
+            policy,
         )
         record = response.program.records[0]
         assert isinstance(record, KnownCommand)
@@ -637,6 +807,7 @@ class ControllerClient:
         checksum_policy: str = "recompute",
     ) -> SendReceipt:
         """Send a job Program as one serialized packet exchange."""
+        self._reject_structured_focus_distance_write(program)
         receipt, _ = self._exchange(
             self.job_codec,
             program,
@@ -842,6 +1013,7 @@ class ControllerClient:
         program: Program,
         behavior: str,
     ) -> tuple[KnownCommand, ...]:
+        self._reject_structured_focus_distance_write(program)
         if not program.records:
             raise UnsupportedExchangeError(
                 "A controller request must contain at least one command"
@@ -858,16 +1030,21 @@ class ControllerClient:
                     f"Request {record.name} does not declare reply "
                     f"behavior {behavior}"
                 )
-            if (
-                record.name == "set_setting"
-                and record.values.get("address") == FOCUS_DEPTH_ADDRESS
-            ):
-                raise UnsupportedExchangeError(
-                    "Focus-depth writes have no validated value encoding, "
-                    "effect, persistence, or rollback contract"
-                )
             commands.append(record)
         return tuple(commands)
+
+    @staticmethod
+    def _reject_structured_focus_distance_write(program: Program) -> None:
+        if any(
+            isinstance(record, KnownCommand)
+            and record.name == "set_setting"
+            and record.values.get("address") == FOCUS_DEPTH_ADDRESS
+            for record in program.records
+        ):
+            raise UnsupportedExchangeError(
+                "Generic focus-distance setting writes are blocked; use "
+                "compare_and_set_focus_distance_raw()"
+            )
 
     def _declared_reply_request(
         self,

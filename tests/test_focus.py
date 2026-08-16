@@ -10,6 +10,8 @@ from ruida_re import (
     CURRENT_Y_ADDRESS,
     CURRENT_Z_ADDRESS,
     FOCUS_DEPTH_ADDRESS,
+    FOCUS_DISTANCE_RAW_MAX,
+    FOCUS_DISTANCE_RAW_MIN,
     CurrentXReading,
     CurrentYReading,
     CurrentZReading,
@@ -20,6 +22,10 @@ from ruida_re import (
 
 
 class FocusProtocolTest(unittest.TestCase):
+    def test_focus_distance_raw_guards_are_public_constants(self) -> None:
+        self.assertEqual(FOCUS_DISTANCE_RAW_MIN, 0)
+        self.assertEqual(FOCUS_DISTANCE_RAW_MAX, 1_000_000_000)
+
     def test_reported_addresses_encode_to_exact_logical_requests(self) -> None:
         codec = RuidaCodec(context="request")
         cases = (

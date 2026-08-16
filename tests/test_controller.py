@@ -19,6 +19,9 @@ from ruida_re.controller import (
     ControllerTransportError,
     DeliveryCertainty,
     ExchangeEvent,
+    FocusDistanceMismatchError,
+    FocusDistanceWriteNotConfirmedError,
+    FocusDistanceWriteReceipt,
     HandshakeProfile,
     MachineStatus,
     ReplyLimitError,
@@ -350,6 +353,362 @@ class ControllerClientTest(unittest.TestCase):
 
         self.assertEqual(transport.sent, [])
         self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_depth_write_is_blocked_on_structured_job(self) -> None:
+        transport = self.open_transport()
+        client = ControllerClient(transport)
+        command = client.job_codec.command(
+            "set_setting",
+            address=0x010E,
+            first_value=9300,
+            second_value=9300,
+        )
+        program = client.job_codec.program([command])
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.send_job(program)
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_depth_write_is_blocked_on_job_commands(self) -> None:
+        transport = self.open_transport()
+        client = ControllerClient(transport)
+        command = client.job_codec.command(
+            "set_setting",
+            address=0x010E,
+            first_value=9300,
+            second_value=9300,
+        )
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.send_job_commands([command])
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_compare_and_set_uses_exact_serial_wire(
+        self,
+    ) -> None:
+        cases = (
+            (9300, 9300, "d4098b87898989c1dd898989c1dd"),
+            (9300, 9400, "d4098b8789898941b189898941b1"),
+            (9400, 9300, "d4098b87898989c1dd898989c1dd"),
+        )
+        for prior_raw, requested_raw, write_hex in cases:
+            with self.subTest(requested_raw=requested_raw):
+                transport = self.open_transport("serial")
+                transport.on_send.append(
+                    [setting_reply(0x010E, prior_raw)]
+                )
+                client = ControllerClient(transport)
+
+                result = client.compare_and_set_focus_distance_raw(
+                    expected_raw=prior_raw,
+                    requested_raw=requested_raw,
+                    confirm_unverified_write=True,
+                )
+
+                write_wire = bytes.fromhex(write_hex)
+                self.assertEqual(
+                    transport.sent,
+                    [bytes.fromhex("d4898b87"), write_wire],
+                )
+                self.assertEqual(
+                    result,
+                    FocusDistanceWriteReceipt(
+                        prior_raw=prior_raw,
+                        requested_raw=requested_raw,
+                        send_receipt=result.send_receipt,
+                    ),
+                )
+                self.assertEqual(result.send_receipt.packets, (write_wire,))
+                self.assertEqual(result.send_receipt.transmissions, 1)
+                self.assertEqual(result.send_receipt.retries, 0)
+                self.assertEqual(result.send_receipt.completed_packets, 1)
+                self.assertFalse(result.readback_performed)
+                self.assertEqual(result.persistence_evidence, "unknown")
+                with self.assertRaises(FrozenInstanceError):
+                    result.prior_raw = 0
+                self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_compare_and_set_mismatch_does_not_write(
+        self,
+    ) -> None:
+        transport = self.open_transport("serial")
+        transport.on_send.append([setting_reply(0x010E, 9301)])
+        client = ControllerClient(transport)
+
+        with self.assertRaises(FocusDistanceMismatchError) as caught:
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        self.assertEqual(transport.sent, [bytes.fromhex("d4898b87")])
+        self.assertEqual(caught.exception.expected_raw, 9300)
+        self.assertEqual(caught.exception.actual_raw, 9301)
+        self.assertEqual(caught.exception.requested_raw, 9400)
+        self.assertIsNone(caught.exception.receipt)
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_requires_confirmation_before_io(
+        self,
+    ) -> None:
+        transport = self.open_transport("serial")
+        client = ControllerClient(transport)
+
+        with self.assertRaises(FocusDistanceWriteNotConfirmedError):
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=False,
+            )
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_validates_raw_inputs_before_io(self) -> None:
+        cases = (
+            (True, 9400, True),
+            (9300, True, True),
+            (9300.0, 9400, True),
+            (9300, "9400", True),
+            (-1, 0, True),
+            (0, -1, True),
+            (1_000_000_001, 1_000_000_000, True),
+            (1_000_000_000, 1_000_000_001, True),
+            (9300, 9400, 1),
+        )
+        for expected_raw, requested_raw, confirmation in cases:
+            with self.subTest(
+                expected_raw=expected_raw,
+                requested_raw=requested_raw,
+                confirmation=confirmation,
+            ):
+                transport = self.open_transport("serial")
+                client = ControllerClient(transport)
+
+                with self.assertRaises(ValueError):
+                    client.compare_and_set_focus_distance_raw(
+                        expected_raw=expected_raw,
+                        requested_raw=requested_raw,
+                        confirm_unverified_write=confirmation,
+                    )
+
+                self.assertEqual(transport.sent, [])
+                self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_accepts_range_and_large_deltas(self) -> None:
+        cases = (
+            (0, 0, "d4098b8789898989898989898989"),
+            (
+                1_000_000_000,
+                1_000_000_000,
+                "d4098b870bd5639d890bd5639d89",
+            ),
+            (9300, 1_000_000, "d4098b878989358dc98989358dc9"),
+            (1_000_000, 9300, "d4098b87898989c1dd898989c1dd"),
+        )
+        for prior_raw, requested_raw, write_hex in cases:
+            with self.subTest(
+                prior_raw=prior_raw,
+                requested_raw=requested_raw,
+            ):
+                transport = self.open_transport("serial")
+                transport.on_send.append(
+                    [setting_reply(0x010E, prior_raw)]
+                )
+                client = ControllerClient(transport)
+
+                result = client.compare_and_set_focus_distance_raw(
+                    expected_raw=prior_raw,
+                    requested_raw=requested_raw,
+                    confirm_unverified_write=True,
+                )
+
+                self.assertEqual(
+                    transport.sent,
+                    [
+                        bytes.fromhex("d4898b87"),
+                        bytes.fromhex(write_hex),
+                    ],
+                )
+                self.assertEqual(result.prior_raw, prior_raw)
+                self.assertEqual(result.requested_raw, requested_raw)
+                self.assertEqual(result.send_receipt.transmissions, 1)
+                self.assertEqual(result.send_receipt.retries, 0)
+
+    def test_focus_distance_write_rejects_udp_before_io(self) -> None:
+        transport = self.open_transport("udp")
+        client = ControllerClient(transport)
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_rejects_custom_magic_before_io(self) -> None:
+        transport = self.open_transport("serial")
+        client = ControllerClient(transport, magic=0x89)
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_rejects_custom_link_before_io(self) -> None:
+        class CustomSerialLink(SerialLink):
+            pass
+
+        transport = self.open_transport("serial")
+        client = ControllerClient(
+            transport,
+            link=CustomSerialLink(transport),
+        )
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_rejects_split_serial_before_io(self) -> None:
+        transport = self.open_transport("serial")
+        client = ControllerClient(transport, chunk_size=13)
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_distance_write_failure_reports_no_completed_send(
+        self,
+    ) -> None:
+        class FailSecondSendTransport(FakeTransport):
+            def send(self, data: bytes) -> None:
+                if self.sent:
+                    raise OSError("write failed")
+                super().send(data)
+
+        transport = FailSecondSendTransport("serial")
+        transport.open()
+        transport.on_send.append([setting_reply(0x010E, 9300)])
+        client = ControllerClient(transport)
+
+        with self.assertRaises(ControllerTransportError) as caught:
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        write_wire = bytes.fromhex("d4098b8789898941b189898941b1")
+        self.assertEqual(transport.sent, [bytes.fromhex("d4898b87")])
+        self.assertEqual(caught.exception.receipt.packets, (write_wire,))
+        self.assertEqual(caught.exception.receipt.transmissions, 0)
+        self.assertEqual(caught.exception.receipt.retries, 0)
+        self.assertEqual(caught.exception.receipt.completed_packets, 0)
+        self.assertEqual(
+            caught.exception.delivery_certainty,
+            DeliveryCertainty.UNKNOWN,
+        )
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
+
+    def test_focus_distance_write_cancellation_preserves_send_progress(
+        self,
+    ) -> None:
+        transport = self.open_transport("serial")
+        transport.on_send.append([setting_reply(0x010E, 9300)])
+        write_wire = bytes.fromhex("d4098b8789898941b189898941b1")
+
+        def cancel_after_send(event: ExchangeEvent) -> None:
+            if event.direction == "send" and event.raw == write_wire:
+                raise KeyboardInterrupt
+
+        client = ControllerClient(transport, observer=cancel_after_send)
+
+        with self.assertRaises(KeyboardInterrupt) as caught:
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        receipt = caught.exception.receipt
+        self.assertEqual(
+            transport.sent,
+            [bytes.fromhex("d4898b87"), write_wire],
+        )
+        self.assertEqual(receipt.packets, (write_wire,))
+        self.assertEqual(receipt.transmissions, 1)
+        self.assertEqual(receipt.retries, 0)
+        self.assertEqual(receipt.completed_packets, 0)
+        self.assertEqual(
+            caught.exception.delivery_certainty,
+            DeliveryCertainty.UNKNOWN,
+        )
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
+
+    def test_focus_distance_post_exchange_interruption_faults_session(
+        self,
+    ) -> None:
+        class PostExchangeInterrupt(BaseException):
+            pass
+
+        class InterruptingControllerClient(ControllerClientClass):
+            def _focus_distance_write_receipt(self, *args: object) -> None:
+                del args
+                raise PostExchangeInterrupt
+
+        transport = self.open_transport("serial")
+        transport.on_send.append([setting_reply(0x010E, 9300)])
+        client = InterruptingControllerClient(
+            transport,
+            assume_synchronized=True,
+        )
+
+        with self.assertRaises(PostExchangeInterrupt) as caught:
+            client.compare_and_set_focus_distance_raw(
+                expected_raw=9300,
+                requested_raw=9400,
+                confirm_unverified_write=True,
+            )
+
+        write_wire = bytes.fromhex("d4098b8789898941b189898941b1")
+        self.assertEqual(
+            transport.sent,
+            [bytes.fromhex("d4898b87"), write_wire],
+        )
+        self.assertEqual(caught.exception.receipt.packets, (write_wire,))
+        self.assertEqual(caught.exception.receipt.transmissions, 1)
+        self.assertEqual(caught.exception.receipt.retries, 0)
+        self.assertEqual(caught.exception.receipt.completed_packets, 1)
+        self.assertEqual(
+            caught.exception.delivery_certainty,
+            DeliveryCertainty.UNKNOWN,
+        )
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
 
     def test_read_machine_status_serial_assembles_split_reply(self) -> None:
         transport = self.open_transport("serial")

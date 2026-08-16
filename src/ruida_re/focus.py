@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import ClassVar, Literal
+from typing import ClassVar, Final, Literal
 
 from .api import RuidaCodec
 from .registry import get_registry
 
 FOCUS_DEPTH_ADDRESS = 0x010E
+FOCUS_DISTANCE_RAW_MIN: Final[int] = 0
+FOCUS_DISTANCE_RAW_MAX: Final[int] = 1_000_000_000
 CURRENT_X_ADDRESS = 0x0221
 CURRENT_Y_ADDRESS = 0x0231
 CURRENT_Z_ADDRESS = 0x0241
@@ -138,6 +140,8 @@ __all__ = (
     "CURRENT_Y_ADDRESS",
     "CURRENT_Z_ADDRESS",
     "FOCUS_DEPTH_ADDRESS",
+    "FOCUS_DISTANCE_RAW_MAX",
+    "FOCUS_DISTANCE_RAW_MIN",
     "AutofocusCandidate",
     "CurrentXReading",
     "CurrentYReading",

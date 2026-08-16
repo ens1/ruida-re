@@ -425,17 +425,39 @@ z = client.read_current_z()
 ```
 
 The fixed semantic U14 addresses are `0x010E`, `0x0221`, `0x0231`, and
-`0x0241`. Their meanings come from pinned implementations and have not been
-captured on the Boss controller. Every result preserves `raw_value`. The
-`hypothesized_mm` properties are explicitly non-authoritative interpretations,
-not calibrated measurements or values safe to write back.
+`0x0241`. Their meanings come from pinned implementations. Operator-supervised
+USB-serial snapshots from one controller returned values from those addresses;
+an exact-controller-associated private LightBurn export identifies Focus
+Distance as 9.3 while one `0x010E` read returned raw 9300. The operator supplied
+both artifacts, but the controller model identity was not independently
+verified. This is one-point corroboration, not a general conversion contract.
+Every result preserves `raw_value`; `hypothesized_mm` remains a
+non-authoritative interpretation, not a calibrated measurement or a value
+safe to write back generically.
 
 `build_autofocus_candidate()` constructs logical `D8 2E` for offline capture
 planning. Its effect and reply behavior remain unknown, so
-`send_no_reply_request()` refuses it. There is no live autofocus trigger or
-typed focus-depth write API. The generic no-reply request surface also rejects
-a DA01 write to address `0x010E` before transmission because its units, two
-value fields, persistence, and rollback behavior are unvalidated.
+`send_no_reply_request()` refuses it. There is no live autofocus trigger.
+
+An experimental USB-serial-only
+`compare_and_set_focus_distance_raw()` operation reads `0x010E`, requires an
+exact expected value and `confirm_unverified_write=True`, then emits one
+implementation-reported DA01 command with the requested raw value duplicated.
+It accepts only the built-in serial link with the evidenced magic `0x88`.
+Both raw values must be from `FOCUS_DISTANCE_RAW_MIN` (0) through
+`FOCUS_DISTANCE_RAW_MAX` (1000000000). Those limits reproduce the audited
+LightBurn metadata and signed-integer setter representation. They are
+representation guards, not controller capability, validity, or machine-safe
+focus claims.
+The library imposes no fixed per-call delta because legitimate lens changes
+can require a large adjustment.
+
+The immutable result records the prior and requested raw values plus host-side
+serial send progress. It is not a controller acknowledgement and performs no
+readback. There is no captured write or evidence of acceptance, effect,
+persistence, or rollback. Generic structured request and job sends reject a
+`set_setting` record for `0x010E`; the low-level codec, opaque-record paths,
+and direct transport access are protocol research tools, not a safety sandbox.
 
 **Machine safety:** controller calls can move axes, change outputs, or start
 work depending on the records sent and controller state. Use an idle machine,

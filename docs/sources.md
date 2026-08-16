@@ -357,8 +357,10 @@ and both pinned implementations distinguish it from the state-changing
   [pinned addresses](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L239-L254),
   [pinned decoder](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L340-L381),
   [pinned emulator value](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/emulator.py#L1088-L1098).
-  None of those values has a Boss capture, so the typed API preserves raw U35
-  and labels every unit conversion as a hypothesis.
+  Those implementation reports alone do not establish values on the
+  operator-controlled device, so the typed API preserves raw U35 and labels
+  every unit conversion as a hypothesis. The later single-point capture is
+  scoped below.
 - Both pinned implementations label logical `D8 2E` as Focus Z, but neither
   establishes its physical effect or reply behavior on hardware:
   [ruida-pa command table](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/protocols/ruida/ruida_protocol.py#L510-L538),
@@ -373,6 +375,55 @@ axes. The state-changing `set_setting` (`DA 01`) retains a
 `fixture-observed` shape and `reported` semantics; the numeric reply does not
 validate that write command. These labels do not guarantee the same reply
 shape for every address, controller, or firmware dialect.
+
+## Experimental Focus Distance write evidence
+
+The narrow typed write surface is based on a static audit of the same
+LightBurn 2.1.03 application identified by SHA-256
+`909262ec7f67b1accbf42f9905ded18a317febb09202ff8cfa81bc0256f7d02a`
+in the primary fixture manifests. The audit observed these implementation
+facts without copying application code or redistributing the binary:
+
+- `GetMachineSettingsInfo` associates Focus Distance with address bytes
+  `02 0E`, a displayed minimum of 0 mm, a displayed maximum of 1,000,000 mm,
+  and three decimal places.
+- `SetMachineSettingsValues` multiplies the displayed millimetre value by
+  1000 and converts the result to a signed integer.
+- `SendConfigurationCommand(unsigned short, int)` constructs logical DA01
+  with the two address bytes and passes the same integer twice to
+  `WriteLongPair(int, int)`. That encoder emits five base-128 groups for each
+  integer.
+- The USB-serial branch scrambles and submits the resulting 14 bytes as one
+  write, waits up to 500 ms for host-side send completion, and does not read a
+  controller acknowledgement.
+
+The typed operation is limited to the built-in USB-serial link with magic
+`0x88`; no static or captured evidence supports alternate magic values for
+this setting write.
+
+An operator-supplied private machine-settings export contains
+`Focus Distance`, LightBurn ID `0x20e`, value `9.3`. A separate supervised
+read-only USB-serial register snapshot,
+`ruida-z-register-baseline-v1.json`, SHA-256
+`5e0cb66fd9ccc2bc62deefe69e47e45c50e95b1d7da0e84a7a96cde848db0c23`,
+records exact logical request `DA00020E` and matching logical reply
+`DA01020E0000004854`, whose U35 value is 9300. Together those artifacts
+corroborate the setting identity and scale on that controller at that instant.
+The operator associated both artifacts with the exact same controller; the
+controller model was not independently verified. The full private export is
+deliberately not distributed.
+
+There is no captured Focus Distance write, controller acknowledgement,
+post-write readback, reset, or power-cycle observation. The DA01 write shape,
+duplicated-field rule, and USB-serial completion behavior therefore remain
+`implementation-reported`, not `hardware-observed`. They do not establish
+controller acceptance, physical effect, value lifetime, persistence, or a
+rollback contract. The typed method exposes raw integers and a host-side send
+receipt so none of those missing claims is implied by its API.
+Its fixed 0-through-1,000,000,000 raw bounds reproduce the audited LightBurn
+display metadata and signed-integer setter representation. They are not
+controller limits, capability claims, or machine-safe focus bounds. The
+library imposes no fixed per-call delta limit.
 
 ## Other comparison oracles
 
