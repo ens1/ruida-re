@@ -25,6 +25,7 @@ from ruida_re.registry import (
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN_CAPABILITIES,
     SRC_MEERK40T,
+    SRC_RUIDA_PA,
     get_registry,
 )
 from ruida_re.specs import CommandRegistry, CommandSpec
@@ -190,6 +191,23 @@ class RegistryTest(unittest.TestCase):
         self.assertEqual(job_stop.semantic_evidence, "uncited-hypothesis")
         self.assertEqual(job_stop.controller_effect, "unknown")
         self.assertEqual(job_stop.reply_behavior, "unknown")
+        focus = request.name("focus_z")
+        self.assertIsNotNone(focus)
+        self.assertEqual(focus.shape_evidence, "reported")
+        self.assertEqual(focus.semantic_evidence, "reported")
+        self.assertEqual(
+            focus.shape_sources,
+            (SRC_MEERK40T, SRC_RUIDA_PA),
+        )
+        self.assertEqual(
+            focus.semantic_sources,
+            (SRC_MEERK40T, SRC_RUIDA_PA),
+        )
+        self.assertEqual(focus.controller_effect, "unknown")
+        self.assertEqual(focus.reply_behavior, "unknown")
+        job_focus = get_registry("job").name("focus_z")
+        self.assertEqual(job_focus.shape_evidence, "uncited-hypothesis")
+        self.assertEqual(job_focus.semantic_evidence, "uncited-hypothesis")
         self.assertIsNone(reply.name("document_name_reply"))
         hypothesis = reply.name("mainboard_version_reply_hypothesis")
         self.assertIsNotNone(hypothesis)

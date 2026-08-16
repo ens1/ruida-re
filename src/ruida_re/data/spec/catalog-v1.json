@@ -2976,8 +2976,7 @@
     },
     {
       "contexts": [
-        "job",
-        "request"
+        "job"
       ],
       "controller_effect": "unknown",
       "fields": [],
@@ -2991,6 +2990,29 @@
       "semantic_sources": [],
       "shape_evidence": "uncited-hypothesis",
       "shape_sources": []
+    },
+    {
+      "contexts": [
+        "request"
+      ],
+      "controller_effect": "unknown",
+      "fields": [],
+      "name": "focus_z",
+      "notes": "Pinned MeerK40t and ruida-pa implementations independently label logical D82E as Focus Z. This is implementation-reported naming only. No controller capture establishes its physical effect, reply behavior, completion signal, relationship to the stored focus-depth setting, or safety on a particular machine.",
+      "opcode": "d82e",
+      "reply_behavior": "unknown",
+      "reply_commands": [],
+      "reply_field_matches": [],
+      "semantic_evidence": "reported",
+      "semantic_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ],
+      "shape_evidence": "reported",
+      "shape_sources": [
+        "github:StevenIsaacs/ruida-pa@92efde98004d9948474eb712ef6f5b164f468c4f",
+        "github:meerk40t/meerk40t@5f68a45bff41d98e4d3fe8b8267857218099afa8"
+      ]
     },
     {
       "contexts": [

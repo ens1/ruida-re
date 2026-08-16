@@ -2,16 +2,26 @@
 
 from __future__ import annotations
 
+import math
+import threading
+import time
 from collections import deque
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, replace
 from enum import Enum
-import math
-import threading
-import time
 from typing import Literal
 
 from .api import RuidaCodec
+from .focus import (
+    CURRENT_X_ADDRESS,
+    CURRENT_Y_ADDRESS,
+    CURRENT_Z_ADDRESS,
+    FOCUS_DEPTH_ADDRESS,
+    CurrentXReading,
+    CurrentYReading,
+    CurrentZReading,
+    FocusDepthReading,
+)
 from .links import (
     InboundUnit,
     OutboundPacket,
@@ -22,14 +32,12 @@ from .program import KnownCommand, Program, Record
 from .specs import CommandSpec
 from .transports import ControllerTransport, DrainLimitError
 
-
 ACKNOWLEDGE = 0xCC
 ERROR = 0xCD
 KEEP_ALIVE = 0xCE
 NEGATIVE_ACKNOWLEDGE = 0xCF
 DEFAULT_CHUNK_SIZE = 1024
 MACHINE_STATUS_ADDRESS = 0x0200
-MACHINE_STATUS_REPLY_BYTES = 9
 MACHINE_STATUS_MOVING = 0x01000000
 MACHINE_STATUS_PART_END = 0x00000002
 MACHINE_STATUS_JOB_RUNNING = 0x00000001
@@ -38,6 +46,7 @@ MACHINE_STATUS_KNOWN_MASK = (
     | MACHINE_STATUS_PART_END
     | MACHINE_STATUS_JOB_RUNNING
 )
+NUMERIC_SETTING_REPLY_BYTES = 9
 
 
 class SessionState(str, Enum):
@@ -565,24 +574,7 @@ class ControllerClient:
         Flag meanings are implementation-reported and are not a proof of
         idle state or execution completion.
         """
-        expected_chunks = None
-        if self.link.receive_boundaries == "datagram":
-            expected_chunks = 1
-        policy = replace(
-            self.reply_policy,
-            expected_chunks=expected_chunks,
-            expected_bytes=MACHINE_STATUS_REPLY_BYTES,
-            complete_when=None,
-        )
-        response = self.request_command(
-            "get_setting",
-            address=MACHINE_STATUS_ADDRESS,
-            reply_policy=policy,
-        )
-        record = response.program.records[0]
-        assert isinstance(record, KnownCommand)
-        raw_word = record.values["value"]
-        assert isinstance(raw_word, int)
+        raw_word = self._read_numeric_setting(MACHINE_STATUS_ADDRESS)
         return MachineStatus(
             raw_word=raw_word,
             moving=bool(raw_word & MACHINE_STATUS_MOVING),
@@ -590,6 +582,53 @@ class ControllerClient:
             part_end=bool(raw_word & MACHINE_STATUS_PART_END),
             unknown_bits=raw_word & ~MACHINE_STATUS_KNOWN_MASK,
         )
+
+    def read_focus_depth(self) -> FocusDepthReading:
+        """Read raw address 0x010E without asserting units or write meaning."""
+        return FocusDepthReading(
+            self._read_numeric_setting(FOCUS_DEPTH_ADDRESS)
+        )
+
+    def read_current_x(self) -> CurrentXReading:
+        """Read raw address 0x0221 with reported coordinate metadata."""
+        return CurrentXReading(
+            self._read_numeric_setting(CURRENT_X_ADDRESS)
+        )
+
+    def read_current_y(self) -> CurrentYReading:
+        """Read raw address 0x0231 with reported coordinate metadata."""
+        return CurrentYReading(
+            self._read_numeric_setting(CURRENT_Y_ADDRESS)
+        )
+
+    def read_current_z(self) -> CurrentZReading:
+        """Read raw address 0x0241 with reported coordinate metadata."""
+        return CurrentZReading(
+            self._read_numeric_setting(CURRENT_Z_ADDRESS)
+        )
+
+    def _read_numeric_setting(self, address: int) -> int:
+        """Read one correlated DA01 numeric reply for a fixed DA00 address."""
+        expected_chunks = None
+        if self.link.receive_boundaries == "datagram":
+            expected_chunks = 1
+        policy = replace(
+            self.reply_policy,
+            expected_chunks=expected_chunks,
+            expected_bytes=NUMERIC_SETTING_REPLY_BYTES,
+            max_bytes=NUMERIC_SETTING_REPLY_BYTES,
+            complete_when=None,
+        )
+        response = self.request_command(
+            "get_setting",
+            address=address,
+            reply_policy=policy,
+        )
+        record = response.program.records[0]
+        assert isinstance(record, KnownCommand)
+        raw_value = record.values["value"]
+        assert isinstance(raw_value, int)
+        return raw_value
 
     def send_job(
         self,
@@ -818,6 +857,14 @@ class ControllerClient:
                 raise UnsupportedExchangeError(
                     f"Request {record.name} does not declare reply "
                     f"behavior {behavior}"
+                )
+            if (
+                record.name == "set_setting"
+                and record.values.get("address") == FOCUS_DEPTH_ADDRESS
+            ):
+                raise UnsupportedExchangeError(
+                    "Focus-depth writes have no validated value encoding, "
+                    "effect, persistence, or rollback contract"
                 )
             commands.append(record)
         return tuple(commands)

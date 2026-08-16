@@ -10,6 +10,8 @@ from functools import partial
 from ruida_re.codec import encode_u14, encode_u35, swizzle
 from ruida_re.controller import (
     ControllerClient as ControllerClientClass,
+)
+from ruida_re.controller import (
     ControllerError,
     ControllerExchangeError,
     ControllerRejectedError,
@@ -26,9 +28,14 @@ from ruida_re.controller import (
     UnexpectedControllerReply,
     UnsupportedExchangeError,
 )
+from ruida_re.focus import (
+    CurrentXReading,
+    CurrentYReading,
+    CurrentZReading,
+    FocusDepthReading,
+)
 from ruida_re.links import SerialLink
 from ruida_re.transport import encode_datagram
-
 
 ControllerClient = partial(
     ControllerClientClass,
@@ -248,6 +255,100 @@ class ControllerClientTest(unittest.TestCase):
         )
         with self.assertRaises(FrozenInstanceError):
             setattr(status, "raw_word", 0)
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_read_focus_depth_uses_fixed_address_and_preserves_raw(self) -> None:
+        transport = self.open_transport()
+        transport.on_send.append(
+            [control(0xCC), setting_reply(0x010E, 5000)]
+        )
+        client = ControllerClient(transport)
+
+        reading = client.read_focus_depth()
+
+        self.assertEqual(reading, FocusDepthReading(5000))
+        self.assertEqual(
+            transport.sent,
+            [encode_datagram(bytes.fromhex("da00020e"), "request")],
+        )
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_read_focus_depth_serial_assembles_split_reply(self) -> None:
+        transport = self.open_transport("serial")
+        logical = bytes.fromhex("da01020e0000002708")
+        transport.on_send.append(
+            [swizzle(logical[:3]), swizzle(logical[3:7]), swizzle(logical[7:])]
+        )
+        client = ControllerClient(transport)
+
+        reading = client.read_focus_depth()
+
+        self.assertEqual(reading, FocusDepthReading(5000))
+        self.assertEqual(transport.sent, [swizzle(bytes.fromhex("da00020e"))])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_read_current_z_rejects_wrong_correlated_address(self) -> None:
+        transport = self.open_transport()
+        transport.on_send.append(
+            [control(0xCC), setting_reply(0x0240, 18_200)]
+        )
+        client = ControllerClient(transport)
+
+        with self.assertRaises(UnexpectedControllerReply):
+            client.read_current_z()
+
+        self.assertEqual(client.state, SessionState.DESYNCHRONIZED)
+
+    def test_read_current_positions_use_fixed_reported_addresses(self) -> None:
+        cases = (
+            ("read_current_x", 0x0221, CurrentXReading, "da000421"),
+            ("read_current_y", 0x0231, CurrentYReading, "da000431"),
+            ("read_current_z", 0x0241, CurrentZReading, "da000441"),
+        )
+        for method_name, address, reading_type, logical in cases:
+            with self.subTest(method=method_name):
+                transport = self.open_transport()
+                transport.on_send.append(
+                    [control(0xCC), setting_reply(address, 18_200)]
+                )
+                client = ControllerClient(transport)
+
+                reading = getattr(client, method_name)()
+
+                self.assertEqual(reading, reading_type(18_200))
+                self.assertEqual(
+                    transport.sent,
+                    [encode_datagram(bytes.fromhex(logical), "request")],
+                )
+                self.assertEqual(client.state, SessionState.READY)
+
+    def test_autofocus_candidate_cannot_use_no_reply_request_path(self) -> None:
+        transport = self.open_transport()
+        client = ControllerClient(transport)
+        codec = client.request_codec
+        program = codec.program([codec.command("focus_z")])
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.send_no_reply_request(program)
+
+        self.assertEqual(transport.sent, [])
+        self.assertEqual(client.state, SessionState.READY)
+
+    def test_focus_depth_write_is_blocked_on_no_reply_request(self) -> None:
+        transport = self.open_transport()
+        client = ControllerClient(transport)
+        command = client.request_codec.command(
+            "set_setting",
+            address=0x010E,
+            first_value=5000,
+            second_value=5000,
+        )
+        program = client.request_codec.program([command])
+
+        with self.assertRaises(UnsupportedExchangeError):
+            client.send_no_reply_request(program)
+
+        self.assertEqual(transport.sent, [])
         self.assertEqual(client.state, SessionState.READY)
 
     def test_read_machine_status_serial_assembles_split_reply(self) -> None:

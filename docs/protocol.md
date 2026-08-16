@@ -553,6 +553,11 @@ These are research tasks, not parser exceptions:
 - `D8 00`, `D8 12`, and `F0` have stable shapes and conflicting names.
 - Request-context `D8 01` is reported as software stop by one pinned active
   implementation, but lacks a controller capture and completion observation.
+- Two pinned implementations label `D8 2E` as Focus Z, but its controller
+  effect and reply behavior remain unknown. It is exposed only as an offline
+  candidate descriptor. Reported DA00 addresses for focus depth and current
+  X/Y/Z likewise remain raw, machine-unvalidated reads; no DA01 focus write is
+  supported.
 - `C6 15` and `C6 16` have stable shapes but disputed timing meaning, so their
   names remain neutral delay-set labels.
 - Several E8, DA05, E732, and D90F payload layouts differ across reported

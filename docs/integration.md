@@ -698,6 +698,72 @@ the uncertainty latch and require operator confirmation. This policy belongs
 above ruida-re; the typed read deliberately makes no idle or completion
 inference.
 
+### Experimental focus and position reads
+
+Four fixed DA00 helpers expose raw values needed to design a supervised focus
+calibration experiment:
+
+```python
+focus = client.read_focus_depth()
+x = client.read_current_x()
+y = client.read_current_y()
+z = client.read_current_z()
+
+print(focus.raw_value, x.raw_value, y.raw_value, z.raw_value)
+```
+
+The address candidates and exact logical requests are:
+
+| Helper | Semantic U14 address | Logical request |
+| --- | ---: | --- |
+| `read_focus_depth()` | `0x010E` | `DA 00 02 0E` |
+| `read_current_x()` | `0x0221` | `DA 00 04 21` |
+| `read_current_y()` | `0x0231` | `DA 00 04 31` |
+| `read_current_z()` | `0x0241` | `DA 00 04 41` |
+
+Each helper requires one correlated nine-byte numeric `setting_reply`. UDP
+requires one reply datagram; serial permits arbitrary read splits until all
+nine logical bytes are assembled. A wrong address, malformed reply, short
+reply, excess data, or timeout follows the normal fail-closed session rules.
+
+The address labels are independently reported by pinned MeerK40t and ruida-pa
+implementations, but none of these addresses has a Boss LS2040 capture.
+`FocusDepthReading` therefore treats its value as an opaque U35. Its
+`hypothesized_mm` property applies a simulator-only unsigned-micrometre
+hypothesis and must not be used as a write value. The current-position result
+types preserve the same raw U35 while exposing the implementations' reported
+signed-35-bit micrometre interpretation through `hypothesized_micrometres` and
+`hypothesized_mm`. Those properties are candidate interpretations, not
+panel-correlated or machine-calibrated coordinates.
+
+For offline planning, the library can describe the independently reported
+autofocus command candidate:
+
+```python
+from ruida_re import build_autofocus_candidate
+
+candidate = build_autofocus_candidate()
+assert candidate.logical == bytes.fromhex("d82e")
+assert candidate.reply_behavior == "unknown"
+assert candidate.controller_effect == "unknown"
+```
+
+The builder performs no I/O and deliberately returns a descriptor rather than
+a live operation. Request-context `focus_z` retains unknown reply behavior, so
+`send_no_reply_request()` rejects it. D8 2E has not been captured on the Boss
+controller, and a successful link receipt would not prove that motion ended,
+the focus probe contacted correctly, or the machine reached a safe position.
+It invokes a reported routine candidate; it does not calculate or write a new
+focus-depth setting.
+
+There is no typed focus-depth write API. Generic `set_setting` uses two U35
+fields whose meanings, equality requirement, units, persistence, and rollback
+behavior are not established for focus depth. The controller client explicitly
+rejects DA01 address `0x010E` on its no-reply request surface before
+transmission. A live write must remain out of scope until a staged, supervised
+capture establishes an exact candidate, read-back behavior, physical effect,
+and recovery procedure.
+
 ### USB serial
 
 Install the optional dependency, then provide the operating-system serial

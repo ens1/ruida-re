@@ -49,6 +49,7 @@ from ruida_re.registry import (
     SRC_HARDWARE_RUIDA_644XS_USB_SERIAL_V1,
     SRC_LIGHTBURN_CAPABILITIES,
     SRC_MEERK40T,
+    SRC_RUIDA_PA,
 )
 from ruida_re.specs import SEMANTIC_EVIDENCE, SHAPE_EVIDENCE
 
@@ -233,6 +234,20 @@ class CatalogTest(unittest.TestCase):
             job_process_stop["semantic_evidence"],
             "uncited-hypothesis",
         )
+        focus_z = next(
+            command
+            for command in catalog["commands"]
+            if command["name"] == "focus_z"
+            and command["contexts"] == ["request"]
+        )
+        self.assertEqual(focus_z["shape_evidence"], "reported")
+        self.assertEqual(focus_z["semantic_evidence"], "reported")
+        self.assertEqual(
+            focus_z["shape_sources"],
+            sorted((SRC_MEERK40T, SRC_RUIDA_PA)),
+        )
+        self.assertEqual(focus_z["controller_effect"], "unknown")
+        self.assertEqual(focus_z["reply_behavior"], "unknown")
 
     def test_codec_semantics_are_complete_and_consistent(self) -> None:
         codecs = {

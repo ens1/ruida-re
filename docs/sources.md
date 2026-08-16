@@ -347,6 +347,23 @@ and both pinned implementations distinguish it from the state-changing
   [pinned status table](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L217-L249).
   Those labels remain implementation-reported; the local address-512 capture
   establishes only the request/reply shape and returned zero value.
+- ruida-pa maps semantic addresses `0x010E`, `0x0221`, `0x0231`, and `0x0241`
+  to focus depth and current X, Y, and Z. It treats the coordinate values as
+  signed dimensions scaled by 1000 while leaving focus depth as `TBDU35`:
+  [pinned memory table](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/protocols/ruida/ruida_protocol.py#L312-L370).
+  MeerK40t independently reports the current-position address bytes and
+  signed coordinate decoder, while only its emulator suggests that focus
+  depth raw 5000 represents 5 mm:
+  [pinned addresses](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L239-L254),
+  [pinned decoder](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L340-L381),
+  [pinned emulator value](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/emulator.py#L1088-L1098).
+  None of those values has a Boss capture, so the typed API preserves raw U35
+  and labels every unit conversion as a hypothesis.
+- Both pinned implementations label logical `D8 2E` as Focus Z, but neither
+  establishes its physical effect or reply behavior on hardware:
+  [ruida-pa command table](https://github.com/StevenIsaacs/ruida-pa/blob/92efde98004d9948474eb712ef6f5b164f468c4f/protocols/ruida/ruida_protocol.py#L510-L538),
+  [MeerK40t command table](https://github.com/meerk40t/meerk40t/blob/5f68a45bff41d98e4d3fe8b8267857218099afa8/meerk40t/ruida/rdjob.py#L130-L150).
+  It remains an offline-only candidate, not a live controller operation.
 
 The live exchange and independent implementation reports establish different,
 explicitly scoped evidence states. Request-context `get_setting` (`DA 00`) and

@@ -415,6 +415,28 @@ correlated zero reply, but did not include an operator physical-state report
 or an active-to-complete transition. See the integration guide before using
 the result for machine state.
 
+The same bounded DA00 path provides experimental raw focus and position reads:
+
+```python
+focus = client.read_focus_depth()
+x = client.read_current_x()
+y = client.read_current_y()
+z = client.read_current_z()
+```
+
+The fixed semantic U14 addresses are `0x010E`, `0x0221`, `0x0231`, and
+`0x0241`. Their meanings come from pinned implementations and have not been
+captured on the Boss controller. Every result preserves `raw_value`. The
+`hypothesized_mm` properties are explicitly non-authoritative interpretations,
+not calibrated measurements or values safe to write back.
+
+`build_autofocus_candidate()` constructs logical `D8 2E` for offline capture
+planning. Its effect and reply behavior remain unknown, so
+`send_no_reply_request()` refuses it. There is no live autofocus trigger or
+typed focus-depth write API. The generic no-reply request surface also rejects
+a DA01 write to address `0x010E` before transmission because its units, two
+value fields, persistence, and rollback behavior are unvalidated.
+
 **Machine safety:** controller calls can move axes, change outputs, or start
 work depending on the records sent and controller state. Use an idle machine,
 known-safe material and power state, physical supervision, and the machine's

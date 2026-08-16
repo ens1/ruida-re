@@ -99,6 +99,13 @@ REPORTED_PROCESS_STOP_NOTES = (
     "This is implementation-reported evidence, not a hardware observation "
     "or proof that controller execution has stopped."
 )
+REPORTED_FOCUS_Z_NOTES = (
+    "Pinned MeerK40t and ruida-pa implementations independently label "
+    "logical D82E as Focus Z. This is implementation-reported naming only. "
+    "No controller capture establishes its physical effect, reply behavior, "
+    "completion signal, relationship to the stored focus-depth setting, or "
+    "safety on a particular machine."
+)
 
 
 SPECS = (
@@ -1016,6 +1023,15 @@ def _with_request_evidence(spec: CommandSpec) -> CommandSpec:
             notes=REPORTED_PROCESS_STOP_NOTES,
             controller_effect="machine-action",
             reply_behavior="none",
+        )
+    if spec.name == "focus_z":
+        return replace(
+            spec,
+            shape_evidence="reported",
+            semantic_evidence="reported",
+            shape_sources=(SRC_MEERK40T, SRC_RUIDA_PA),
+            semantic_sources=(SRC_MEERK40T, SRC_RUIDA_PA),
+            notes=REPORTED_FOCUS_Z_NOTES,
         )
     return spec
 
