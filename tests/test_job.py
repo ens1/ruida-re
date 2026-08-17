@@ -790,6 +790,37 @@ class RuidaJobCompilerTest(unittest.TestCase):
                 LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
             ).compile(_focus_test_plan((0, 2_147_483.648)))
 
+    def test_focus_test_accepts_30_layers_and_rejects_31st(self) -> None:
+        compiler = RuidaJobCompiler(
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+        )
+        result = compiler.compile(
+            _focus_test_plan(tuple(index / 10 for index in range(30)))
+        )
+
+        self.assertEqual(len(result.layer_bounds), 30)
+        self.assertEqual(
+            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH.allowed_layer_indices,
+            tuple(range(30)),
+        )
+        with self.assertRaisesRegex(
+            UnsupportedJobFeatureError,
+            "Layer index 30 is outside",
+        ):
+            compiler.compile(
+                _focus_test_plan(tuple(index / 10 for index in range(31)))
+            )
+
+    def test_standard_profile_still_accepts_128_layers(self) -> None:
+        layer = _baseline_plan().layers[0]
+        plan = JobPlan(
+            tuple(replace(layer, index=index) for index in range(128))
+        )
+
+        result = RuidaJobCompiler(LIGHTBURN_2103_644XS).compile(plan)
+
+        self.assertEqual(len(result.layer_bounds), 128)
+
     def test_focus_test_rejects_unsupported_layer_forms(self) -> None:
         valid = _focus_test_plan((0, 0.5))
         native = valid.layers[0]
@@ -2786,7 +2817,7 @@ class RuidaJobCompilerTest(unittest.TestCase):
                 )
             )
 
-    def test_research_modes_have_no_execution_claim(self) -> None:
+    def test_unobserved_research_modes_have_no_execution_claim(self) -> None:
         modes = (
             LIGHTBURN_2103_644XS_PLANNED_PATH_RESEARCH
             .planned_path_raster_mode,
@@ -2795,7 +2826,6 @@ class RuidaJobCompilerTest(unittest.TestCase):
             LIGHTBURN_2103_644XS_RF_RESEARCH.layer_frequency_mode,
             LIGHTBURN_2103_644XS_FIBER_RESEARCH.fiber_pulse_width_mode,
             LIGHTBURN_2103_644XS_Z_RESEARCH.paired_z_offset_mode,
-            LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH.focus_test_mode,
             LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH
             .dynamic_vector_power_mode,
         )
@@ -2803,6 +2833,22 @@ class RuidaJobCompilerTest(unittest.TestCase):
             self.assertIsNotNone(mode)
             assert mode is not None
             self.assertEqual(mode.execution_evidence, "not-observed")
+
+    def test_focus_test_mode_has_scoped_execution_evidence(self) -> None:
+        profile = LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH
+        mode = profile.focus_test_mode
+        assert mode is not None
+
+        self.assertEqual(profile.execution_evidence, "not-observed")
+        self.assertIsNone(profile.execution_evidence_source)
+        self.assertEqual(mode.execution_evidence, "operator-observed")
+        self.assertEqual(
+            mode.execution_evidence_source,
+            "fixtures/hardware/"
+            "boss-ls2040-usb-serial-focus-test-v1/README.md",
+        )
+        assert mode.execution_evidence_source is not None
+        self.assertTrue((ROOT / mode.execution_evidence_source).is_file())
 
     def test_planned_path_raster_rejects_unsupported_mixes(self) -> None:
         events = _diagonal_45_unidirectional_events()

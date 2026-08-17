@@ -469,9 +469,28 @@ The remaining controlled results are:
   `FocusTest::Generate` and `Protocol_Ruida::OutputShapeCuts` shows target Z
   offsets lowered as inverse-first, previous-minus-next transitions, and one
   final restore. The Focus Test research profile applies that differential
-  staircase to connected +X native-raster segments. The staircase and offsets
-  beyond ±1 mm are hardware-unobserved; machine travel and collision limits
-  are not protocol metadata and remain the caller's responsibility.
+  staircase to 2–30 connected +X native-raster segments at indices 0–29. One
+  five-segment program completed source-disabled motion and restored displayed
+  Z to 9.300 mm. A later exact 30-layer, 60 mm program spanning displayed Z
+  9.300–10.300 mm at 10 mm/s, 1% power, and air off was accepted and executed;
+  the operator observed X motion and Z stepping. The
+  [scoped observation note](../fixtures/hardware/boss-ls2040-usb-serial-focus-test-v1/README.md)
+  records its limitations and SHA-256:
+  `69bf75754534e9267ae764729747ea1a4cd85555e78dca30b07612d9fc33ddb8`.
+  It ended at current Z 9.296 mm rather than the 9.300 mm baseline while Focus
+  Distance remained 9.300 mm. Later 30-layer positive-power jobs also executed
+  on the same setup. One exact 30-layer job at 100 mm/s, 15% power, and air off
+  spanned displayed Z 0.500–25.500 mm (logical targets +8.800 through
+  -16.200 mm), executed, and made a visible line. Its SHA-256 is
+  `4aa7f8577589dd6e1424b385120bb078ffdb9964d3b1d426c23d4b919a1c5e76`;
+  post-run current Z was 9.312 mm while Focus Distance remained 9.300 mm. An
+  exact 128-layer program was rejected as invalid before motion. The profile
+  stops at the largest positively observed count, 30; behavior at 31–127
+  layers, other controllers, arbitrary target ranges, and Z accuracy and
+  repeatability remain unvalidated. Machine travel and collision limits are
+  not protocol metadata and remain the caller's responsibility. The Focus Test
+  mode has scoped `operator-observed` evidence; the enclosing research profile
+  remains `not-observed`.
 - **Negative Z results (c011-c014).** Positive and negative `zPerPass`, and a
   1 mm material-height change, each produce a byte-identical `.rd` relative to
   the zero baseline. They are not mapped to `80 03` or another Z command.

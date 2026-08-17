@@ -164,17 +164,36 @@ width, and 1 mm absolute Z offset for `Z_RESEARCH`. The Focus Test profile
 uses the signed `80 03` representation range; integrations must constrain it
 to the configured machine travel and collision-safe range.
 
-Focus Test layers use sequential unique indices beginning at zero, and every
-layer supplies a logical Z target in `z_offset_mm`; an explicit zero is valid.
-Each layer contains one horizontal `TravelTo`/`MarkTo` segment. The +X
+Focus Test jobs contain 2–30 layers with sequential unique indices 0–29, and
+every layer supplies a logical Z target in `z_offset_mm`; an explicit zero is
+valid. Each layer contains one horizontal `TravelTo`/`MarkTo` segment. The +X
 segments connect end-to-start and share speed, power, and air. The compiler
 emits `-target[0]`, each `target[i-1] - target[i]`, and then `+target[-1]`.
 It omits zero deltas, so the final wire-micron sum is zero. Vector,
 planned-path, mixed, disconnected, and non-monotonic plans are rejected. This
 follows the static
 LightBurn 2.1.03 `FocusTest::Generate` and
-`Protocol_Ruida::OutputShapeCuts` implementation; the staircase and targets
-beyond ±1 mm remain hardware-unobserved.
+`Protocol_Ruida::OutputShapeCuts` implementation. One five-segment program
+completed source-disabled motion and restored displayed Z to 9.300 mm. A later
+exact 30-layer, 60 mm program spanning displayed Z 9.300–10.300 mm at 10 mm/s,
+1% power, and air off was accepted and executed on the same controller; the
+operator observed its X motion and Z stepping. The
+[scoped observation note](../fixtures/hardware/boss-ls2040-usb-serial-focus-test-v1/README.md)
+records its limitations and artifact SHA-256:
+`69bf75754534e9267ae764729747ea1a4cd85555e78dca30b07612d9fc33ddb8`.
+It ended at current Z 9.296 mm rather than the 9.300 mm baseline while Focus
+Distance remained 9.300 mm. Later 30-layer positive-power programs also
+executed on the same setup. In particular, an exact 30-layer job at 100 mm/s,
+15% power, and air off spanned displayed Z 0.500–25.500 mm (logical targets
++8.800 through -16.200 mm), executed, and made a visible line. Its SHA-256 is
+`4aa7f8577589dd6e1424b385120bb078ffdb9964d3b1d426c23d4b919a1c5e76`;
+post-run current Z was 9.312 mm while Focus Distance remained 9.300 mm. An
+exact 128-layer program was rejected as invalid before motion. The profile
+stops at the largest positively observed count, 30; behavior at 31–127 layers,
+other controllers, arbitrary target ranges, and Z accuracy and repeatability
+remain unvalidated. The Focus Test mode has scoped `operator-observed`
+evidence, while the enclosing research profile retains `not-observed`
+execution status.
 
 Pass expansion also belongs to the host. Repeated planar passes can be
 represented by repeated planned motion. Controlled LightBurn four-pass

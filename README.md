@@ -220,11 +220,11 @@ for `Z_RESEARCH`.
 The dual-head, stationary, RF, fiber, and dynamic-power profiles accept
 exactly one vector layer at index zero. Planned-path and Z profiles each
 accept exactly one raster layer at index zero; Z requires native raster. The
-Focus Test profile accepts at least two native-raster layers with the format's
-sequential indices from zero. Every layer supplies its logical Z target in
-`z_offset_mm`, including an explicit zero target. Each layer is exactly one
-horizontal `TravelTo`/`MarkTo` segment; segments connect end-to-start in +X
-and share speed, power, and air. Its offset range is the `80 03`
+Focus Test profile accepts 2–30 native-raster layers with sequential indices
+0–29. Every layer supplies its logical Z target in `z_offset_mm`, including an
+explicit zero target. Each layer is exactly one horizontal
+`TravelTo`/`MarkTo` segment; segments connect end-to-start in +X and share
+speed, power, and air. Its offset range is the `80 03`
 representation range, so callers must separately enforce their configured
 machine travel and collision limits. The host must provide resolved per-head
 powers to `MarkWithPower`, not a source
@@ -254,10 +254,27 @@ research-only.
 `FocusTest::Generate` and `Protocol_Ruida::OutputShapeCuts` implementation:
 it emits the inverse first target, each previous-target difference, and one
 final target delta to restore net logical Z to zero. Zero deltas are omitted.
-Only the exact single-layer ±1 mm payloads above have controller-readout
-observations. The connected multi-segment staircase and larger targets are
-hardware-unobserved static lowering; initial hardware validation should stay
-within the observed range.
+One supervised five-segment staircase completed its planned motion with the
+laser source disabled and returned the displayed Z to 9.300 mm. A later exact
+30-layer, 60 mm staircase from displayed Z 9.300 to 10.300 mm at 10 mm/s,
+1% power, and air off was accepted and executed on the same controller. The
+operator observed X motion and Z stepping during its seven-packet transfer.
+The [scoped observation note](fixtures/hardware/boss-ls2040-usb-serial-focus-test-v1/README.md)
+records the limitations and its artifact SHA-256:
+`69bf75754534e9267ae764729747ea1a4cd85555e78dca30b07612d9fc33ddb8`.
+It produced no visible mark at 1% and ended at current Z 9.296 mm, a -0.004 mm
+residual from the 9.300 mm baseline; Focus Distance remained 9.300 mm. Later
+an exact 30-layer, 100 mm/s, 15% job spanning displayed Z 0.500–25.500 mm
+(logical targets +8.800 through -16.200 mm) executed and made a visible line.
+Its SHA-256 is
+`4aa7f8577589dd6e1424b385120bb078ffdb9964d3b1d426c23d4b919a1c5e76`;
+post-run current Z was 9.312 mm while Focus Distance remained 9.300 mm. An
+exact 128-layer file was rejected as invalid before motion. The profile is
+limited to the largest positively observed layer count, 30 (indices 0–29);
+this does not establish whether 31–127 layers work, compatibility with other
+controllers, arbitrary target ranges, or Z accuracy and repeatability.
+The scoped observation supports the Focus Test mode's `operator-observed`
+label; the enclosing research profile retains `not-observed` execution status.
 
 Dynamic vector power is stateful. Layer setup establishes the baseline.
 `MarkWithPower` emits resolved per-channel active powers, marks to its endpoint,

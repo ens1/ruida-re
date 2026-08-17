@@ -270,12 +270,13 @@ class PairedZOffsetMode:
 
 @dataclass(frozen=True)
 class FocusTestMode:
-    """Static differential Z staircase across connected raster segments."""
+    """Differential Z staircase across connected raster segments."""
 
     z_offset_mode: PairedZOffsetMode
     semantic_evidence: str
     evidence_source: str
     execution_evidence: str = "not-observed"
+    execution_evidence_source: str | None = None
 
 
 @dataclass(frozen=True)
@@ -561,8 +562,14 @@ LIGHTBURN_2103_644XS_FOCUS_TEST_RESEARCH = _research_profile(
             "LightBurn 2.1.03 FocusTest::Generate and "
             "Protocol_Ruida::OutputShapeCuts static implementation"
         ),
+        execution_evidence="operator-observed",
+        execution_evidence_source=(
+            "fixtures/hardware/"
+            "boss-ls2040-usb-serial-focus-test-v1/README.md"
+        ),
     ),
     allowed_layer_kinds=("raster",),
+    allowed_layer_indices=tuple(range(30)),
     required_raster_processing="native",
 )
 LIGHTBURN_2103_644XS_DYNAMIC_POWER_RESEARCH = _research_profile(
